@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>内容维护 · Zhige Security Lab</title>
+  <link rel="icon" href="/preview/assets/favicon.svg"><link rel="stylesheet" href="/admin.css">
+  <script src="/admin.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/preview/" target="_blank" rel="noopener"><img src="/preview/assets/logo.svg" alt="" width="36" height="36"><span>Zhige Security Lab<small>内容维护</small></span></a>
+    <nav aria-label="维护模块">
+      <button type="button" data-tab="overview" class="active">简介与首页</button>
+      <button type="button" data-tab="news">News · 新闻</button>
+      <button type="button" data-tab="publications">Publications · 论文</button>
+      <button type="button" data-tab="people">People · 成员</button>
+      <button type="button" data-tab="settings">设置与备份</button>
+    </nav>
+    <div class="sidebar-note">本地维护工作台<br>保存内容 → 检查预览 → 提交 GitHub</div>
+  </aside>
+  <main>
+    <header class="topbar"><span id="save-state" role="status">正在加载内容…</span><div class="actions"><a id="site-link" href="/preview/" target="_blank" rel="noopener">查看网站 ↗</a><button id="save" type="button" class="primary" disabled>保存并更新预览</button></div></header>
+    <section class="workspace">
+      <div class="page-title"><div><p class="eyebrow">ZHIGE / CONTENT STUDIO</p><h1 id="page-title">简介与首页</h1><p id="page-description">用表单维护实验室内容。</p></div><div id="languages" class="segmented" aria-label="内容语言"><button type="button" data-lang="en" class="active">英文 EN</button><button type="button" data-lang="zh">中文 ZH</button></div></div>
+      <p id="message" role="alert" hidden></p>
+      <div id="editor"></div>
+      <section class="preview-section"><div class="preview-heading"><h2>网站预览</h2><span>显示最近一次保存的版本</span><button id="refresh-preview" type="button">刷新预览</button></div><iframe id="site-preview" src="/preview/" title="网站预览" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe></section>
+    </section>
+  </main>
+</body></html>
