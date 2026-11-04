@@ -1,0 +1,62 @@
+{
+  "url": "https://zhigesecuritylab.github.io",
+  "github": "https://github.com/ZhigeSecurityLab",
+  "email": "zhige.sec.lab@hotmail.com",
+  "en": {
+    "name": "Zhige Security Lab",
+    "other_name": "止戈实验室",
+    "institution": "",
+    "eyebrow": "SECURITY · PRIVACY · SYSTEMS",
+    "intro": "We study the security and privacy of large language models and AI agents, alongside system security.",
+    "about": "Our research focuses on understanding security and privacy challenges in intelligent systems and the computing systems that support them.",
+    "news": [
+      {
+        "date": "2026-11-05",
+        "title": "Markdown 编辑演示（草稿，不对外显示）",
+        "body_markdown": "## 研究动态\n\n这是一条**演示草稿**，用于检查新闻排版。\n\n- 支持列表和链接\n- 支持中英文内容\n\n[实验室 GitHub](https://github.com/ZhigeSecurityLab)\n\n> 确认内容后，勾选“在网站显示”再保存。",
+        "url": "",
+        "draft": true
+      }
+    ],
+    "publications": [],
+    "people": []
+  },
+  "zh": {
+    "name": "止戈实验室",
+    "other_name": "Zhige Security Lab",
+    "institution": "",
+    "eyebrow": "安全 · 隐私 · 系统",
+    "intro": "我们关注大语言模型与智能体的安全及隐私，以及系统安全研究。",
+    "about": "我们的研究围绕智能系统及其支撑计算系统中的安全与隐私问题展开。",
+    "news": [],
+    "publications": [],
+    "people": []
+  },
+  "people_categories": [
+    {
+      "id": "faculty",
+      "en": "Faculty",
+      "zh": "教师"
+    },
+    {
+      "id": "postdocs",
+      "en": "Postdoctoral Researchers",
+      "zh": "博士后"
+    },
+    {
+      "id": "phd",
+      "en": "PhD Students",
+      "zh": "博士生"
+    },
+    {
+      "id": "masters",
+      "en": "Master’s Students",
+      "zh": "硕士生"
+    },
+    {
+      "id": "alumni",
+      "en": "Alumni",
+      "zh": "毕业成员"
+    }
+  ]
+}
