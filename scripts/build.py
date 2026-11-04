@@ -1,0 +1,251 @@
+"""Bilingual static site generator with Markdown news support; Python 3.9+."""
+from pathlib import Path
+from html import escape
+from urllib.parse import urlsplit
+import json
+import shutil
+import xml.etree.ElementTree as ET
+from datetime import date
+from markdown_it import MarkdownIt
+
+ROOT = Path(__file__).resolve().parents[1]
+OUT = ROOT / "_site"
+MARKDOWN = MarkdownIt("js-default")
+
+
+def validate(data):
+    """Shared validation for the editor and CI builds."""
+    def string(value, field, required=False):
+        if not isinstance(value, str) or len(value) > 100000 or (required and not value.strip()):
+            raise ValueError(f"{field}: 请填写有效文字")
+    for field in ("url", "github"):
+        string(data[field], field, True)
+        link(data[field])
+    email = data["email"]
+    string(email, "email")
+    if email and (any(c.isspace() or c in '?&<>"' for c in email) or email.count('@') != 1 or not all(email.split('@'))):
+        raise ValueError("联系邮箱格式无效")
+    groups = data["people_categories"]
+    if not isinstance(groups, list) or not groups:
+        raise ValueError("至少保留一个成员分类")
+    slugs = []
+    for group in groups:
+        slug = group["id"]
+        string(slug, "category id", True)
+        if not all(c in "abcdefghijklmnopqrstuvwxyz0123456789-" for c in slug):
+            raise ValueError("分类 id 只允许小写字母、数字、连字符")
+        slugs.append(slug)
+        for lang in ("en", "zh"):
+            string(group[lang], "分类名称", True)
+    if len(slugs) != len(set(slugs)):
+        raise ValueError("分类 id 不能重复")
+    for lang in ("en", "zh"):
+        t = data[lang]
+        for field in ("name", "other_name", "institution", "eyebrow", "intro", "about"):
+            string(t[field], f"{lang}.{field}", field == "name")
+        for key in ("news", "publications", "people"):
+            if not isinstance(t[key], list) or len(t[key]) > 5000:
+                raise ValueError(f"{lang}.{key}: 列表格式无效")
+            for item in t[key]:
+                if item.get("url"):
+                    string(item["url"], "链接")
+                    link(item["url"])
+                if key == "news":
+                    if date.fromisoformat(item["date"]).isoformat() != item["date"]:
+                        raise ValueError("新闻日期应为 YYYY-MM-DD")
+                    string(item.get("title", item.get("text", "")), "新闻标题", True)
+                    string(item.get("body_markdown", ""), "Markdown 正文")
+                    if not isinstance(item.get("draft", False), bool):
+                        raise ValueError("草稿状态格式无效")
+                elif key == "publications":
+                    for field in ("title", "authors", "venue"):
+                        string(item[field], field, field == "title")
+                    if type(item["year"]) is not int or not 1900 <= item["year"] <= 2200:
+                        raise ValueError("论文年份应为 1900–2200")
+                else:
+                    string(item["name"], "成员姓名", True)
+                    string(item["role"], "成员身份")
+                    if item["category"] not in slugs:
+                        raise ValueError("成员分类不存在")
+
+
+def e(value):
+    return escape(str(value), quote=True)
+
+
+def link(value):
+    parsed = urlsplit(value)
+    if parsed.scheme not in ("https", "http") or not parsed.netloc:
+        raise ValueError(f"Expected an absolute HTTP(S) URL: {value!r}")
+    return e(value)
+
+
+def labels(lang):
+    return dict(zip(("home", "publications", "people", "news", "contact"),
+                    ("首页", "学术论文", "实验室成员", "最新动态", "联系我们") if lang == "zh" else
+                    ("Home", "Publications", "People", "News", "Contact Us")))
+
+
+def empty(message):
+    return f'<p class="empty-state">{e(message)}</p>'
+
+
+def members(data, lang, category):
+    items = [person for person in data[lang]["people"] if person["category"] == category]
+    if not items:
+        return empty("成员信息待更新。" if lang == "zh" else "Member information will be added.")
+    rows = ""
+    for person in items:
+        name = e(person["name"])
+        if person.get("url"):
+            name = f'<a href="{link(person["url"])}">{name}</a>'
+        rows += f'<li class="person"><h3>{name}</h3><p class="muted">{e(person["role"])}</p></li>'
+    return f'<ul class="plain-list people-list">{rows}</ul>'
+
+
+def home_content(data, lang):
+    t = data[lang]
+    zh = lang == "zh"
+    names = labels(lang)
+    institution = f'<p class="institution">{e(t["institution"])}</p>' if t["institution"] else ""
+    result = f'''<section id="about" class="intro-section">
+      <p class="eyebrow">{e(t['eyebrow'])}</p><h1>{e(t['name'])}</h1><p class="other-name">{e(t['other_name'])}</p>{institution}
+      <p class="intro">{e(t['intro'])}</p><p class="about-copy">{e(t['about'])}</p>
+      <a class="text-link" href="#publications">{names['publications']} <span aria-hidden="true">↓</span></a>
+    </section>'''
+    for key in ("publications", "news"):
+        rows = ""
+        items = sorted((item for item in t[key] if not item.get("draft", False)), key=lambda x: x["date" if key == "news" else "year"], reverse=True)
+        for item in items:
+            title = e(item.get("title", item.get("text", "")))
+            if item.get("url"):
+                title = f'<a href="{link(item["url"])}">{title}</a>'
+            if key == "news":
+                markdown = MARKDOWN.render(item.get("body_markdown", ""))
+                rows += f'<li class="news-row"><time datetime="{e(item["date"])}">{e(item["date"])}</time><article><h3>{title}</h3><div class="markdown-body">{markdown}</div></article></li>'
+            else:
+                rows += f'<li class="publication"><h3>{title}</h3><p>{e(item["authors"])}</p><p class="muted">{e(item["venue"])} · {e(item["year"])}</p></li>'
+        body = f'<ul class="plain-list">{rows}</ul>' if rows else empty(
+            ("论文信息待更新。" if zh else "Publication information will be added.") if key == "publications" else
+            ("最新动态待更新。" if zh else "News and updates will be added."))
+        result += f'<section id="{key}" class="section"><h2>{names[key]}</h2>{body}</section>'
+    if data["email"]:
+        email = data["email"]
+        if any(c in email for c in "\r\n?&") or "@" not in email:
+            raise ValueError("Invalid contact email")
+        result += f'<section id="contact" class="section"><h2>{names["contact"]}</h2><a href="mailto:{e(email)}">{e(email)}</a></section>'
+    return result
+
+
+def people_content(data, lang, category):
+    zh = lang == "zh"
+    groups = data["people_categories"]
+    selected = next((group for group in groups if group["id"] == category), None)
+    title = selected[lang] if selected else labels(lang)["people"]
+    home_prefix = "../../" if category else "../"
+    all_people = "../" if category else "./"
+    tabs = f'<a href="{all_people}"' + (' aria-current="page"' if not category else '') + f'>{"全部成员" if zh else "All people"}</a>'
+    for group in groups:
+        href = ("../" if category else "") + group["id"] + "/"
+        current = ' aria-current="page"' if category == group["id"] else ''
+        tabs += f'<a href="{href}"{current}>{e(group[lang])}</a>'
+    back_label = "返回首页" if zh else "Back to home"
+    description = "按成员类别浏览实验室。" if zh else "Explore the lab by member category."
+    result = f'''<div class="page-heading"><a class="back-link" href="{home_prefix}">← {back_label}</a>
+      <p class="eyebrow">ZHIGE SECURITY LAB</p><h1>{e(title)}</h1><p class="section-description">{description}</p></div>
+      <nav class="people-tabs" aria-label="{'成员分类' if zh else 'People categories'}">{tabs}</nav>'''
+    for group in groups:
+        if selected and group["id"] != category:
+            continue
+        heading = ("成员" if zh else "Members") if selected else e(group[lang])
+        if not selected:
+            heading = f'<a href="{group["id"]}/">{heading} <span aria-hidden="true">↗</span></a>'
+        result += f'<section class="section people-group" id="{group["id"]}"><h2>{heading}</h2>{members(data, lang, group["id"])}</section>'
+    return result
+
+
+def render(data, lang, page="home", category=None):
+    t = data[lang]
+    zh = lang == "zh"
+    names = labels(lang)
+    subpath = "" if page == "home" else "people/" + (category + "/" if category else "")
+    prefix = "../" * (subpath.count("/") + int(zh))
+    local_home = "../" * subpath.count("/") or "./"
+    base = data["url"].rstrip("/")
+    en_path = subpath
+    zh_path = "zh/" + subpath
+    canonical_path = zh_path if zh else en_path
+    switch_path = en_path if zh else zh_path
+    title = t["name"] if page == "home" else labels(lang)["people"]
+    if category:
+        title = next(group[lang] for group in data["people_categories"] if group["id"] == category)
+    document_title = f'{title} | {t["other_name"] if page == "home" else t["name"]}'
+    menu = f'<a href="{local_home}"' + (' aria-current="page"' if page == "home" else '') + f'>{names["home"]}</a>'
+    menu += f'<a href="{local_home}#publications">{names["publications"]}</a>'
+    people_home = local_home + "people/"
+    submenu = f'<a href="{people_home}">{"全部成员" if zh else "All people"}</a>'
+    submenu += "".join(f'<a href="{people_home}{g["id"]}/">{e(g[lang])}</a>' for g in data["people_categories"])
+    menu += f'<details class="people-menu"><summary>{names["people"]}</summary><div class="people-submenu">{submenu}</div></details>'
+    menu += f'<a href="{local_home}#news">{names["news"]}</a>'
+    if data["email"]:
+        menu += f'<a href="mailto:{e(data["email"])}">{names["contact"]}</a>'
+    content = home_content(data, lang) if page == "home" else people_content(data, lang, category)
+    return f'''<!doctype html>
+<html lang="{'zh-CN' if zh else 'en'}"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{e(document_title)}</title><meta name="description" content="{e(t['intro'])}"><meta name="theme-color" content="#f7f8f6">
+<meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(t['intro'])}">
+<meta property="og:type" content="website"><meta property="og:url" content="{e(base + '/' + canonical_path)}">
+<link rel="canonical" href="{e(base + '/' + canonical_path)}">
+<link rel="alternate" hreflang="en" href="{e(base + '/' + en_path)}"><link rel="alternate" hreflang="zh-CN" href="{e(base + '/' + zh_path)}">
+<link rel="alternate" hreflang="x-default" href="{e(base + '/' + en_path)}">
+<link rel="icon" type="image/svg+xml" href="{prefix}assets/favicon.svg"><link rel="stylesheet" href="{prefix}assets/style.css">
+</head><body>
+<a class="skip-link" href="#main">{'跳转到正文' if zh else 'Skip to content'}</a>
+<div class="site-shell"><aside class="sidebar">
+<a class="brand" href="{local_home}" aria-label="Zhige Security Lab"><img class="brand-logo" src="{prefix}assets/logo.svg" width="44" height="44" alt=""><span class="brand-name">Zhige Security Lab</span></a>
+<nav class="main-nav" aria-label="{'主导航' if zh else 'Main navigation'}">{menu}</nav>
+<div class="sidebar-bottom"><a class="language-switch" href="{prefix}{switch_path or './'}" lang="{'en' if zh else 'zh-CN'}" hreflang="{'en' if zh else 'zh-CN'}">{'English' if zh else '中文'} <span aria-hidden="true">↗</span></a><a href="{link(data['github'])}">GitHub <span aria-hidden="true">↗</span></a></div>
+</aside><main id="main">{content}
+<footer><span>Zhige Security Lab <span class="footer-dot">·</span> 止戈实验室</span><a href="{link(data['github'])}">GitHub ↗</a></footer>
+</main></div></body></html>'''
+
+
+def build(data=None, output=None):
+    data = data if data is not None else json.loads((ROOT / "content/site.json").read_text(encoding="utf-8"))
+    validate(data)
+    output = Path(output) if output is not None else OUT
+    categories = [group["id"] for group in data["people_categories"]]
+    if len(categories) != len(set(categories)) or any(not slug or not all(c in "abcdefghijklmnopqrstuvwxyz0123456789-" for c in slug) for slug in categories):
+        raise ValueError("Category ids must be unique lowercase URL slugs")
+    pages = {}
+    for lang in ("en", "zh"):
+        for person in data[lang]["people"]:
+            if person["category"] not in categories:
+                raise ValueError(f'Unknown member category: {person["category"]}')
+        prefix = "zh/" if lang == "zh" else ""
+        pages[prefix + "index.html"] = render(data, lang)
+        pages[prefix + "people/index.html"] = render(data, lang, "people")
+        for category in categories:
+            pages[prefix + f"people/{category}/index.html"] = render(data, lang, "people", category)
+    if output.exists():
+        shutil.rmtree(output)
+    output.mkdir()
+    shutil.copytree(ROOT / "assets", output / "assets")
+    for path, html in pages.items():
+        target = output / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(html, encoding="utf-8")
+    (output / ".nojekyll").touch()
+    (output / "404.html").write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page not found · Zhige Security Lab</title><body style="font-family:system-ui;max-width:40rem;margin:15vh auto;padding:2rem"><h1>Page not found / 页面未找到</h1><p><a href="/">English home</a> · <a href="/zh/">中文首页</a></p></body></html>', encoding="utf-8")
+    base = data["url"].rstrip("/")
+    (output / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n", encoding="utf-8")
+    sitemap = ET.Element("urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
+    for path in pages:
+        ET.SubElement(ET.SubElement(sitemap, "url"), "loc").text = base + "/" + path.removesuffix("index.html")
+    ET.ElementTree(sitemap).write(output / "sitemap.xml", encoding="utf-8", xml_declaration=True)
+    print(f"Built {len(pages)} bilingual pages in {output}")
+
+
+if __name__ == "__main__":
+    build()
