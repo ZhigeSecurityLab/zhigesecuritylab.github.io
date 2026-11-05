@@ -4,8 +4,8 @@
   "email": "zhige.sec.lab@hotmail.com",
   "en": {
     "name": "Zhige Security Lab",
-    "other_name": "止戈实验室",
-    "institution": "",
+    "other_name": "止戈安全实验室",
+    "institution": "Southeast University",
     "eyebrow": "SECURITY · PRIVACY · SYSTEMS",
     "intro": "We study the security and privacy of large language models and AI agents, alongside system security.",
     "about": "Our research focuses on understanding security and privacy challenges in intelligent systems and the computing systems that support them.",
@@ -29,9 +29,9 @@
     }
   },
   "zh": {
-    "name": "止戈实验室",
+    "name": "止戈安全实验室",
     "other_name": "Zhige Security Lab",
-    "institution": "",
+    "institution": "东南大学",
     "eyebrow": "安全 · 隐私 · 系统",
     "intro": "我们关注大语言模型与智能体的安全及隐私，以及系统安全研究。",
     "about": "我们的研究围绕智能系统及其支撑计算系统中的安全与隐私问题展开。",
@@ -41,7 +41,7 @@
     "recruitment": {
       "enabled": true,
       "title": "加入我们",
-      "body_markdown": "你是否希望让智能系统与计算系统更加安全？**止戈实验室欢迎对安全与隐私研究感兴趣的博士生、硕士生、博士后及科研助理联系咨询。**\n\n我们目前关注以下研究方向：\n\n- **大语言模型与智能体安全及隐私**\n- **系统安全**\n\n### 博士生与硕士生\n\n如果你希望围绕上述方向开展研究，欢迎介绍你的学习背景与研究兴趣，以及想要探索的问题。相关课程、项目或科研经历，都可以帮助我们更好地了解你。\n\n### 博士后\n\n### 科研助理\n\n### 如何联系我们\n\n请发送邮件至 **zhige.sec.lab@hotmail.com**，并提供：\n\n-\n-\n-\n-\n",
+      "body_markdown": "你是否希望让智能系统与计算系统更加安全？**止戈安全实验室欢迎对安全与隐私研究感兴趣的博士生、硕士生、博士后及科研助理联系咨询。**\n\n我们目前关注以下研究方向：\n\n- **大语言模型与智能体安全及隐私**\n- **系统安全**\n\n### 博士生与硕士生\n\n如果你希望围绕上述方向开展研究，欢迎介绍你的学习背景与研究兴趣，以及想要探索的问题。相关课程、项目或科研经历，都可以帮助我们更好地了解你。\n\n### 博士后\n\n### 科研助理\n\n### 如何联系我们\n\n请发送邮件至 **zhige.sec.lab@hotmail.com**，并提供：\n\n-\n-\n-\n-\n",
       "cta_label": "邮件咨询加入事宜",
       "email_subject": ""
     }
