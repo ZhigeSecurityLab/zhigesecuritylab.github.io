@@ -19,7 +19,14 @@
       }
     ],
     "publications": [],
-    "people": []
+    "people": [],
+    "recruitment": {
+      "enabled": true,
+      "title": "Recruitment",
+      "body_markdown": "Interested in making intelligent and computing systems more secure? **Zhige Security Lab welcomes enquiries from prospective PhD students, master's students, postdoctoral researchers, and research assistants.**\n\nOur current research interests include:\n\n- **LLM & Agent Security and Privacy**\n- **System Security**\n\n### PhD and Master's Students\n\nIf you are interested in pursuing research in these areas, we would be glad to hear about your background and research interests. Tell us what questions you would like to explore, and share any relevant coursework, projects, or research experience.\n\n### Postdoctoral Researchers\n\nWe welcome discussions with researchers whose work aligns with our interests. Please include a brief summary of your research, representative work, and the topics you would like to investigate with us.\n\n### Research Assistants\n\nIf you would like to contribute to security and privacy research, please introduce your background, relevant experience in programming or building systems, and anticipated availability.\n\n### How to Get in Touch\n\nPlease email **zhige.sec.lab@hotmail.com** with:\n\n- Your **CV** and the type of opportunity you are interested in;\n- A short description of your **research interests** and relevant experience;\n- Links to publications, projects, or code, if available;\n- Your anticipated starting time and availability.\n\nSuggested email subject: **[Zhige Lab] Position – Your Name**.\n\nSpecific openings, timelines, and application procedures are not yet finalized. Please contact us for the latest information.",
+      "cta_label": "Enquire about joining us",
+      "email_subject": "[Zhige Lab] Research opportunity enquiry"
+    }
   },
   "zh": {
     "name": "止戈实验室",
@@ -30,7 +37,14 @@
     "about": "我们的研究围绕智能系统及其支撑计算系统中的安全与隐私问题展开。",
     "news": [],
     "publications": [],
-    "people": []
+    "people": [],
+    "recruitment": {
+      "enabled": true,
+      "title": "加入我们",
+      "body_markdown": "你是否希望让智能系统与计算系统更加安全？**止戈实验室欢迎对安全与隐私研究感兴趣的博士生、硕士生、博士后及科研助理联系咨询。**\n\n我们目前关注以下研究方向：\n\n- **大语言模型与智能体安全及隐私**\n- **系统安全**\n\n### 博士生与硕士生\n\n如果你希望围绕上述方向开展研究，欢迎介绍你的学习背景与研究兴趣，以及想要探索的问题。相关课程、项目或科研经历，都可以帮助我们更好地了解你。\n\n### 博士后\n\n欢迎研究方向契合的博士后申请者交流。请简要介绍你的研究工作、代表性成果，以及希望与实验室共同探索的课题。\n\n### 科研助理\n\n如果你希望参与安全与隐私研究，欢迎介绍你的专业背景、相关编程或系统实践经历，以及预计可以参与的时间安排。\n\n### 如何联系我们\n\n请发送邮件至 **zhige.sec.lab@hotmail.com**，并提供：\n\n- **个人简历**及希望申请的类别；\n- 简短的**研究兴趣**和相关经历介绍；\n- 已有论文、项目或代码链接（如有）；\n- 预计开始时间及可参与的时间安排。\n\n建议邮件主题：**[Zhige Lab] 申请类别 – 姓名**。\n\n具体名额、时间安排与申请流程尚未确定，欢迎通过邮件咨询最新信息。",
+      "cta_label": "邮件咨询加入事宜",
+      "email_subject": "[Zhige Lab] 加入实验室咨询"
+    }
   },
   "people_categories": [
     {
