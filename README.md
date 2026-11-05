@@ -1,4 +1,4 @@
-# Zhige Security Lab · 止戈实验室
+# Zhige Security Lab · 止戈安全实验室
 
 实验室双语主页，默认英文，中文位于 `/zh/`。公开网站为静态页面，无前端框架或外部字体依赖；构建时使用 Python 和 Markdown 渲染器。
 
@@ -28,7 +28,7 @@ python3 -m venv .venv
 | 内容 | 字段 |
 | --- | --- |
 | 名称与简介 | 各语言的 `name`、`intro`、`about` |
-| 所属学校／单位 | 各语言的 `institution`，留空隐藏 |
+| 所属学校／单位 | 各语言的 `institution`，显示在首页中英文名称后，留空隐藏 |
 | 联系邮箱 | 顶层 `email`，留空隐藏联系栏目 |
 | 研究方向描述 | 各语言的 `intro`、`about` |
 | 新闻 | 各语言的 `news` 数组，日期降序 |
@@ -83,8 +83,7 @@ python3 -m http.server 8000 --directory _site --bind 127.0.0.1
 ```text
 content/site.json              中英文内容
 assets/style.css               配色和响应式布局
-assets/logo.svg                止戈合文图形 Logo
-assets/favicon.svg             配套网站图标
+assets/logo.jpg                用户提供的完整 Logo，同时用作网站图标
 scripts/build.py               静态页面生成器
 scripts/admin.py               本机维护服务
 admin/                         维护后台界面，不会发布到公开网站
@@ -94,4 +93,4 @@ requirements.txt               构建依赖
 .github/workflows/pages.yml    自动发布工作流
 ```
 
-页眉使用止戈合文图形 Logo 和统一字号的“Zhige Security Lab”，浏览器使用配套网站图标。替换 Logo 时同步修改 `assets/logo.svg` 与夜间版 `assets/logo-dark.svg`，保持正方形画板和图形比例。导航中的 Contact Us／联系我们直接打开邮件客户端，收件人为 `content/site.json` 中的 `email`；首页联系栏目也显示该邮箱。页面支持记住偏好的日间／夜间模式，页脚显示不蒜子提供的全站浏览量，本地预览不计数。字体和 Logo 不依赖外部服务。更换域名时同步修改 `content/site.json` 的 `url`，并配置 GitHub Pages 自定义域名。
+页眉使用用户提供的完整 Logo 图片 `assets/logo.jpg`，保持原始比例与颜色，日间／夜间共用同一张图片。更换 Logo 时替换该文件即可，网站图标和本地维护后台同步使用它。首页中英文名称分别追加对应语言的 `@ institution`，目前为 Southeast University／东南大学。导航中的 Contact Us／联系我们直接打开邮件客户端，收件人为 `content/site.json` 中的 `email`；首页联系栏目也显示该邮箱。页面支持记住偏好的日间／夜间模式，页脚显示不蒜子提供的全站浏览量，本地预览不计数。字体和 Logo 不依赖外部服务。更换域名时同步修改 `content/site.json` 的 `url`，并配置 GitHub Pages 自定义域名。

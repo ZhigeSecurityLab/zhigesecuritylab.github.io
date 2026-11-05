@@ -1,4 +1,4 @@
-# 止戈实验室网站维护指南
+# 止戈安全实验室网站维护指南
 
 ## 打开后台
 
@@ -77,7 +77,7 @@ print("Hello, Zhige")
 
 只有正式网站域名会加载统计脚本。本机预览和局域网预览不计数，显示“—”；统计服务暂时不可用或被浏览器拦截时同样显示“—”。网站内容和主题切换仍可使用。统计不需要在后台手动编辑数字。
 
-主题与计数逻辑位于 `assets/site.js`；配色在 `assets/style.css` 中维护。夜间 Logo 使用相同的图形路径，颜色调整为浅绿色，保存在 `assets/logo-dark.svg`。
+主题与计数逻辑位于 `assets/site.js`；配色在 `assets/style.css` 中维护。Logo 使用 `assets/logo.jpg`，日间和夜间均完整保留原图，不改变其颜色。首页名称后的学校信息取自各语言的 `institution`，当前为 Southeast University／东南大学。
 
 ## 保存、备份与恢复
 
