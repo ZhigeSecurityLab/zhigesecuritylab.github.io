@@ -583,7 +583,7 @@ html[lang="zh-CN"] h1, html[lang="zh-CN"] h2, html[lang="zh-CN"] h3 { font-famil
   --hover: #fff;
   --on-accent: #001c42;
   --code-bg: #11365e;
-  --gold-text: #e0b45a;
+  --gold-text: #CA9429FD;
 }
 .theme-icon-day { display: none; }
 :root[data-theme="dark"] .theme-icon-night { display: none; }
@@ -600,7 +600,7 @@ html[lang="zh-CN"] h1, html[lang="zh-CN"] h2, html[lang="zh-CN"] h3 { font-famil
     --hover: #fff;
     --on-accent: #001c42;
     --code-bg: #11365e;
-    --gold-text: #e0b45a;
+    --gold-text: #CA9429FD;
   }
 }
 .theme-toggle {
