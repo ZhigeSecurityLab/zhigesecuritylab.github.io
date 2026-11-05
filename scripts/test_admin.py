@@ -80,8 +80,10 @@ class EditorTests(unittest.TestCase):
         self.assertIn('&lt;script&gt;', html)
 
     def test_recruitment_renders_markdown_and_email_in_both_languages(self):
+        data = copy.deepcopy(self.original)
         for language in ('en', 'zh'):
-            html = render(self.original, language)
+            data[language]['recruitment']['email_subject'] = '[Zhige Lab] Enquiry'
+            html = render(data, language)
             self.assertIn('id="recruitment"', html)
             self.assertIn('href="./#recruitment"', html)
             self.assertIn('class="recruitment-cta"', html)
