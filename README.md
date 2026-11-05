@@ -8,7 +8,7 @@
 
 后台地址：`http://127.0.0.1:8001/`。它只接受本机访问，不随静态网站发布到 GitHub Pages，也不会自动推送 GitHub。
 
-1. 在左侧选择 **简介与首页、News、Publications 或 People**。
+1. 在左侧选择 **简介与首页、News、Publications、People 或 Recruitment**。
 2. 选择 **英文 EN** 或 **中文 ZH**，分别维护两种语言。切换模块或语言会保留尚未保存的修改。
 3. 编辑内容后，点击右上角 **保存并更新预览**。保存成功后，下面的网站预览会刷新，原有 8000 端口的预览也会使用新内容。
 4. 准备上线时，将仓库修改提交并推送到 GitHub；启用 Pages 后，Actions 会自动发布。
@@ -35,6 +35,7 @@ python3 -m venv .venv
 | 论文 | 各语言的 `publications` 数组，年份降序 |
 | 成员 | 各语言的 `people` 数组，使用 `category` 指定分类 |
 | 成员分类 | 顶层 `people_categories`，含中英文名称及页面路径 |
+| 招募信息 | 各语言的 `recruitment`：标题、Markdown 正文、邮件按钮与显示开关 |
 
 Publications、News 和 People 始终保留。内容为空时显示简短的待更新提示。People 菜单可展开分类，每类有独立页面；中文切换会保留当前分类。以下仅为字段示例，请确认真实资料后填写。
 
