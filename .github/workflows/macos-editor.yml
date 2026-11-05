@@ -1,0 +1,54 @@
+name: Build portable macOS member editor
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            arch: Apple-Silicon
+          - runner: macos-15-intel
+            arch: Intel
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install packaging dependencies
+        run: python -m pip install -r requirements.txt pyinstaller==6.22.3
+      - name: Build portable editor
+        run: |
+          python -m PyInstaller --noconfirm --onedir --contents-directory . --name ZhigeMemberEditor --paths scripts --add-data "assets:assets" --add-data "content:content" --add-data "faculty_editor:faculty_editor" --add-data "student_editor:student_editor" scripts/faculty.py
+          cp "$(command -v gh)" dist/ZhigeMemberEditor/gh
+          cp portable/Start-Member-Editor.command dist/ZhigeMemberEditor/
+          cp portable/README-macOS.txt dist/ZhigeMemberEditor/
+          chmod +x dist/ZhigeMemberEditor/gh dist/ZhigeMemberEditor/ZhigeMemberEditor dist/ZhigeMemberEditor/Start-Member-Editor.command
+      - name: Smoke test member editor
+        run: |
+          dist/ZhigeMemberEditor/ZhigeMemberEditor --student --port 18005 > member-out.txt 2> member-err.txt &
+          editor_pid=$!
+          trap 'kill "$editor_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:18005/api/state -o state.json; then
+              if python -c 'import json; s=json.load(open("state.json")); assert s["student"] and s["branch"] == "main"'; then ready=1; break; fi
+            fi
+            sleep 1
+          done
+          if [ "$ready" -ne 1 ]; then cat member-out.txt member-err.txt; exit 1; fi
+          curl --silent --fail http://127.0.0.1:18005/ | grep -q 'id="category"'
+      - name: Package zip preserving executable permissions
+        run: ditto -c -k --sequesterRsrc --keepParent dist/ZhigeMemberEditor Zhige-Member-Editor-macOS-${{ matrix.arch }}.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Zhige-Member-Editor-macOS-${{ matrix.arch }}
+          path: Zhige-Member-Editor-macOS-${{ matrix.arch }}.zip
+          retention-days: 30

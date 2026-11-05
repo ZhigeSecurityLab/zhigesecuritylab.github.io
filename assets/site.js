@@ -3,7 +3,10 @@
   'use strict';
   var root = document.documentElement;
   var preference = null;
-  var system = window.matchMedia('(prefers-color-scheme: dark)');
+  function timeTheme() {
+    var hour = new Date().getHours();
+    return hour >= 7 && hour < 19 ? 'light' : 'dark';
+  }
   try {
     var saved = localStorage.getItem('zhige-theme');
     if (saved === 'light' || saved === 'dark') preference = saved;
@@ -22,12 +25,11 @@
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.content = dark ? '#161f1c' : '#f7f8f6';
   }
-  applyTheme(preference || (system.matches ? 'dark' : 'light'));
-  function followSystem(event) {
-    if (!preference) applyTheme(event.matches ? 'dark' : 'light');
-  }
-  if (system.addEventListener) system.addEventListener('change', followSystem);
-  else if (system.addListener) system.addListener(followSystem);
+  applyTheme(preference || timeTheme());
+  // Follow the visitor's local clock until they choose a mode themselves.
+  setInterval(function () {
+    if (!preference) applyTheme(timeTheme());
+  }, 60000);
 
   function loadCounter() {
     var counter = document.getElementById('busuanzi_value_site_pv');

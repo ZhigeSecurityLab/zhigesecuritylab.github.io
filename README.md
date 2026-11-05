@@ -99,6 +99,8 @@ requirements.txt               构建依赖
 
 `garrisongys` 可在 Windows 双击 `Start Faculty Editor.bat`，或在 macOS 双击 `Start Faculty Editor.command`，打开仅维护本人 Faculty 资料和 Recruitment 的本地界面。Windows 还可从 Actions 下载免安装包，`zhengfeiLian` 可在测试分支演练。头像、中英文 Markdown、模板、预览与 GitHub 推送操作见 [FACULTY_MAINTENANCE.md](FACULTY_MAINTENANCE.md)。
 
+其他成员可下载 Windows、macOS Apple Silicon 或 macOS Intel 自助维护包，登录自己的 GitHub 账号登记及更新 People 资料；操作步骤见 [MEMBER_MAINTENANCE.md](MEMBER_MAINTENANCE.md)。
+
 ## 外观与按钮发布
 
 在后台「外观与字号」调整正文、导航、首页标题、说明、People 标签、Markdown 正文、页脚字号、Logo 宽度和行距。中英文共用这些设置，手机端自动适配；预览栏可以选择首页／People 子页以及 375px 手机宽度。外观保存在 `content/site.json` 的 `appearance` 中；省略字段时使用推荐值。`assets/appearance.css` 是构建产物，不应手工编辑。

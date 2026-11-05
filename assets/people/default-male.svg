@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="Default portrait, masculine">
+  <rect width="320" height="320" fill="#F7F8F6"/>
+  <circle cx="160" cy="150" r="126" fill="#EFF2EF"/>
+  <path d="M50 320c8-53 47-81 110-81s102 28 110 81" fill="#0B2B4B"/>
+  <path d="M123 238l37 50 37-50" fill="#F7F8F6"/>
+  <path d="M147 273l13 17 13-17-13-18z" fill="#CA9429"/>
+  <path d="M118 133c0-34 18-58 43-58 28 0 45 25 45 58v29c0 36-20 62-46 62-24 0-42-25-42-62z" fill="#D9C2A3"/>
+  <path d="M112 136c-5-47 17-76 51-76 36 0 59 29 51 76-7-13-13-25-19-39-17 13-41 20-77 19z" fill="#0B2B4B"/>
+  <path d="M140 180c12 9 28 9 40 0" fill="none" stroke="#9C7654" stroke-linecap="round" stroke-width="3"/>
+  <path d="M64 258c-14-24-18-52-12-79M256 258c14-24 18-52 12-79" fill="none" stroke="#CA9429" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+</svg>
