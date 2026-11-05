@@ -158,6 +158,8 @@ def _publish(raw):
             raise RuntimeError('GitHub 上的内容已由其他人更新。请先同步后再发布，防止覆盖；本地修改已保留。')
         avatars = sorted({person['avatar'] for lang in ('en','zh') for person in content.get(lang, {}).get('people', [])})
         for path in avatars:
+            if path in {'assets/people/default-male.svg', 'assets/people/default-female.svg'}:
+                continue  # Versioned site assets are already in the repository.
             if not re.fullmatch(r'assets/people/[a-zA-Z0-9_-]+\.(?:jpg|png|webp)', path):
                 raise RuntimeError('成员头像路径无效。')
             image = ROOT / path
