@@ -61,13 +61,13 @@ print("Hello, Zhige")
 
 当前文案面向博士生、硕士生、博士后与科研助理，具体名额、时间和申请流程以邮件咨询为准。后续信息明确时，在正文中补充即可；如更换公共邮箱，请同步更新正文中写出的邮箱地址。
 
-可直接分享 `https://zhigesecuritylab.github.io/#recruitment` 或中文 `https://zhigesecuritylab.github.io/zh/#recruitment`。
+可直接分享 `https://zhigesecuritylab.github.io/recruitment/` 或中文 `https://zhigesecuritylab.github.io/zh/recruitment/`。
 
 **简介与首页**：修改当前语言的名称、另一语言名称、单位、关键词与两段介绍。
 
 **设置与备份**：修改公共邮箱、正式网站地址、GitHub 地址，以及各成员分类的中英文名称。分类的路径标识保持稳定。
 
-当前 Contact Us 邮箱：`zhige.sec.lab@hotmail.com`。它会同时用于导航邮件链接和首页联系栏目。
+当前 Contact Us 邮箱：`zhige.sec.lab@hotmail.com`。它会显示在独立的 Contact Us／联系我们页面。
 
 ## 日间／夜间模式与访问量
 
@@ -121,7 +121,7 @@ python3 -m venv .venv
 ## 外观与字号
 
 1. 打开本地后台，选择「外观与字号」。数字单位为 px，正文行距为倍数。
-2. 修改后点「保存并更新预览」，在预览栏选择首页、People 总览或 Faculty 子页；可切换英文、中文和 375px 手机宽度。
+2. 修改后点「保存并更新预览」，在预览栏选择首页、Recruitment、Publications、Contact Us、People 总览或 Faculty 子页；可切换英文、中文和 375px 手机宽度。
 3. 满意后点「发布到网站」。若想撤销字号调整，点「恢复推荐字号」再保存或发布；内容不会被清空。
 
 ## 首次连接 GitHub 与一键发布
@@ -139,3 +139,7 @@ python3 -m venv .venv
 - 后台只发布内容文件。修改程序、CSS 结构或替换图片后仍需正常提交源码。
 
 维护后台只在本机运行，不作为公开网站的在线登录管理端。配置由 `scripts/appearance.py` 校验，发布逻辑在 `scripts/publish.py`；GitHub token 不写入任何内容、备份、发布记录或截图。
+
+## garrisongys 的 Faculty 专用入口
+
+Windows 双击 `Start Faculty Editor.bat`，macOS 双击 `Start Faculty Editor.command`。它只编辑该账号对应的中英文 Faculty 资料，支持头像、Markdown 模板、本地预览，并通过 garrisongys 自己的 GitHub CLI 授权发布。参见 [FACULTY_MAINTENANCE.md](FACULTY_MAINTENANCE.md)。

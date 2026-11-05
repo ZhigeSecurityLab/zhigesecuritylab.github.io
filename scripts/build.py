@@ -44,6 +44,7 @@ def validate(data):
         raise ValueError("分类 id 不能重复")
     for lang in ("en", "zh"):
         t = data[lang]
+        profile_owners = set()
         for field in ("name", "other_name", "institution", "eyebrow", "intro", "about"):
             string(t[field], f"{lang}.{field}", field == "name")
         recruitment = t.get("recruitment")
@@ -76,6 +77,11 @@ def validate(data):
                     string(item["role"], "成员身份")
                     if item["category"] not in slugs:
                         raise ValueError("成员分类不存在")
+                    owner = item.get("github_username", "")
+                    if owner:
+                        if not isinstance(owner, str) or not re.fullmatch(r"[A-Za-z0-9-]{1,39}", owner) or owner.lower() in profile_owners:
+                            raise ValueError("成员 GitHub 用户名无效或重复")
+                        profile_owners.add(owner.lower())
                     avatar = item.get("avatar", "")
                     if not isinstance(avatar, str) or not re.fullmatch(r"assets/people/[a-zA-Z0-9_-]+\.(?:jpg|png|webp)", avatar):
                         raise ValueError("请上传成员头像")
@@ -151,23 +157,32 @@ def home_content(data, lang):
             ("最新动态待更新。" if zh else "News and updates will be added."))
         return f'<section id="{key}" class="section"><h2>{names[key]}</h2>{body}</section>'
 
-    result += listing("news")
+    return result + listing("news")
+
+
+def section_content(data, lang, page):
+    t = data[lang]
+    zh = lang == "zh"
+    names = labels(lang)
+    label = ("加入我们" if zh else "Recruitment") if page == "recruitment" else names[page]
+    result = f'<div class="page-heading"><a class="back-link" href="../">← {"返回首页" if zh else "Back to home"}</a><p class="eyebrow">ZHIGE SECURITY LAB</p><h1>{e(label)}</h1></div>'
     recruitment = t.get("recruitment", {})
-    if recruitment and recruitment.get("enabled", True):
+    if page == "recruitment" and recruitment and recruitment.get("enabled", True):
         contact = ""
         if data["email"]:
             subject = quote(recruitment.get("email_subject", ""), safe="")
             cta = recruitment.get("cta_label") or ("邮件咨询" if zh else "Get in touch")
             contact = f'<a class="recruitment-cta" href="mailto:{e(data["email"])}?subject={subject}">{e(cta)} <span aria-hidden="true">↗</span></a>'
-        result += f'<section id="recruitment" class="section recruitment-section"><h2>{e(recruitment["title"])}</h2><div class="markdown-body recruitment-copy">{MARKDOWN.render(recruitment["body_markdown"])}</div>{contact}</section>'
-    result += listing("publications")
-    people_rows = ""
-    for group in data["people_categories"]:
-        people = [person for person in t["people"] if person["category"] == group["id"]]
-        names_in_group = f'<span class="people-overview-names">{e(", ".join(person["name"] for person in people))}</span>' if people else ""
-        people_rows += f'<li><a href="people/{group["id"]}/">{e(group[lang])} <span aria-hidden="true">↗</span></a>{names_in_group}</li>'
-    result += f'<section id="people" class="section"><h2>{names["people"]}</h2><p class="section-description">{"按成员类别浏览实验室。" if zh else "Explore the lab by member category."}</p><ul class="people-overview-list">{people_rows}</ul></section>'
-    if data["email"]:
+        result += f'<section id="recruitment" class="section recruitment-section"><div class="markdown-body recruitment-copy">{MARKDOWN.render(recruitment["body_markdown"])}</div>{contact}</section>'
+    if page == "publications":
+        rows = ""
+        for item in sorted(t["publications"], key=lambda x: x["year"], reverse=True):
+            title = e(item["title"])
+            if item.get("url"):
+                title = f'<a href="{link(item["url"])}">{title}</a>'
+            rows += f'<li class="publication"><h3>{title}</h3><p>{e(item["authors"])}</p><p class="muted">{e(item["venue"])} · {e(item["year"])}</p></li>'
+        result += f'<section id="publications" class="section"><ul class="plain-list">{rows}</ul></section>' if rows else empty("论文信息待更新。" if zh else "Publication information will be added.")
+    if page == "contact" and data["email"]:
         email = data["email"]
         if any(c in email for c in "\r\n?&") or "@" not in email:
             raise ValueError("Invalid contact email")
@@ -206,7 +221,7 @@ def render(data, lang, page="home", category=None):
     t = data[lang]
     zh = lang == "zh"
     names = labels(lang)
-    subpath = "" if page == "home" else "people/" + (category + "/" if category else "")
+    subpath = "" if page == "home" else ("people/" + (category + "/" if category else "") if page == "people" else page + "/")
     prefix = "../" * (subpath.count("/") + int(zh))
     local_home = "../" * subpath.count("/") or "./"
     base = data["url"].rstrip("/")
@@ -214,22 +229,22 @@ def render(data, lang, page="home", category=None):
     zh_path = "zh/" + subpath
     canonical_path = zh_path if zh else en_path
     switch_path = en_path if zh else zh_path
-    title = t["name"] if page == "home" else labels(lang)["people"]
+    title = t["name"] if page == "home" else (labels(lang)["people"] if page == "people" else ("加入我们" if zh else "Recruitment") if page == "recruitment" else names[page])
     if category:
         title = next(group[lang] for group in data["people_categories"] if group["id"] == category)
     document_title = f'{title} | {t["other_name"] if page == "home" else t["name"]}'
     menu = f'<a href="{local_home}"' + (' aria-current="page"' if page == "home" else '') + f'>{names["home"]}</a>'
     menu += f'<a href="{local_home}#news">{names["news"]}</a>'
     if t.get("recruitment") and t["recruitment"].get("enabled", True):
-        menu += f'<a href="{local_home}#recruitment">{"加入我们" if zh else "Recruitment"}</a>'
-    menu += f'<a href="{local_home}#publications">{names["publications"]}</a>'
+        menu += f'<a href="{local_home}recruitment/"' + (' aria-current="page"' if page == "recruitment" else '') + f'>{"加入我们" if zh else "Recruitment"}</a>'
+    menu += f'<a href="{local_home}publications/"' + (' aria-current="page"' if page == "publications" else '') + f'>{names["publications"]}</a>'
     people_home = local_home + "people/"
     submenu = f'<a href="{people_home}">{"全部成员" if zh else "All people"}</a>'
     submenu += "".join(f'<a href="{people_home}{g["id"]}/">{e(g[lang])}</a>' for g in data["people_categories"])
     menu += f'<details class="people-menu"><summary>{names["people"]}</summary><div class="people-submenu">{submenu}</div></details>'
     if data["email"]:
-        menu += f'<a href="mailto:{e(data["email"])}">{names["contact"]}</a>'
-    content = home_content(data, lang) if page == "home" else people_content(data, lang, category)
+        menu += f'<a href="{local_home}contact/"' + (' aria-current="page"' if page == "contact" else '') + f'>{names["contact"]}</a>'
+    content = home_content(data, lang) if page == "home" else people_content(data, lang, category) if page == "people" else section_content(data, lang, page)
     return f'''<!doctype html>
 <html lang="{'zh-CN' if zh else 'en'}"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -265,6 +280,9 @@ def build(data=None, output=None):
                 raise ValueError(f'Unknown member category: {person["category"]}')
         prefix = "zh/" if lang == "zh" else ""
         pages[prefix + "index.html"] = render(data, lang)
+        for section in ("recruitment", "publications", "contact"):
+            if section != "recruitment" or data[lang].get("recruitment", {}).get("enabled", True):
+                pages[prefix + section + "/index.html"] = render(data, lang, section)
         pages[prefix + "people/index.html"] = render(data, lang, "people")
         for category in categories:
             pages[prefix + f"people/{category}/index.html"] = render(data, lang, "people", category)

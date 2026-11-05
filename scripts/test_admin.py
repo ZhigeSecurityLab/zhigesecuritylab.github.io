@@ -37,7 +37,7 @@ class EditorTests(unittest.TestCase):
         draft['en']['intro'] = 'Updated introduction.'
         result = admin.save(draft, admin.revision(before))
         self.assertEqual(result['data'], draft)
-        self.assertEqual(len(list(admin.OUT.rglob('index.html'))), 14)
+        self.assertEqual(len(list(admin.OUT.rglob('index.html'))), 20)
         self.assertIn('Updated introduction.', (admin.OUT / 'index.html').read_text())
         self.assertEqual((admin.BACKUPS / result['backups'][0]).read_bytes(), before)
         self.assertFalse((admin.OUT / 'admin').exists())
@@ -83,43 +83,44 @@ class EditorTests(unittest.TestCase):
         data = copy.deepcopy(self.original)
         for language in ('en', 'zh'):
             data[language]['recruitment']['email_subject'] = '[Zhige Lab] Enquiry'
-            html = render(data, language)
+            html = render(data, language, 'recruitment')
             self.assertIn('id="recruitment"', html)
-            self.assertIn('href="./#recruitment"', html)
+            self.assertIn('href="../recruitment/"', html)
             self.assertIn('class="recruitment-cta"', html)
             self.assertIn('mailto:zhige.sec.lab@hotmail.com?subject=%5BZhige%20Lab%5D', html)
             self.assertIn('<strong>', html)
-        self.assertIn('Research Assistants', render(self.original, 'en'))
-        self.assertIn('科研助理', render(self.original, 'zh'))
+        self.assertIn('Research Assistants', render(self.original, 'en', 'recruitment'))
+        self.assertIn('科研助理', render(self.original, 'zh', 'recruitment'))
 
     def test_recruitment_can_be_hidden_and_old_content_remains_valid(self):
         data = copy.deepcopy(self.original)
         data['en']['recruitment']['enabled'] = False
         html = render(data, 'en')
         self.assertNotIn('id="recruitment"', html)
-        self.assertNotIn('#recruitment', html)
+        self.assertNotIn('href="./recruitment/"', html)
         for language in ('en', 'zh'):
             data[language].pop('recruitment', None)
         validate(data)
-        self.assertNotIn('id="recruitment"', render(data, 'zh'))
+        self.assertNotIn('href="./recruitment/"', render(data, 'zh'))
 
     def test_home_sections_and_navigation_follow_requested_order(self):
         for language in ('en', 'zh'):
             html = render(self.original, language)
             navigation = html.split('<nav class="main-nav"', 1)[1].split('</nav>', 1)[0]
             for earlier, later in zip(
-                ('"./"', '#news', '#recruitment', '#publications', 'people-menu', 'mailto:'),
-                ('#news', '#recruitment', '#publications', 'people-menu', 'mailto:', '</nav>'),
+                ('"./"', '#news', 'recruitment/', 'publications/', 'people-menu', 'contact/'),
+                ('#news', 'recruitment/', 'publications/', 'people-menu', 'contact/', '</nav>'),
             ):
                 if later != '</nav>':
                     self.assertLess(navigation.index(earlier), navigation.index(later))
             content = html.split('<main id="main">', 1)[1]
-            positions = [content.index(f'id="{section}"') for section in
-                         ('about', 'news', 'recruitment', 'publications', 'people', 'contact')]
+            positions = [content.index(f'id="{section}"') for section in ('about', 'news')]
             self.assertEqual(positions, sorted(positions))
+            for section in ('recruitment', 'publications', 'people', 'contact'):
+                self.assertNotIn(f'id="{section}"', content)
             self.assertNotIn('class="text-link"', content)
-            for group in self.original['people_categories']:
-                self.assertIn(f'href="people/{group["id"]}/"', content)
+            self.assertIn('id="recruitment"', render(self.original, language, 'recruitment'))
+            self.assertIn('id="contact"', render(self.original, language, 'contact'))
 
     def test_http_save_restore_and_request_guards(self):
         with patch.object(admin.Handler, 'log_message', lambda *args: None):

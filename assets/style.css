@@ -9,6 +9,8 @@
   --hover:#9b6a08;
   --on-accent:#fff;
   --code-bg:#f1f4f7;
+  --gold:#c09020;
+  --gold-text:#91610a;
   --serif:"Songti SC","STSong","SimSun",serif;
   --sans:Arial,Helvetica,"PingFang SC","Microsoft YaHei",sans-serif;
 }
@@ -218,7 +220,7 @@ main {
   font-size:14px;
   font-weight:600;
   letter-spacing:1.8px;
-  color:var(--accent);
+  color:var(--gold-text);
   margin:0 0 24px;
 }
 h1 {
@@ -563,6 +565,8 @@ html[lang="zh-CN"] .intro {
 .person { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 22px; align-items: start; }
 .person-avatar { width: 112px; height: 112px; object-fit: cover; border-radius: 4px; background: var(--code-bg); }
 .person-description { white-space: pre-wrap; overflow-wrap: anywhere; }
+.news-row time,.footer-dot { color:var(--gold-text); }
+.main-nav a[aria-current="page"] { border-left:3px solid var(--gold); padding-left:13px; }
 html[lang="en"] h1, html[lang="en"] h2, html[lang="en"] h3 { font-family: var(--sans); font-weight: 700; }
 html[lang="zh-CN"] body { font-family: var(--serif); }
 html[lang="zh-CN"] h1, html[lang="zh-CN"] h2, html[lang="zh-CN"] h3 { font-family: var(--serif); font-weight: 700; }
@@ -579,6 +583,7 @@ html[lang="zh-CN"] h1, html[lang="zh-CN"] h2, html[lang="zh-CN"] h3 { font-famil
   --hover: #fff;
   --on-accent: #001c42;
   --code-bg: #11365e;
+  --gold-text: #e0b45a;
 }
 .theme-icon-day { display: none; }
 :root[data-theme="dark"] .theme-icon-night { display: none; }
@@ -595,6 +600,7 @@ html[lang="zh-CN"] h1, html[lang="zh-CN"] h2, html[lang="zh-CN"] h3 { font-famil
     --hover: #fff;
     --on-accent: #001c42;
     --code-bg: #11365e;
+    --gold-text: #e0b45a;
   }
 }
 .theme-toggle {
@@ -621,7 +627,7 @@ html[lang="zh-CN"] h1, html[lang="zh-CN"] h2, html[lang="zh-CN"] h3 { font-famil
   .footer-meta { gap: 18px; }
 }
 
-.recruitment-copy { margin-top: 22px; max-width: 720px; }
+.recruitment-copy { margin-top: 22px; width: 100%; }
 .recruitment-copy h3 { margin-top: 26px; font-size: 17px; color: var(--text); }
 .recruitment-copy p { margin: 12px 0; }
 .recruitment-copy ul { padding-left: 22px; margin: 12px 0 18px; }
