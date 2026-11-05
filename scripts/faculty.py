@@ -28,6 +28,7 @@ if hasattr(sys.stderr, "reconfigure"):
 
 OWNER = "garrisongys"
 BRANCH = "main"
+STUDENT = False
 REPO = "ZhigeSecurityLab/zhigesecuritylab.github.io"
 UI = ROOT / "faculty_editor"
 CONFIG = ROOT / ".local/faculty-github-auth"
@@ -35,9 +36,10 @@ BASELINE = ROOT / ".local/faculty-baseline.json"
 TOKEN = secrets.token_urlsafe(32)
 AUTH_STATE = {"state": "idle"}
 LOCK = threading.Lock()
-FIELDS = ("name", "role", "url", "bio_markdown")
+FIELDS = ("name", "role", "url", "bio_markdown", "description")
 DRAFT_AVATAR = "assets/people/draft-preview.jpg"
 DRAFT_NAMES = {"en": "Faculty preview", "zh": "教师资料预览"}
+DEFAULT_AVATARS = {"assets/people/default-male.svg", "assets/people/default-female.svg"}
 
 
 def gh(args, payload=None):
@@ -67,7 +69,10 @@ def connection():
     try:
         user = gh(["api", "user"])["login"]
         repo = gh(["api", "repos/" + REPO])
-        return {"installed": True, "connected": user.lower() == OWNER.lower() and bool(repo.get("permissions", {}).get("push")),
+        allowed = bool(repo.get("permissions", {}).get("push"))
+        if STUDENT and not OWNER and allowed:
+            select_student_owner(user)
+        return {"installed": True, "connected": user.lower() == OWNER.lower() and allowed,
                 "account": user, "login": dict(AUTH_STATE)}
     except (RuntimeError, subprocess.TimeoutExpired):
         return {"installed": True, "connected": False, "account": "", "login": dict(AUTH_STATE)}
@@ -101,7 +106,7 @@ def _login():
             for line in process.stdout:
                 match = re.search(r"\b([A-Z0-9]{4}-[A-Z0-9]{4})\b", line)
                 if match:
-                    AUTH_STATE.update(code=match.group(1), message=f"请用 {OWNER} 在 GitHub 输入验证码并授权。")
+                    AUTH_STATE.update(code=match.group(1), message=f"请用 {OWNER or '自己的 GitHub 账号'} 在 GitHub 输入验证码并授权。")
             exit_code = process.wait()
         finally:
             timer.cancel()
@@ -113,34 +118,42 @@ def _login():
 
 
 def own_record(data, lang):
+    if not OWNER:
+        return None
     matches = [person for person in data[lang]["people"] if person.get("github_username", "").lower() == OWNER.lower()]
-    if len(matches) > 1 or (matches and matches[0]["category"] != "faculty"):
+    if len(matches) > 1 or (not STUDENT and matches and matches[0]["category"] != "faculty"):
         raise ValueError("Faculty 资料归属设置异常")
     return matches[0] if matches else None
 
 
 def profiles(data):
-    return {lang: own_record(data, lang) or {"name": "", "role": "", "url": "", "bio_markdown": "", "avatar": ""}
+    return {lang: own_record(data, lang) or {"name": "", "role": "", "url": "", "bio_markdown": "", "description": "", "avatar": "", "category": "phd" if STUDENT else "faculty"}
             for lang in ("en", "zh")}
 
 
 def merge(data, submitted=None, recruitment=None):
     result = copy.deepcopy(data)
     if submitted is not None:
-        if not isinstance(submitted, dict) or set(submitted) != {"en", "zh", "avatar"}:
+        if not isinstance(submitted, dict) or set(submitted) not in ({"en", "zh", "avatar"}, {"en", "zh", "avatar", "category"}):
             raise ValueError("资料格式无效")
         avatar = submitted["avatar"]
+        category = submitted.get("category", "faculty")
+        if category not in {group["id"] for group in result["people_categories"]} or (not STUDENT and category != "faculty"):
+            raise ValueError("成员分类无效")
         for lang in ("en", "zh"):
             source = submitted[lang]
-            if not isinstance(source, dict) or set(source) != set(FIELDS):
+            if not isinstance(source, dict) or set(source) not in (set(FIELDS), set(FIELDS) - {"description"}):
                 raise ValueError("资料字段无效")
             record = own_record(result, lang)
             if record is None:
-                record = {"category": "faculty", "github_username": OWNER}
+                record = {"category": category, "github_username": OWNER}
                 result[lang]["people"].append(record)
             for field in FIELDS:
-                record[field] = source[field]
+                record[field] = source.get(field, "")
+            record["category"] = category
             record["avatar"] = avatar
+    if STUDENT and recruitment is not None:
+        raise ValueError("成员入口不能修改 Recruitment")
     if recruitment is not None:
         expected = {"enabled", "title", "body_markdown", "cta_label", "email_subject"}
         if not isinstance(recruitment, dict) or set(recruitment) != {"en", "zh"}:
@@ -175,6 +188,8 @@ def current_state():
     return {"profiles": {lang: {field: ("" if field == "name" and p[lang].get("name") == DRAFT_NAMES[lang]
                                         else p[lang].get(field, "")) for field in FIELDS} for lang in ("en", "zh")},
             "avatar": "" if p["en"].get("avatar") == DRAFT_AVATAR else (p["en"].get("avatar", "") or p["zh"].get("avatar", "")),
+            "category": p["en"].get("category", "phd" if STUDENT else "faculty"),
+            "categories": data["people_categories"], "student": STUDENT,
             "recruitment": {lang: data[lang]["recruitment"] for lang in ("en", "zh")},
             "owner": OWNER, "branch": BRANCH, "revision": admin.revision(raw), "token": TOKEN}
 
@@ -204,7 +219,7 @@ def baseline_hash(scope):
 
 def save_baseline(data):
     BASELINE.parent.mkdir(exist_ok=True)
-    BASELINE.write_text(json.dumps({"branch": BRANCH, "profile_hash": profile_hash(data),
+    BASELINE.write_text(json.dumps({"branch": BRANCH, "owner": OWNER, "profile_hash": profile_hash(data),
                                     "recruitment_hash": recruitment_hash(data),
                                     "local_sha": admin.revision(admin.CONTENT.read_bytes())}))
 
@@ -230,7 +245,7 @@ def sync_on_start():
         for lang in ("en", "zh"):
             for person in remote[lang]["people"]:
                 path = person.get("avatar", "")
-                if not re.fullmatch(r"assets/people/[a-zA-Z0-9_-]+\.(?:jpg|png|webp)", path):
+                if path not in DEFAULT_AVATARS and not re.fullmatch(r"assets/people/[a-zA-Z0-9_-]+\.(?:jpg|png|webp)", path):
                     raise ValueError("线上成员头像路径无效")
                 target = ROOT / path
                 if not target.is_file():
@@ -249,17 +264,33 @@ def sync_on_start():
         print(f"未能同步线上内容，使用本地副本：{exc}", flush=True)
 
 
+def select_student_owner(user):
+    global OWNER, BASELINE
+    if OWNER:
+        return
+    if not re.fullmatch(r"[A-Za-z0-9-]{1,39}", user):
+        raise ValueError("GitHub 用户名无效")
+    OWNER = user
+    BASELINE = ROOT / (".local/student-baseline-" + user.lower() + "-" + BRANCH + ".json")
+    sync_on_start()
+    build()
+
+
 def blob_sha(raw):
     return hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\0" + raw).hexdigest()
 
 
 def publish_profile():
+    if not OWNER:
+        raise RuntimeError("请先连接有仓库写入权限的 GitHub 账号。")
     if not connection()["connected"]:
         raise RuntimeError(f"请先使用 {OWNER} 连接 GitHub，并确认仓库写入权限。")
     local = json.loads(admin.CONTENT.read_bytes())
     local_profiles = profiles(local)
     scopes = {scope for scope, function in (("profile", profile_hash), ("recruitment", recruitment_hash))
               if function(local) != baseline_hash(scope)}
+    if STUDENT:
+        scopes.discard("recruitment")
     endpoint = "repos/" + REPO + "/contents/content/site.json"
     remote_file = gh(["api", endpoint + "?ref=" + BRANCH])
     remote = json.loads(base64.b64decode(remote_file["content"]))
@@ -273,21 +304,24 @@ def publish_profile():
     if "profile" in scopes:
         if (not local_profiles["en"].get("avatar") or local_profiles["en"]["avatar"] == DRAFT_AVATAR
                 or local_profiles["en"].get("avatar") != local_profiles["zh"].get("avatar")
+                or local_profiles["en"].get("category") != local_profiles["zh"].get("category")
                 or any(local_profiles[lang].get("name") == DRAFT_NAMES[lang] for lang in ("en", "zh"))):
             raise ValueError("正式推送前，请填写中英文姓名并上传共用头像；本地草稿已保留。")
         avatar = local_profiles["en"]["avatar"]
-        image_raw = (ROOT / avatar).read_bytes()
-        image_endpoint = "repos/" + REPO + "/contents/" + avatar
-        try:
-            existing = gh(["api", image_endpoint + "?ref=" + BRANCH])
-        except FileNotFoundError:
-            existing = None
-        if existing and existing["sha"] != blob_sha(image_raw):
-            raise RuntimeError("线上已有同名但内容不同的头像，请重新上传。")
-        if not existing:
-            gh(["api", "--method", "PUT", image_endpoint, "--input", "-"],
-               {"message": f"Add {OWNER} faculty photo", "content": base64.b64encode(image_raw).decode(), "branch": BRANCH})
+        if avatar not in DEFAULT_AVATARS:
+            image_raw = (ROOT / avatar).read_bytes()
+            image_endpoint = "repos/" + REPO + "/contents/" + avatar
+            try:
+                existing = gh(["api", image_endpoint + "?ref=" + BRANCH])
+            except FileNotFoundError:
+                existing = None
+            if existing and existing["sha"] != blob_sha(image_raw):
+                raise RuntimeError("线上已有同名但内容不同的头像，请重新上传。")
+            if not existing:
+                gh(["api", "--method", "PUT", image_endpoint, "--input", "-"],
+                   {"message": f"Add {OWNER} profile photo", "content": base64.b64encode(image_raw).decode(), "branch": BRANCH})
         submitted = {"avatar": avatar}
+        submitted["category"] = local_profiles["en"].get("category", "faculty")
         for lang in ("en", "zh"):
             submitted[lang] = {field: local_profiles[lang].get(field, "") for field in FIELDS}
     recruitment = ({lang: local[lang]["recruitment"] for lang in ("en", "zh")}
@@ -357,6 +391,8 @@ class Handler(admin.Handler):
                     return self.send(200, {"html": MARKDOWN.render(body)})
             if path == "/api/save":
                 with LOCK:
+                    if STUDENT and not OWNER:
+                        raise RuntimeError("请先连接自己的 GitHub 账号。")
                     original = admin.CONTENT.read_bytes()
                     if payload.get("revision") != admin.revision(original):
                         raise RuntimeError("本地文件已变化，请重新加载后编辑。")
@@ -384,15 +420,25 @@ if __name__ == "__main__":
     parser.add_argument("--open", action="store_true")
     parser.add_argument("--user", default="garrisongys", choices=("garrisongys", "zhengfeiLian"))
     parser.add_argument("--branch", default="main", choices=("main", "faculty-editor-test"))
+    parser.add_argument("--student", action="store_true", help="Self-service member editor; account comes from GitHub login")
     args = parser.parse_args()
-    OWNER = args.user
+    STUDENT = args.student
+    OWNER = "" if STUDENT else args.user
     BRANCH = args.branch
-    if (OWNER, BRANCH) not in {("garrisongys", "main"), ("zhengfeiLian", "faculty-editor-test")}:
+    if not STUDENT and (OWNER, BRANCH) not in {("garrisongys", "main"), ("zhengfeiLian", "faculty-editor-test")}:
         parser.error("账号与目标分支不匹配")
-    CONFIG = ROOT / (".local/faculty-github-auth-" + OWNER.lower())
-    BASELINE = ROOT / (".local/faculty-baseline-" + OWNER.lower() + "-" + BRANCH + ".json")
-    sync_on_start()
-    build()
+    if STUDENT and BRANCH != "main":
+        parser.error("通用成员入口只发布到 main")
+    UI = ROOT / ("student_editor" if STUDENT else "faculty_editor")
+    CONFIG = ROOT / (".local/member-github-auth" if STUDENT else ".local/faculty-github-auth-" + OWNER.lower())
+    BASELINE = ROOT / (".local/member-baseline-pending.json" if STUDENT else ".local/faculty-baseline-" + OWNER.lower() + "-" + BRANCH + ".json")
+    if STUDENT:
+        connection()
+        if not OWNER:
+            build()
+    else:
+        sync_on_start()
+        build()
     url = f"http://127.0.0.1:{args.port}/"
     server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
     print("Faculty 资料维护：" + url, flush=True)

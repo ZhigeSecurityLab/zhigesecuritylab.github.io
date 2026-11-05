@@ -84,7 +84,8 @@ def validate(data):
                             raise ValueError("成员 GitHub 用户名无效或重复")
                         profile_owners.add(owner.lower())
                     avatar = item.get("avatar", "")
-                    if not isinstance(avatar, str) or not re.fullmatch(r"assets/people/[a-zA-Z0-9_-]+\.(?:jpg|png|webp)", avatar):
+                    defaults = {"assets/people/default-male.svg", "assets/people/default-female.svg"}
+                    if not isinstance(avatar, str) or (avatar not in defaults and not re.fullmatch(r"assets/people/[a-zA-Z0-9_-]+\.(?:jpg|png|webp)", avatar)):
                         raise ValueError("请上传成员头像")
                     if not (ROOT / avatar).is_file():
                         raise ValueError("成员头像文件不存在：" + avatar)

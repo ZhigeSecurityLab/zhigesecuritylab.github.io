@@ -9,6 +9,7 @@ import unittest
 from unittest.mock import patch
 
 import faculty
+from build import validate
 
 
 class FacultyEditorTests(unittest.TestCase):
@@ -24,9 +25,9 @@ class FacultyEditorTests(unittest.TestCase):
         source = copy.deepcopy(self.data)
         source["en"]["people"].append({"name": "Another Member", "category": "faculty", "avatar": "assets/people/other.jpg"})
         merged = faculty.merge(source, self.submitted())
-        self.assertEqual(merged["en"]["people"][0], source["en"]["people"][0])
-        self.assertEqual(merged["en"]["people"][1]["github_username"], "garrisongys")
-        self.assertEqual(merged["zh"]["people"][0]["name"], "示例姓名")
+        self.assertEqual(next(p for p in merged["en"]["people"] if p["name"] == "Another Member"), source["en"]["people"][-1])
+        self.assertEqual(next(p for p in merged["en"]["people"] if p.get("github_username") == "garrisongys")["name"], "Example Name")
+        self.assertEqual(next(p for p in merged["zh"]["people"] if p.get("github_username") == "garrisongys")["name"], "示例姓名")
         self.assertEqual(merged["en"]["news"], source["en"]["news"])
         with self.assertRaises(ValueError):
             faculty.merge(source, {**self.submitted(), "news": []})
@@ -56,6 +57,44 @@ class FacultyEditorTests(unittest.TestCase):
                 self.assertTrue((root / faculty.DRAFT_AVATAR).is_file())
                 self.assertIn("**Secure systems**", merged["en"]["people"][-1]["bio_markdown"])
                 self.assertEqual(draft["avatar"], "")
+
+    def test_student_editor_only_changes_its_own_profile_and_accepts_default_avatar(self):
+        source = copy.deepcopy(self.data)
+        submitted = {"category": "phd", "avatar": "assets/people/default-female.svg",
+                     "en": {"name": "Student Test", "role": "PhD student", "url": "", "bio_markdown": "", "description": "First line\nSecond line"},
+                     "zh": {"name": "测试学生", "role": "博士生", "url": "", "bio_markdown": "", "description": "第一行\n第二行"}}
+        with patch.object(faculty, "STUDENT", True), patch.object(faculty, "OWNER", "student-example"):
+            merged = faculty.merge(source, submitted)
+            validate(merged)
+            self.assertEqual(merged["en"]["people"][-1]["github_username"], "student-example")
+            self.assertEqual(merged["en"]["people"][-1]["category"], "phd")
+            self.assertEqual(merged["en"]["people"][-1]["description"], "First line\nSecond line")
+            self.assertEqual(merged["en"]["recruitment"], source["en"]["recruitment"])
+            with self.assertRaisesRegex(ValueError, "Recruitment"):
+                faculty.merge(source, recruitment={lang: source[lang]["recruitment"] for lang in ("en", "zh")})
+
+    def test_student_publish_with_default_avatar_only_updates_own_record(self):
+        source = copy.deepcopy(self.data)
+        submitted = {"category": "masters", "avatar": "assets/people/default-male.svg",
+                     "en": {"name": "Student Test", "role": "Master's student", "url": "", "bio_markdown": "", "description": "Line one"},
+                     "zh": {"name": "测试学生", "role": "硕士生", "url": "", "bio_markdown": "", "description": "第一行"}}
+        with patch.object(faculty, "STUDENT", True), patch.object(faculty, "OWNER", "student-example"):
+            local = faculty.merge(source, submitted)
+            with tempfile.TemporaryDirectory() as temp:
+                content = Path(temp) / "site.json"
+                content.write_text(json.dumps(local))
+                remote_file = {"sha": "old", "content": base64.b64encode(json.dumps(source).encode()).decode()}
+                with patch.object(faculty.admin, "CONTENT", content), \
+                     patch.object(faculty, "baseline_hash", side_effect=lambda scope: faculty.profile_hash(source) if scope == "profile" else faculty.recruitment_hash(source)), \
+                     patch.object(faculty, "connection", return_value={"connected": True}), \
+                     patch.object(faculty, "save_baseline"), patch.object(faculty, "gh") as gh:
+                    gh.side_effect = [remote_file, {"commit": {"sha": "student-sha"}}]
+                    result = faculty.publish_profile()
+                    uploaded = json.loads(base64.b64decode(gh.call_args_list[-1].args[1]["content"]))
+            self.assertEqual(result["commit"], "student-sha")
+            self.assertEqual(gh.call_count, 2)
+            self.assertEqual(uploaded["en"]["people"][-1]["category"], "masters")
+            self.assertEqual(uploaded["en"]["recruitment"], source["en"]["recruitment"])
 
     def test_publish_merges_latest_remote_content_and_uploads_photo_first(self):
         with tempfile.TemporaryDirectory() as temp:
