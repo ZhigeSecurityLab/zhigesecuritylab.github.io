@@ -121,9 +121,23 @@ class EditorTests(unittest.TestCase):
                     post('/api/markdown', {'markdown':'hello'}, {'Content-Type':'application/json', 'X-Editor-Token':admin.TOKEN, 'Origin':'https://other.example'})
                 self.assertEqual(rejected.exception.code, 403)
                 self.assertEqual(post('/api/markdown', {'markdown':'**hello**'})['html'], '<p><strong>hello</strong></p>\n')
+                with patch.object(admin.publish, 'begin_publish', return_value={'state':'publishing'}) as started:
+                    with self.assertRaises(HTTPError) as rejected:
+                        post('/api/publish', {'revision':'stale'})
+                    self.assertEqual(rejected.exception.code, 409)
+                    started.assert_not_called()
+                    self.assertEqual(post('/api/publish', {'revision':state['revision']})['state'], 'publishing')
+                    self.assertEqual(started.call_args.args[0], admin.CONTENT.read_bytes())
+                with patch.object(admin.publish, 'begin_login', return_value={'state':'waiting'}) as login:
+                    with self.assertRaises(HTTPError) as rejected:
+                        post('/api/connect', {}, {'Content-Type':'application/json'})
+                    self.assertEqual(rejected.exception.code, 403)
+                    login.assert_not_called()
                 data = copy.deepcopy(self.original)
+                data['appearance'] = {'body':20}
                 data['en']['intro'] = 'Changed via HTTP.'
                 saved = post('/api/save', {'data':data,'revision':state['revision']})
+                self.assertIn('font-size:20px', urlopen(base + '/preview/assets/appearance.css').read().decode())
                 self.assertEqual(urlopen(base + '/preview/assets/logo.jpg').status, 200)
                 self.assertEqual(urlopen(base + '/assets/logo.jpg').status, 200)
                 restored = post('/api/restore', {'backup':saved['backups'][0], 'revision':saved['revision']})

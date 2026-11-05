@@ -15,17 +15,20 @@
       <button type="button" data-tab="publications">Publications · 论文</button>
       <button type="button" data-tab="people">People · 成员</button>
       <button type="button" data-tab="recruitment">Recruitment · 加入我们</button>
+      <button type="button" data-tab="appearance">外观与字号</button>
+      <button type="button" data-tab="publishing">网站发布</button>
       <button type="button" data-tab="settings">设置与备份</button>
     </nav>
-    <div class="sidebar-note">本地维护工作台<br>保存内容 → 检查预览 → 提交 GitHub</div>
+    <div class="sidebar-note">本地维护工作台<br>保存内容 → 检查预览 → 发布到网站</div>
   </aside>
   <main>
-    <header class="topbar"><span id="save-state" role="status">正在加载内容…</span><div class="actions"><a id="site-link" href="/preview/" target="_blank" rel="noopener">查看网站 ↗</a><button id="save" type="button" class="primary" disabled>保存并更新预览</button></div></header>
+    <header class="topbar"><span id="save-state" role="status">正在加载内容…</span><div class="actions"><a id="site-link" href="/preview/" target="_blank" rel="noopener">查看网站 ↗</a><button id="save" type="button" class="primary" disabled>保存并更新预览</button><button id="publish" type="button" class="primary" disabled>发布到网站</button></div></header>
     <section class="workspace">
       <div class="page-title"><div><p class="eyebrow">ZHIGE / CONTENT STUDIO</p><h1 id="page-title">简介与首页</h1><p id="page-description">用表单维护实验室内容。</p></div><div id="languages" class="segmented" aria-label="内容语言"><button type="button" data-lang="en" class="active">英文 EN</button><button type="button" data-lang="zh">中文 ZH</button></div></div>
       <p id="message" role="alert" hidden></p>
+      <section id="publishing-status" class="publish-status" aria-live="polite" hidden></section>
       <div id="editor"></div>
-      <section class="preview-section"><div class="preview-heading"><h2>网站预览</h2><span>显示最近一次保存的版本</span><button id="refresh-preview" type="button">刷新预览</button></div><iframe id="site-preview" src="/preview/" title="网站预览" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe></section>
+      <section class="preview-section"><div class="preview-heading"><h2>网站预览</h2><span>显示最近一次保存的版本</span><label>预览页面<select id="preview-page"><option value="">首页</option><option value="people/">People 总览</option><option value="people/faculty/">Faculty 子页</option></select></label><label>宽度<select id="preview-width"><option value="desktop">自适应</option><option value="mobile">手机 375px</option></select></label><button id="refresh-preview" type="button">刷新预览</button></div><iframe id="site-preview" src="/preview/" title="网站预览" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe></section>
     </section>
   </main>
 </body></html>

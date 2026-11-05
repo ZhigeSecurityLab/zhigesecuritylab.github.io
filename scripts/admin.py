@@ -16,6 +16,8 @@ import webbrowser
 from urllib.request import urlopen
 
 from build import ROOT, OUT, MARKDOWN, build, validate
+from appearance import FIELDS
+import publish
 
 CONTENT = ROOT / "content/site.json"
 LOCAL = ROOT / ".local"
@@ -32,6 +34,7 @@ def revision(raw):
 def state():
     raw = CONTENT.read_bytes()
     return {"data": json.loads(raw), "revision": revision(raw), "token": TOKEN,
+            "appearance_fields": {k: {"label": v[0], "default": v[1], "min": v[2], "max": v[3]} for k, v in FIELDS.items()},
             "backups": sorted((p.name for p in BACKUPS.glob("*.json")), reverse=True)[:50]}
 
 
@@ -93,6 +96,8 @@ class Handler(BaseHTTPRequestHandler):
         path = urlsplit(self.path).path
         if path == "/api/state":
             return self.send(200, state())
+        if path == "/api/publishing":
+            return self.send(200, {"connection": publish.connection(), "deployment": publish.deployment()})
         if path.startswith("/preview/"):
             root = OUT
             name = unquote(path[len("/preview/"):]) or "index.html"
@@ -127,6 +132,18 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(415, {"error": "需要 JSON 请求"})
             payload = json.loads(self.rfile.read(length))
             path = urlsplit(self.path).path
+            if path == "/api/connect":
+                return self.send(200, publish.begin_login())
+            if path == "/api/check-connection":
+                return self.send(200, publish.connection(force=True))
+            if path == "/api/publish":
+                with LOCK:
+                    raw = CONTENT.read_bytes()
+                    if payload["revision"] != revision(raw):
+                        raise RuntimeError("内容已变化，请重新加载并确认预览后发布。")
+                    validate(json.loads(raw))
+                    result = publish.begin_publish(raw)
+                return self.send(202, result)
             if path == "/api/markdown":
                 text = payload["markdown"]
                 if not isinstance(text, str) or len(text) > 100000:
@@ -170,7 +187,7 @@ if __name__ == "__main__":
     build()
     server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
     print(f"维护后台：http://127.0.0.1:{args.port}/", flush=True)
-    print("保存会更新本地内容及预览；不会自动提交或推送 GitHub。", flush=True)
+    print("保存更新本地预览；点击后台“发布到网站”可提交 GitHub 并自动部署。", flush=True)
     if args.open:
         webbrowser.open(editor_url)
     try:

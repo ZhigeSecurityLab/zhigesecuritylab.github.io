@@ -7,6 +7,7 @@ import shutil
 import xml.etree.ElementTree as ET
 from datetime import date
 from markdown_it import MarkdownIt
+from appearance import settings as appearance_settings, stylesheet as appearance_stylesheet
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "_site"
@@ -15,6 +16,7 @@ MARKDOWN = MarkdownIt("js-default")
 
 def validate(data):
     """Shared validation for the editor and CI builds."""
+    appearance_settings(data)
     def string(value, field, required=False):
         if not isinstance(value, str) or len(value) > 100000 or (required and not value.strip()):
             raise ValueError(f"{field}: 请填写有效文字")
@@ -217,7 +219,7 @@ def render(data, lang, page="home", category=None):
 <link rel="canonical" href="{e(base + '/' + canonical_path)}">
 <link rel="alternate" hreflang="en" href="{e(base + '/' + en_path)}"><link rel="alternate" hreflang="zh-CN" href="{e(base + '/' + zh_path)}">
 <link rel="alternate" hreflang="x-default" href="{e(base + '/' + en_path)}">
-<link rel="icon" type="image/jpeg" href="{prefix}assets/logo.jpg"><script src="{prefix}assets/site.js"></script><link rel="stylesheet" href="{prefix}assets/style.css">
+<link rel="icon" type="image/jpeg" href="{prefix}assets/logo.jpg"><script src="{prefix}assets/site.js"></script><link rel="stylesheet" href="{prefix}assets/style.css"><link rel="stylesheet" href="{prefix}assets/appearance.css">
 </head><body>
 <a class="skip-link" href="#main">{'跳转到正文' if zh else 'Skip to content'}</a>
 <div class="site-shell"><aside class="sidebar">
@@ -250,6 +252,7 @@ def build(data=None, output=None):
         shutil.rmtree(output)
     output.mkdir()
     shutil.copytree(ROOT / "assets", output / "assets")
+    (output / "assets/appearance.css").write_text(appearance_stylesheet(data), encoding="utf-8")
     for path, html in pages.items():
         target = output / path
         target.parent.mkdir(parents=True, exist_ok=True)
