@@ -19,8 +19,8 @@
 ## 编辑与发布
 
 1. 填写中英文姓名、职务；个人主页可留空。上传一张 JPEG、PNG 或 WebP 头像（最大 2.5 MB），中英文共用。
-2. 在 English／中文之间切换，分别写 Markdown。可以点「插入可修改的模板」，再删改不适用的小节。模板不会自动发布。
-3. Faculty 和 Recruitment 都有 Markdown 即时预览；Recruitment 会自动载入现有文案，也可以不填写 Faculty 而单独更新 Recruitment。点击「保存并更新本地预览」，再查看下方的完整页面；可切换英文、中文。
+2. 在 English／中文之间切换，分别写 Markdown。可以点「在光标处插入模板」，再删改不适用的小节；已有文字不会被替换。模板不会自动发布。
+3. Faculty 和 Recruitment 都有 Markdown 即时预览；Recruitment 会自动载入现有文案，也可以不填写 Faculty 而单独更新 Recruitment。点击「保存并更新本地预览」，再查看下方的完整页面；可切换英文、中文。Faculty 资料未填完整时仍可保存本地草稿并预览，空缺姓名与头像会显示临时占位；正式推送前须补齐中英文姓名和头像。
 4. 首次发布时点击「连接 GitHub」，用 **garrisongys** 登录设备授权页并核对权限。授权信息由本机 GitHub CLI 保存，不放入仓库或网页源码。
 5. 点击「推送到网站」。后台会从 GitHub 读取最新内容，只合并实际修改的 `garrisongys` Faculty 条目与 Recruitment 文案，必要时上传头像，并提交到 `main`。GitHub Actions 部署完成后，查看[英文 Faculty 页面](https://zhigesecuritylab.github.io/people/faculty/)或[中文 Faculty 页面](https://zhigesecuritylab.github.io/zh/people/faculty/)。
 

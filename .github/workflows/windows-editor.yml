@@ -27,7 +27,8 @@ jobs:
       - name: Smoke test executable
         shell: pwsh
         run: |
-          $process = Start-Process -FilePath dist/ZhigeFacultyEditor/ZhigeFacultyEditor.exe -ArgumentList '--user','zhengfeiLian','--branch','faculty-editor-test','--port','18003' -PassThru -RedirectStandardOutput smoke-out.txt -RedirectStandardError smoke-err.txt
+          Copy-Item dist/ZhigeFacultyEditor smoke-editor -Recurse
+          $process = Start-Process -FilePath smoke-editor/ZhigeFacultyEditor.exe -ArgumentList '--user','zhengfeiLian','--branch','faculty-editor-test','--port','18003' -PassThru -RedirectStandardOutput smoke-out.txt -RedirectStandardError smoke-err.txt
           try {
             $ready = $false
             for ($i=0; $i -lt 30; $i++) {
@@ -38,6 +39,11 @@ jobs:
               } catch {}
             }
             if (-not $ready) { Get-Content smoke-out.txt; Get-Content smoke-err.txt; throw 'Portable editor did not start' }
+            $profile = @{ en = @{ name = ''; role = ''; url = ''; bio_markdown = '## Windows preview check' }; zh = @{ name = ''; role = ''; url = ''; bio_markdown = '## 中文预览' }; avatar = '' }
+            $body = @{ revision = $state.revision; profile = $profile; recruitment = $null } | ConvertTo-Json -Depth 10
+            Invoke-RestMethod -Uri 'http://127.0.0.1:18003/api/save' -Method Post -ContentType 'application/json; charset=utf-8' -Headers @{ 'X-Editor-Token' = $state.token } -Body ([System.Text.Encoding]::UTF8.GetBytes($body)) | Out-Null
+            $preview = (Invoke-WebRequest -Uri 'http://127.0.0.1:18003/preview/people/faculty/').Content
+            if (-not $preview.Contains('Windows preview check')) { throw 'Saved Faculty Markdown did not appear in preview' }
           } finally { Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue }
       - uses: actions/upload-artifact@v4
         with:

@@ -88,8 +88,8 @@ a:focus-visible {
   max-width:100%;
   aspect-ratio:1;
   background:#fff;
-  border:1px solid var(--line);
-  border-radius:8px;
+  border:0;
+  border-radius:0;
   object-fit:contain;
 }
 .main-nav {

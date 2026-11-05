@@ -40,6 +40,23 @@ class FacultyEditorTests(unittest.TestCase):
         self.assertEqual(merged["en"]["news"], source["en"]["news"])
         self.assertIn("New details.", merged["en"]["recruitment"]["body_markdown"])
 
+    def test_incomplete_faculty_can_be_built_as_local_preview(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "assets").mkdir()
+            (root / "assets/logo.jpg").write_bytes(b"preview image")
+            with patch.object(faculty, "ROOT", root):
+                draft = self.submitted(avatar="")
+                draft["en"]["name"] = ""
+                draft["zh"]["name"] = ""
+                prepared = faculty.preview_profile(draft)
+                merged = faculty.merge(self.data, prepared)
+                self.assertEqual(prepared["avatar"], faculty.DRAFT_AVATAR)
+                self.assertEqual(prepared["en"]["name"], faculty.DRAFT_NAMES["en"])
+                self.assertTrue((root / faculty.DRAFT_AVATAR).is_file())
+                self.assertIn("**Secure systems**", merged["en"]["people"][-1]["bio_markdown"])
+                self.assertEqual(draft["avatar"], "")
+
     def test_publish_merges_latest_remote_content_and_uploads_photo_first(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

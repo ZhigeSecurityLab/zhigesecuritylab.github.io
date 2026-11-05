@@ -36,6 +36,8 @@ TOKEN = secrets.token_urlsafe(32)
 AUTH_STATE = {"state": "idle"}
 LOCK = threading.Lock()
 FIELDS = ("name", "role", "url", "bio_markdown")
+DRAFT_AVATAR = "assets/people/draft-preview.jpg"
+DRAFT_NAMES = {"en": "Faculty preview", "zh": "教师资料预览"}
 
 
 def gh(args, payload=None):
@@ -150,12 +152,29 @@ def merge(data, submitted=None, recruitment=None):
     return result
 
 
+def preview_profile(submitted):
+    """Fill required public-site fields in a local draft without claiming they are complete."""
+    if submitted is None:
+        return None
+    draft = copy.deepcopy(submitted)
+    if not draft.get("avatar"):
+        target = ROOT / DRAFT_AVATAR
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ROOT / "assets/logo.jpg", target)
+        draft["avatar"] = DRAFT_AVATAR
+    for lang in ("en", "zh"):
+        if not draft[lang].get("name", "").strip():
+            draft[lang]["name"] = DRAFT_NAMES[lang]
+    return draft
+
+
 def current_state():
     raw = admin.CONTENT.read_bytes()
     data = json.loads(raw)
     p = profiles(data)
-    return {"profiles": {lang: {field: p[lang].get(field, "") for field in FIELDS} for lang in ("en", "zh")},
-            "avatar": p["en"].get("avatar", "") or p["zh"].get("avatar", ""),
+    return {"profiles": {lang: {field: ("" if field == "name" and p[lang].get("name") == DRAFT_NAMES[lang]
+                                        else p[lang].get(field, "")) for field in FIELDS} for lang in ("en", "zh")},
+            "avatar": "" if p["en"].get("avatar") == DRAFT_AVATAR else (p["en"].get("avatar", "") or p["zh"].get("avatar", "")),
             "recruitment": {lang: data[lang]["recruitment"] for lang in ("en", "zh")},
             "owner": OWNER, "branch": BRANCH, "revision": admin.revision(raw), "token": TOKEN}
 
@@ -252,8 +271,10 @@ def publish_profile():
             raise RuntimeError(f"线上 {scope} 内容已有变化，请先同步后重试，避免覆盖他人的修改。")
     submitted = None
     if "profile" in scopes:
-        if not local_profiles["en"].get("avatar") or local_profiles["en"].get("avatar") != local_profiles["zh"].get("avatar"):
-            raise ValueError("请先保存中英文资料和共用头像。")
+        if (not local_profiles["en"].get("avatar") or local_profiles["en"]["avatar"] == DRAFT_AVATAR
+                or local_profiles["en"].get("avatar") != local_profiles["zh"].get("avatar")
+                or any(local_profiles[lang].get("name") == DRAFT_NAMES[lang] for lang in ("en", "zh"))):
+            raise ValueError("正式推送前，请填写中英文姓名并上传共用头像；本地草稿已保留。")
         avatar = local_profiles["en"]["avatar"]
         image_raw = (ROOT / avatar).read_bytes()
         image_endpoint = "repos/" + REPO + "/contents/" + avatar
@@ -339,7 +360,7 @@ class Handler(admin.Handler):
                     original = admin.CONTENT.read_bytes()
                     if payload.get("revision") != admin.revision(original):
                         raise RuntimeError("本地文件已变化，请重新加载后编辑。")
-                    merged = merge(json.loads(original), payload.get("profile"), payload.get("recruitment"))
+                    merged = merge(json.loads(original), preview_profile(payload.get("profile")), payload.get("recruitment"))
                     validate(merged)
                     admin.save(merged, payload["revision"])
                     return self.send(200, current_state())
