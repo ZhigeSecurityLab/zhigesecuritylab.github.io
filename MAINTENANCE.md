@@ -140,6 +140,6 @@ python3 -m venv .venv
 
 维护后台只在本机运行，不作为公开网站的在线登录管理端。配置由 `scripts/appearance.py` 校验，发布逻辑在 `scripts/publish.py`；GitHub token 不写入任何内容、备份、发布记录或截图。
 
-## garrisongys 的 Faculty 专用入口
+## garrisongys 的 Faculty 与 Recruitment 专用入口
 
-Windows 双击 `Start Faculty Editor.bat`，macOS 双击 `Start Faculty Editor.command`。它只编辑该账号对应的中英文 Faculty 资料，支持头像、Markdown 模板、本地预览，并通过 garrisongys 自己的 GitHub CLI 授权发布。参见 [FACULTY_MAINTENANCE.md](FACULTY_MAINTENANCE.md)。
+Windows 双击 `Start Faculty Editor.bat`，macOS 双击 `Start Faculty Editor.command`。它编辑该账号对应的中英文 Faculty 资料及 Recruitment，支持头像、Markdown 模板、本地预览，并通过 garrisongys 自己的 GitHub CLI 授权发布。Windows 免安装包也可供 zhengfeiLian 在独立测试分支演练。参见 [FACULTY_MAINTENANCE.md](FACULTY_MAINTENANCE.md)。

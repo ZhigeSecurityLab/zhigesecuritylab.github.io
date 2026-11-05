@@ -37,7 +37,7 @@ class EditorTests(unittest.TestCase):
         draft['en']['intro'] = 'Updated introduction.'
         result = admin.save(draft, admin.revision(before))
         self.assertEqual(result['data'], draft)
-        self.assertEqual(len(list(admin.OUT.rglob('index.html'))), 20)
+        self.assertEqual(len(list(admin.OUT.rglob('index.html'))), 22)
         self.assertIn('Updated introduction.', (admin.OUT / 'index.html').read_text())
         self.assertEqual((admin.BACKUPS / result['backups'][0]).read_bytes(), before)
         self.assertFalse((admin.OUT / 'admin').exists())
@@ -108,8 +108,8 @@ class EditorTests(unittest.TestCase):
             html = render(self.original, language)
             navigation = html.split('<nav class="main-nav"', 1)[1].split('</nav>', 1)[0]
             for earlier, later in zip(
-                ('"./"', '#news', 'recruitment/', 'publications/', 'people-menu', 'contact/'),
-                ('#news', 'recruitment/', 'publications/', 'people-menu', 'contact/', '</nav>'),
+                ('"./"', 'news/', 'recruitment/', 'publications/', 'people-menu', 'contact/'),
+                ('news/', 'recruitment/', 'publications/', 'people-menu', 'contact/', '</nav>'),
             ):
                 if later != '</nav>':
                     self.assertLess(navigation.index(earlier), navigation.index(later))
@@ -121,6 +121,8 @@ class EditorTests(unittest.TestCase):
             self.assertNotIn('class="text-link"', content)
             self.assertIn('id="recruitment"', render(self.original, language, 'recruitment'))
             self.assertIn('id="contact"', render(self.original, language, 'contact'))
+            self.assertIn('id="news"', render(self.original, language, 'news'))
+            self.assertNotIn('id="about"', render(self.original, language, 'news'))
 
     def test_http_save_restore_and_request_guards(self):
         with patch.object(admin.Handler, 'log_message', lambda *args: None):

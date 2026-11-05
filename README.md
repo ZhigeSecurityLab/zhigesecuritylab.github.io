@@ -95,9 +95,9 @@ requirements.txt               构建依赖
 
 页眉使用用户提供的完整 Logo 图片 `assets/logo.jpg`，保持原始比例与颜色，日间／夜间共用同一张图片。更换 Logo 时替换该文件即可，网站图标和本地维护后台同步使用它。首页中英文名称分别追加对应语言的 `@ institution`，目前为 Southeast University／东南大学。导航中的 Contact Us／联系我们打开独立联系页面，其中的邮箱链接会打开邮件客户端，收件人为 `content/site.json` 中的 `email`。首页仅显示简介和 News，其他栏目在独立页面中。页面支持记住偏好的日间／夜间模式，页脚显示不蒜子提供的全站浏览量，本地预览不计数。字体和 Logo 不依赖外部服务。更换域名时同步修改 `content/site.json` 的 `url`，并配置 GitHub Pages 自定义域名。
 
-## Faculty 专用编辑入口
+## Faculty 与 Recruitment 专用编辑入口
 
-`garrisongys` 可在 Windows 双击 `Start Faculty Editor.bat`，或在 macOS 双击 `Start Faculty Editor.command`，打开仅维护本人 Faculty 资料的本地界面。头像、中英文 Markdown、模板、预览与 GitHub 推送操作见 [FACULTY_MAINTENANCE.md](FACULTY_MAINTENANCE.md)。
+`garrisongys` 可在 Windows 双击 `Start Faculty Editor.bat`，或在 macOS 双击 `Start Faculty Editor.command`，打开仅维护本人 Faculty 资料和 Recruitment 的本地界面。Windows 还可从 Actions 下载免安装包，`zhengfeiLian` 可在测试分支演练。头像、中英文 Markdown、模板、预览与 GitHub 推送操作见 [FACULTY_MAINTENANCE.md](FACULTY_MAINTENANCE.md)。
 
 ## 外观与按钮发布
 

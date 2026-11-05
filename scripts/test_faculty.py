@@ -31,6 +31,15 @@ class FacultyEditorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             faculty.merge(source, {**self.submitted(), "news": []})
 
+    def test_recruitment_can_be_edited_before_faculty_photo_exists(self):
+        source = copy.deepcopy(self.data)
+        recruitment = {lang: copy.deepcopy(source[lang]["recruitment"]) for lang in ("en", "zh")}
+        recruitment["en"]["body_markdown"] += "\n\nNew details."
+        merged = faculty.merge(source, recruitment=recruitment)
+        self.assertEqual(merged["en"]["people"], source["en"]["people"])
+        self.assertEqual(merged["en"]["news"], source["en"]["news"])
+        self.assertIn("New details.", merged["en"]["recruitment"]["body_markdown"])
+
     def test_publish_merges_latest_remote_content_and_uploads_photo_first(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -45,7 +54,7 @@ class FacultyEditorTests(unittest.TestCase):
             file = {"sha": "old", "content": base64.b64encode(json.dumps(remote).encode()).decode()}
             with patch.object(faculty, "ROOT", root), patch.object(faculty.admin, "CONTENT", content), \
                  patch.object(faculty, "BASELINE", root / "baseline.json"), \
-                 patch.object(faculty, "baseline_hash", return_value=faculty.profile_hash(remote)), \
+                 patch.object(faculty, "baseline_hash", side_effect=lambda scope: faculty.profile_hash(remote) if scope == "profile" else faculty.recruitment_hash(remote)), \
                  patch.object(faculty, "connection", return_value={"connected": True}), \
                  patch.object(faculty.subprocess, "check_output", return_value="head"), \
                  patch.object(faculty, "gh") as gh:
@@ -56,3 +65,28 @@ class FacultyEditorTests(unittest.TestCase):
         self.assertEqual(uploaded["en"]["news"][-1]["title"], "Remote news")
         self.assertEqual(uploaded["en"]["people"][0]["github_username"], "garrisongys")
         self.assertEqual(uploaded["zh"]["people"][0]["avatar"], "assets/people/example.png")
+
+    def test_recruitment_only_publish_needs_no_photo_and_targets_test_branch(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            local = copy.deepcopy(self.data)
+            local["en"]["recruitment"]["body_markdown"] += "\n\nTest update."
+            content = root / "site.json"
+            content.write_text(json.dumps(local))
+            remote = copy.deepcopy(self.data)
+            remote["en"]["news"].append({"title": "Other news", "date": "2026-11-05"})
+            file = {"sha": "old", "content": base64.b64encode(json.dumps(remote).encode()).decode()}
+            baseline = lambda scope: faculty.profile_hash(self.data) if scope == "profile" else faculty.recruitment_hash(self.data)
+            with patch.object(faculty, "BRANCH", "faculty-editor-test"), patch.object(faculty.admin, "CONTENT", content), \
+                 patch.object(faculty, "BASELINE", root / "baseline.json"), \
+                 patch.object(faculty, "baseline_hash", side_effect=baseline), \
+                 patch.object(faculty, "connection", return_value={"connected": True}), \
+                 patch.object(faculty, "gh") as gh:
+                gh.side_effect = [file, {"commit": {"sha": "test-content"}}]
+                result = faculty.publish_profile()
+                uploaded = json.loads(base64.b64decode(gh.call_args_list[-1].args[1]["content"]))
+        self.assertEqual(result["branch"], "faculty-editor-test")
+        self.assertEqual(gh.call_count, 2)
+        self.assertEqual(gh.call_args_list[-1].args[1]["branch"], "faculty-editor-test")
+        self.assertEqual(uploaded["en"]["news"][-1]["title"], "Other news")
+        self.assertIn("Test update.", uploaded["en"]["recruitment"]["body_markdown"])

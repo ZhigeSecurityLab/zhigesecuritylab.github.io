@@ -14,12 +14,14 @@ import shutil
 import subprocess
 import threading
 import webbrowser
+from urllib.request import Request, urlopen
 
 import admin
 from build import ROOT, OUT, MARKDOWN, build, validate
 from media import store_avatar
 
 OWNER = "garrisongys"
+BRANCH = "main"
 REPO = "ZhigeSecurityLab/zhigesecuritylab.github.io"
 UI = ROOT / "faculty_editor"
 CONFIG = ROOT / ".local/faculty-github-auth"
@@ -31,7 +33,7 @@ FIELDS = ("name", "role", "url", "bio_markdown")
 
 
 def gh(args, payload=None):
-    binary = admin.publish.gh_path()
+    binary = gh_binary()
     if not binary:
         raise RuntimeError("请先安装 GitHub CLI。")
     env = dict(os.environ, GH_CONFIG_DIR=str(CONFIG), GH_PROMPT_DISABLED="1", GH_NO_UPDATE_NOTIFIER="1")
@@ -46,13 +48,18 @@ def gh(args, payload=None):
     return json.loads(result.stdout) if result.stdout.strip() else {}
 
 
+def gh_binary():
+    bundled = ROOT / ("gh.exe" if os.name == "nt" else "gh")
+    return str(bundled) if bundled.is_file() else admin.publish.gh_path()
+
+
 def connection():
-    if not admin.publish.gh_path():
+    if not gh_binary():
         return {"installed": False, "connected": False, "account": "", "login": dict(AUTH_STATE)}
     try:
         user = gh(["api", "user"])["login"]
         repo = gh(["api", "repos/" + REPO])
-        return {"installed": True, "connected": user.lower() == OWNER and bool(repo.get("permissions", {}).get("push")),
+        return {"installed": True, "connected": user.lower() == OWNER.lower() and bool(repo.get("permissions", {}).get("push")),
                 "account": user, "login": dict(AUTH_STATE)}
     except (RuntimeError, subprocess.TimeoutExpired):
         return {"installed": True, "connected": False, "account": "", "login": dict(AUTH_STATE)}
@@ -61,7 +68,7 @@ def connection():
 def login():
     if AUTH_STATE["state"] == "waiting":
         return dict(AUTH_STATE)
-    if not admin.publish.gh_path():
+    if not gh_binary():
         raise RuntimeError("请先安装 GitHub CLI。")
     AUTH_STATE.update(state="waiting", message="正在获取一次性验证码…", url="https://github.com/login/device")
     threading.Thread(target=_login, daemon=True).start()
@@ -75,7 +82,7 @@ def _login():
         env = dict(os.environ, GH_CONFIG_DIR=str(CONFIG), GH_NO_UPDATE_NOTIFIER="1")
         if os.name != "nt":
             env["GH_BROWSER"] = "/usr/bin/true"
-        process = subprocess.Popen([admin.publish.gh_path(), "auth", "login", "--web", "--hostname", "github.com",
+        process = subprocess.Popen([gh_binary(), "auth", "login", "--web", "--hostname", "github.com",
                                     "--git-protocol", "https"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                    stderr=subprocess.STDOUT, text=True, cwd=ROOT, env=env)
         process.stdin.write("\n")
@@ -86,19 +93,19 @@ def _login():
             for line in process.stdout:
                 match = re.search(r"\b([A-Z0-9]{4}-[A-Z0-9]{4})\b", line)
                 if match:
-                    AUTH_STATE.update(code=match.group(1), message="请用 garrisongys 在 GitHub 输入验证码并授权。")
+                    AUTH_STATE.update(code=match.group(1), message=f"请用 {OWNER} 在 GitHub 输入验证码并授权。")
             exit_code = process.wait()
         finally:
             timer.cancel()
         AUTH_STATE.pop("code", None)
         AUTH_STATE.update(state="success" if exit_code == 0 and connection()["connected"] else "error",
-                          message="garrisongys 已连接。" if exit_code == 0 and connection()["connected"] else "账号或仓库写入权限不匹配，请检查后重试。")
+                          message=f"{OWNER} 已连接。" if exit_code == 0 and connection()["connected"] else "账号或仓库写入权限不匹配，请检查后重试。")
     except Exception:
         AUTH_STATE.update(state="error", message="连接失败，请检查 GitHub CLI 和网络。")
 
 
 def own_record(data, lang):
-    matches = [person for person in data[lang]["people"] if person.get("github_username", "").lower() == OWNER]
+    matches = [person for person in data[lang]["people"] if person.get("github_username", "").lower() == OWNER.lower()]
     if len(matches) > 1 or (matches and matches[0]["category"] != "faculty"):
         raise ValueError("Faculty 资料归属设置异常")
     return matches[0] if matches else None
@@ -109,22 +116,31 @@ def profiles(data):
             for lang in ("en", "zh")}
 
 
-def merge(data, submitted):
+def merge(data, submitted=None, recruitment=None):
     result = copy.deepcopy(data)
-    if not isinstance(submitted, dict) or set(submitted) != {"en", "zh", "avatar"}:
-        raise ValueError("资料格式无效")
-    avatar = submitted["avatar"]
-    for lang in ("en", "zh"):
-        source = submitted[lang]
-        if not isinstance(source, dict) or set(source) != set(FIELDS):
-            raise ValueError("资料字段无效")
-        record = own_record(result, lang)
-        if record is None:
-            record = {"category": "faculty", "github_username": OWNER}
-            result[lang]["people"].append(record)
-        for field in FIELDS:
-            record[field] = source[field]
-        record["avatar"] = avatar
+    if submitted is not None:
+        if not isinstance(submitted, dict) or set(submitted) != {"en", "zh", "avatar"}:
+            raise ValueError("资料格式无效")
+        avatar = submitted["avatar"]
+        for lang in ("en", "zh"):
+            source = submitted[lang]
+            if not isinstance(source, dict) or set(source) != set(FIELDS):
+                raise ValueError("资料字段无效")
+            record = own_record(result, lang)
+            if record is None:
+                record = {"category": "faculty", "github_username": OWNER}
+                result[lang]["people"].append(record)
+            for field in FIELDS:
+                record[field] = source[field]
+            record["avatar"] = avatar
+    if recruitment is not None:
+        expected = {"enabled", "title", "body_markdown", "cta_label", "email_subject"}
+        if not isinstance(recruitment, dict) or set(recruitment) != {"en", "zh"}:
+            raise ValueError("Recruitment 格式无效")
+        for lang in ("en", "zh"):
+            if not isinstance(recruitment[lang], dict) or set(recruitment[lang]) != expected:
+                raise ValueError("Recruitment 字段无效")
+            result[lang]["recruitment"] = copy.deepcopy(recruitment[lang])
     return result
 
 
@@ -134,23 +150,78 @@ def current_state():
     p = profiles(data)
     return {"profiles": {lang: {field: p[lang].get(field, "") for field in FIELDS} for lang in ("en", "zh")},
             "avatar": p["en"].get("avatar", "") or p["zh"].get("avatar", ""),
-            "revision": admin.revision(raw), "token": TOKEN}
+            "recruitment": {lang: data[lang]["recruitment"] for lang in ("en", "zh")},
+            "owner": OWNER, "branch": BRANCH, "revision": admin.revision(raw), "token": TOKEN}
 
 
 def profile_hash(data):
     return hashlib.sha256(json.dumps(profiles(data), sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
-def baseline_hash():
-    head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+def recruitment_hash(data):
+    return hashlib.sha256(json.dumps({lang: data[lang]["recruitment"] for lang in ("en", "zh")},
+                                     sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+
+
+def baseline_hash(scope):
     try:
         saved = json.loads(BASELINE.read_text())
-        if saved.get("git_head") == head:
-            return saved["profile_hash"]
+        if saved.get("branch") == BRANCH:
+            return saved[scope + "_hash"]
     except (OSError, ValueError, KeyError):
         pass
-    raw = subprocess.check_output(["git", "show", "HEAD:content/site.json"], cwd=ROOT)
-    return profile_hash(json.loads(raw))
+    try:
+        raw = subprocess.check_output(["git", "show", "HEAD:content/site.json"], cwd=ROOT)
+    except (OSError, subprocess.CalledProcessError):
+        raise RuntimeError("尚未建立线上同步基线，请联网重新启动编辑器。")
+    return (profile_hash if scope == "profile" else recruitment_hash)(json.loads(raw))
+
+
+def save_baseline(data):
+    BASELINE.parent.mkdir(exist_ok=True)
+    BASELINE.write_text(json.dumps({"branch": BRANCH, "profile_hash": profile_hash(data),
+                                    "recruitment_hash": recruitment_hash(data),
+                                    "local_sha": admin.revision(admin.CONTENT.read_bytes())}))
+
+
+def fetch_remote():
+    endpoint = f"https://api.github.com/repos/{REPO}/contents/content/site.json?ref={BRANCH}"
+    with urlopen(Request(endpoint, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20) as response:
+        return json.loads(base64.b64decode(json.load(response)["content"]))
+
+
+def sync_on_start():
+    """Refresh a clean portable copy while preserving edits from a previous session."""
+    try:
+        saved = json.loads(BASELINE.read_text())
+    except (OSError, ValueError):
+        saved = {}
+    local_raw = admin.CONTENT.read_bytes()
+    if saved.get("branch") == BRANCH and saved.get("local_sha") != admin.revision(local_raw):
+        print("检测到未发布的本地修改，保留当前资料。", flush=True)
+        return
+    try:
+        remote = fetch_remote()
+        for lang in ("en", "zh"):
+            for person in remote[lang]["people"]:
+                path = person.get("avatar", "")
+                if not re.fullmatch(r"assets/people/[a-zA-Z0-9_-]+\.(?:jpg|png|webp)", path):
+                    raise ValueError("线上成员头像路径无效")
+                target = ROOT / path
+                if not target.is_file():
+                    url = f"https://raw.githubusercontent.com/{REPO}/{BRANCH}/{path}"
+                    with urlopen(Request(url, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20) as response:
+                        raw = response.read(2_500_001)
+                    if len(raw) > 2_500_000:
+                        raise ValueError("线上头像文件过大")
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(raw)
+        validate(remote)
+        admin.CONTENT.write_text(json.dumps(remote, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        save_baseline(remote)
+        print(f"已同步 GitHub {BRANCH} 分支的最新内容。", flush=True)
+    except Exception as exc:
+        print(f"未能同步线上内容，使用本地副本：{exc}", flush=True)
 
 
 def blob_sha(raw):
@@ -159,40 +230,49 @@ def blob_sha(raw):
 
 def publish_profile():
     if not connection()["connected"]:
-        raise RuntimeError("请先使用 garrisongys 连接 GitHub，并确认仓库写入权限。")
+        raise RuntimeError(f"请先使用 {OWNER} 连接 GitHub，并确认仓库写入权限。")
     local = json.loads(admin.CONTENT.read_bytes())
     local_profiles = profiles(local)
-    if not local_profiles["en"].get("avatar") or local_profiles["en"].get("avatar") != local_profiles["zh"].get("avatar"):
-        raise ValueError("请先保存中英文资料和共用头像。")
+    scopes = {scope for scope, function in (("profile", profile_hash), ("recruitment", recruitment_hash))
+              if function(local) != baseline_hash(scope)}
     endpoint = "repos/" + REPO + "/contents/content/site.json"
-    remote_file = gh(["api", endpoint + "?ref=main"])
+    remote_file = gh(["api", endpoint + "?ref=" + BRANCH])
     remote = json.loads(base64.b64decode(remote_file["content"]))
-    if profile_hash(remote) != baseline_hash():
-        raise RuntimeError("线上 Faculty 资料已有变化，请先同步仓库后重试，避免覆盖他人的修改。")
-    avatar = local_profiles["en"]["avatar"]
-    image_raw = (ROOT / avatar).read_bytes()
-    image_endpoint = "repos/" + REPO + "/contents/" + avatar
-    try:
-        existing = gh(["api", image_endpoint + "?ref=main"])
-    except FileNotFoundError:
-        existing = None
-    if existing and existing["sha"] != blob_sha(image_raw):
-        raise RuntimeError("线上已有同名但内容不同的头像，请重新上传。")
-    if not existing:
-        gh(["api", "--method", "PUT", image_endpoint, "--input", "-"],
-           {"message": "Add garrisongys faculty photo", "content": base64.b64encode(image_raw).decode(), "branch": "main"})
-    submitted = {"avatar": avatar}
-    for lang in ("en", "zh"):
-        submitted[lang] = {field: local_profiles[lang].get(field, "") for field in FIELDS}
-    updated = merge(remote, submitted)
+    if not scopes:
+        return {"unchanged": True, "branch": BRANCH}
+    for scope in scopes:
+        function = profile_hash if scope == "profile" else recruitment_hash
+        if function(remote) != baseline_hash(scope):
+            raise RuntimeError(f"线上 {scope} 内容已有变化，请先同步后重试，避免覆盖他人的修改。")
+    submitted = None
+    if "profile" in scopes:
+        if not local_profiles["en"].get("avatar") or local_profiles["en"].get("avatar") != local_profiles["zh"].get("avatar"):
+            raise ValueError("请先保存中英文资料和共用头像。")
+        avatar = local_profiles["en"]["avatar"]
+        image_raw = (ROOT / avatar).read_bytes()
+        image_endpoint = "repos/" + REPO + "/contents/" + avatar
+        try:
+            existing = gh(["api", image_endpoint + "?ref=" + BRANCH])
+        except FileNotFoundError:
+            existing = None
+        if existing and existing["sha"] != blob_sha(image_raw):
+            raise RuntimeError("线上已有同名但内容不同的头像，请重新上传。")
+        if not existing:
+            gh(["api", "--method", "PUT", image_endpoint, "--input", "-"],
+               {"message": f"Add {OWNER} faculty photo", "content": base64.b64encode(image_raw).decode(), "branch": BRANCH})
+        submitted = {"avatar": avatar}
+        for lang in ("en", "zh"):
+            submitted[lang] = {field: local_profiles[lang].get(field, "") for field in FIELDS}
+    recruitment = ({lang: local[lang]["recruitment"] for lang in ("en", "zh")}
+                   if "recruitment" in scopes else None)
+    updated = merge(remote, submitted, recruitment)
     raw = (json.dumps(updated, ensure_ascii=False, indent=2) + "\n").encode()
     result = gh(["api", "--method", "PUT", endpoint, "--input", "-"],
-                {"message": "Update garrisongys faculty profile", "content": base64.b64encode(raw).decode(),
-                 "sha": remote_file["sha"], "branch": "main"})
-    BASELINE.parent.mkdir(exist_ok=True)
-    head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-    BASELINE.write_text(json.dumps({"git_head": head, "profile_hash": profile_hash(updated)}))
-    return {"commit": result["commit"]["sha"], "url": "https://github.com/" + REPO + "/commit/" + result["commit"]["sha"]}
+                {"message": f"Update {OWNER} faculty and recruitment content", "content": base64.b64encode(raw).decode(),
+                 "sha": remote_file["sha"], "branch": BRANCH})
+    save_baseline(updated)
+    return {"commit": result["commit"]["sha"], "branch": BRANCH,
+            "url": "https://github.com/" + REPO + "/commit/" + result["commit"]["sha"]}
 
 
 class Handler(admin.Handler):
@@ -253,7 +333,7 @@ class Handler(admin.Handler):
                     original = admin.CONTENT.read_bytes()
                     if payload.get("revision") != admin.revision(original):
                         raise RuntimeError("本地文件已变化，请重新加载后编辑。")
-                    merged = merge(json.loads(original), payload["profile"])
+                    merged = merge(json.loads(original), payload.get("profile"), payload.get("recruitment"))
                     validate(merged)
                     admin.save(merged, payload["revision"])
                     return self.send(200, current_state())
@@ -275,7 +355,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", type=int, default=8002)
     parser.add_argument("--open", action="store_true")
+    parser.add_argument("--user", default="garrisongys", choices=("garrisongys", "zhengfeiLian"))
+    parser.add_argument("--branch", default="main", choices=("main", "faculty-editor-test"))
     args = parser.parse_args()
+    OWNER = args.user
+    BRANCH = args.branch
+    if (OWNER, BRANCH) not in {("garrisongys", "main"), ("zhengfeiLian", "faculty-editor-test")}:
+        parser.error("账号与目标分支不匹配")
+    CONFIG = ROOT / (".local/faculty-github-auth-" + OWNER.lower())
+    BASELINE = ROOT / (".local/faculty-baseline-" + OWNER.lower() + "-" + BRANCH + ".json")
+    sync_on_start()
     build()
     url = f"http://127.0.0.1:{args.port}/"
     server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)

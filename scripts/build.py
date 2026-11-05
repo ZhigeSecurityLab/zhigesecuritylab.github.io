@@ -5,12 +5,13 @@ from urllib.parse import urlsplit, quote
 import json
 import re
 import shutil
+import sys
 import xml.etree.ElementTree as ET
 from datetime import date
 from markdown_it import MarkdownIt
 from appearance import settings as appearance_settings, stylesheet as appearance_stylesheet
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else Path(__file__).resolve().parents[1]
 OUT = ROOT / "_site"
 MARKDOWN = MarkdownIt("js-default")
 
@@ -112,6 +113,18 @@ def empty(message):
     return f'<p class="empty-state">{e(message)}</p>'
 
 
+def news_list(data, lang):
+    rows = ""
+    for item in sorted((entry for entry in data[lang]["news"] if not entry.get("draft", False)),
+                       key=lambda entry: entry["date"], reverse=True):
+        title = e(item.get("title", item.get("text", "")))
+        if item.get("url"):
+            title = f'<a href="{link(item["url"])}">{title}</a>'
+        body = MARKDOWN.render(item.get("body_markdown", ""))
+        rows += f'<li class="news-row"><time datetime="{e(item["date"])}">{e(item["date"])}</time><article><h3>{title}</h3><div class="markdown-body">{body}</div></article></li>'
+    return f'<ul class="plain-list">{rows}</ul>' if rows else empty("最新动态待更新。" if lang == "zh" else "News and updates will be added.")
+
+
 def members(data, lang, category):
     items = [person for person in data[lang]["people"] if person["category"] == category]
     if not items:
@@ -140,24 +153,7 @@ def home_content(data, lang):
       <p class="intro">{e(t['intro'])}</p><p class="about-copy">{e(t['about'])}</p>
     </section>'''
 
-    def listing(key):
-        rows = ""
-        items = sorted((item for item in t[key] if not item.get("draft", False)), key=lambda x: x["date" if key == "news" else "year"], reverse=True)
-        for item in items:
-            title = e(item.get("title", item.get("text", "")))
-            if item.get("url"):
-                title = f'<a href="{link(item["url"])}">{title}</a>'
-            if key == "news":
-                markdown = MARKDOWN.render(item.get("body_markdown", ""))
-                rows += f'<li class="news-row"><time datetime="{e(item["date"])}">{e(item["date"])}</time><article><h3>{title}</h3><div class="markdown-body">{markdown}</div></article></li>'
-            else:
-                rows += f'<li class="publication"><h3>{title}</h3><p>{e(item["authors"])}</p><p class="muted">{e(item["venue"])} · {e(item["year"])}</p></li>'
-        body = f'<ul class="plain-list">{rows}</ul>' if rows else empty(
-            ("论文信息待更新。" if zh else "Publication information will be added.") if key == "publications" else
-            ("最新动态待更新。" if zh else "News and updates will be added."))
-        return f'<section id="{key}" class="section"><h2>{names[key]}</h2>{body}</section>'
-
-    return result + listing("news")
+    return result + f'<section id="news" class="section"><h2>{names["news"]}</h2>{news_list(data, lang)}</section>'
 
 
 def section_content(data, lang, page):
@@ -166,6 +162,8 @@ def section_content(data, lang, page):
     names = labels(lang)
     label = ("加入我们" if zh else "Recruitment") if page == "recruitment" else names[page]
     result = f'<div class="page-heading"><a class="back-link" href="../">← {"返回首页" if zh else "Back to home"}</a><p class="eyebrow">ZHIGE SECURITY LAB</p><h1>{e(label)}</h1></div>'
+    if page == "news":
+        return result + f'<section id="news" class="section">{news_list(data, lang)}</section>'
     recruitment = t.get("recruitment", {})
     if page == "recruitment" and recruitment and recruitment.get("enabled", True):
         contact = ""
@@ -234,7 +232,7 @@ def render(data, lang, page="home", category=None):
         title = next(group[lang] for group in data["people_categories"] if group["id"] == category)
     document_title = f'{title} | {t["other_name"] if page == "home" else t["name"]}'
     menu = f'<a href="{local_home}"' + (' aria-current="page"' if page == "home" else '') + f'>{names["home"]}</a>'
-    menu += f'<a href="{local_home}#news">{names["news"]}</a>'
+    menu += f'<a href="{local_home}news/"' + (' aria-current="page"' if page == "news" else '') + f'>{names["news"]}</a>'
     if t.get("recruitment") and t["recruitment"].get("enabled", True):
         menu += f'<a href="{local_home}recruitment/"' + (' aria-current="page"' if page == "recruitment" else '') + f'>{"加入我们" if zh else "Recruitment"}</a>'
     menu += f'<a href="{local_home}publications/"' + (' aria-current="page"' if page == "publications" else '') + f'>{names["publications"]}</a>'
@@ -280,7 +278,7 @@ def build(data=None, output=None):
                 raise ValueError(f'Unknown member category: {person["category"]}')
         prefix = "zh/" if lang == "zh" else ""
         pages[prefix + "index.html"] = render(data, lang)
-        for section in ("recruitment", "publications", "contact"):
+        for section in ("news", "recruitment", "publications", "contact"):
             if section != "recruitment" or data[lang].get("recruitment", {}).get("enabled", True):
                 pages[prefix + section + "/index.html"] = render(data, lang, section)
         pages[prefix + "people/index.html"] = render(data, lang, "people")
