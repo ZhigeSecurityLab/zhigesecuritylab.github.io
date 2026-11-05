@@ -79,6 +79,28 @@ class EditorTests(unittest.TestCase):
         self.assertNotIn('href="javascript:', html)
         self.assertIn('&lt;script&gt;', html)
 
+    def test_recruitment_renders_markdown_and_email_in_both_languages(self):
+        for language in ('en', 'zh'):
+            html = render(self.original, language)
+            self.assertIn('id="recruitment"', html)
+            self.assertIn('href="./#recruitment"', html)
+            self.assertIn('class="recruitment-cta"', html)
+            self.assertIn('mailto:zhige.sec.lab@hotmail.com?subject=%5BZhige%20Lab%5D', html)
+            self.assertIn('<strong>', html)
+        self.assertIn('Research Assistants', render(self.original, 'en'))
+        self.assertIn('科研助理', render(self.original, 'zh'))
+
+    def test_recruitment_can_be_hidden_and_old_content_remains_valid(self):
+        data = copy.deepcopy(self.original)
+        data['en']['recruitment']['enabled'] = False
+        html = render(data, 'en')
+        self.assertNotIn('id="recruitment"', html)
+        self.assertNotIn('#recruitment', html)
+        for language in ('en', 'zh'):
+            data[language].pop('recruitment', None)
+        validate(data)
+        self.assertNotIn('id="recruitment"', render(data, 'zh'))
+
     def test_http_save_restore_and_request_guards(self):
         with patch.object(admin.Handler, 'log_message', lambda *args: None):
             server = admin.ThreadingHTTPServer(('127.0.0.1', 0), admin.Handler)

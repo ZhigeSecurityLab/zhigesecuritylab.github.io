@@ -1,7 +1,7 @@
 """Bilingual static site generator with Markdown news support; Python 3.9+."""
 from pathlib import Path
 from html import escape
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, quote
 import json
 import shutil
 import xml.etree.ElementTree as ET
@@ -43,6 +43,12 @@ def validate(data):
         t = data[lang]
         for field in ("name", "other_name", "institution", "eyebrow", "intro", "about"):
             string(t[field], f"{lang}.{field}", field == "name")
+        recruitment = t.get("recruitment")
+        if recruitment is not None:
+            if not isinstance(recruitment, dict) or not isinstance(recruitment.get("enabled", True), bool):
+                raise ValueError("加入我们模块格式无效")
+            for field in ("title", "body_markdown", "cta_label", "email_subject"):
+                string(recruitment.get(field, ""), f"{lang}.recruitment.{field}", recruitment.get("enabled", True) and field in ("title", "body_markdown"))
         for key in ("news", "publications", "people"):
             if not isinstance(t[key], list) or len(t[key]) > 5000:
                 raise ValueError(f"{lang}.{key}: 列表格式无效")
@@ -129,6 +135,14 @@ def home_content(data, lang):
             ("论文信息待更新。" if zh else "Publication information will be added.") if key == "publications" else
             ("最新动态待更新。" if zh else "News and updates will be added."))
         result += f'<section id="{key}" class="section"><h2>{names[key]}</h2>{body}</section>'
+    recruitment = t.get("recruitment", {})
+    if recruitment and recruitment.get("enabled", True):
+        contact = ""
+        if data["email"]:
+            subject = quote(recruitment.get("email_subject", ""), safe="")
+            cta = recruitment.get("cta_label") or ("邮件咨询" if zh else "Get in touch")
+            contact = f'<a class="recruitment-cta" href="mailto:{e(data["email"])}?subject={subject}">{e(cta)} <span aria-hidden="true">↗</span></a>'
+        result += f'<section id="recruitment" class="section recruitment-section"><h2>{e(recruitment["title"])}</h2><div class="markdown-body recruitment-copy">{MARKDOWN.render(recruitment["body_markdown"])}</div>{contact}</section>'
     if data["email"]:
         email = data["email"]
         if any(c in email for c in "\r\n?&") or "@" not in email:
@@ -187,6 +201,8 @@ def render(data, lang, page="home", category=None):
     submenu += "".join(f'<a href="{people_home}{g["id"]}/">{e(g[lang])}</a>' for g in data["people_categories"])
     menu += f'<details class="people-menu"><summary>{names["people"]}</summary><div class="people-submenu">{submenu}</div></details>'
     menu += f'<a href="{local_home}#news">{names["news"]}</a>'
+    if t.get("recruitment") and t["recruitment"].get("enabled", True):
+        menu += f'<a href="{local_home}#recruitment">{"加入我们" if zh else "Recruitment"}</a>'
     if data["email"]:
         menu += f'<a href="mailto:{e(data["email"])}">{names["contact"]}</a>'
     content = home_content(data, lang) if page == "home" else people_content(data, lang, category)
