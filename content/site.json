@@ -33,7 +33,7 @@
     "recruitment": {
       "enabled": true,
       "title": "Recruitment",
-      "body_markdown": "Interested in making intelligent and computing systems more secure? **Zhige Security Lab welcomes enquiries from prospective PhD students, master's students, postdoctoral researchers, and research assistants.**\n\nOur current research interests include:\n\n- **LLM & Agent Security and Privacy**\n- **System Security**\n\n### PhD and Master's Students\n\nIf you are interested in pursuing research in these areas, we would be glad to hear about your background and research interests. Tell us what questions you would like to explore, and share any relevant coursework, projects, or research experience.\n\n### Postdoctoral Researchers\n\n### Research Assistants\n\n### How to Get in Touch\n\nPlease email **zhige.sec.lab@hotmail.com** with:\n\n-\n-\n-\n-\n",
+      "body_markdown": "Interested in making intelligent and computing systems more secure? **Zhige Security Lab welcomes enquiries from prospective PhD students, master's students, postdoctoral researchers, and research assistants.**\n\nOur current research interests include:\n\n- **LLM & Agent Security and Privacy**\n- **System Security**\n\n### PhD and Master's Students\n\nIf you are interested in pursuing research in these areas, we would be glad to hear about your background and research interests. Tell us what questions you would like to explore, and share any relevant coursework, projects, or research experience.\n\n### Postdoctoral Researchers\n\n### Research Assistants\n\n### How to Get in Touch\n\nPlease email **zhige.sec.lab@hotmail.com** with:\n\n- CV\n- Transcript\n- Publication (Preferred but Optional)\n",
       "cta_label": "Enquire about joining us",
       "email_subject": ""
     }
