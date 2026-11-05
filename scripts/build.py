@@ -121,9 +121,9 @@ def home_content(data, lang):
     result = f'''<section id="about" class="intro-section">
       <p class="eyebrow">{e(t['eyebrow'])}</p><h1>{e(t['name'])}{institution}</h1><p class="other-name">{e(t['other_name'])}{other_institution}</p>
       <p class="intro">{e(t['intro'])}</p><p class="about-copy">{e(t['about'])}</p>
-      <a class="text-link" href="#publications">{names['publications']} <span aria-hidden="true">↓</span></a>
     </section>'''
-    for key in ("publications", "news"):
+
+    def listing(key):
         rows = ""
         items = sorted((item for item in t[key] if not item.get("draft", False)), key=lambda x: x["date" if key == "news" else "year"], reverse=True)
         for item in items:
@@ -138,7 +138,9 @@ def home_content(data, lang):
         body = f'<ul class="plain-list">{rows}</ul>' if rows else empty(
             ("论文信息待更新。" if zh else "Publication information will be added.") if key == "publications" else
             ("最新动态待更新。" if zh else "News and updates will be added."))
-        result += f'<section id="{key}" class="section"><h2>{names[key]}</h2>{body}</section>'
+        return f'<section id="{key}" class="section"><h2>{names[key]}</h2>{body}</section>'
+
+    result += listing("news")
     recruitment = t.get("recruitment", {})
     if recruitment and recruitment.get("enabled", True):
         contact = ""
@@ -147,6 +149,13 @@ def home_content(data, lang):
             cta = recruitment.get("cta_label") or ("邮件咨询" if zh else "Get in touch")
             contact = f'<a class="recruitment-cta" href="mailto:{e(data["email"])}?subject={subject}">{e(cta)} <span aria-hidden="true">↗</span></a>'
         result += f'<section id="recruitment" class="section recruitment-section"><h2>{e(recruitment["title"])}</h2><div class="markdown-body recruitment-copy">{MARKDOWN.render(recruitment["body_markdown"])}</div>{contact}</section>'
+    result += listing("publications")
+    people_rows = ""
+    for group in data["people_categories"]:
+        people = [person for person in t["people"] if person["category"] == group["id"]]
+        names_in_group = f'<span class="people-overview-names">{e(", ".join(person["name"] for person in people))}</span>' if people else ""
+        people_rows += f'<li><a href="people/{group["id"]}/">{e(group[lang])} <span aria-hidden="true">↗</span></a>{names_in_group}</li>'
+    result += f'<section id="people" class="section"><h2>{names["people"]}</h2><p class="section-description">{"按成员类别浏览实验室。" if zh else "Explore the lab by member category."}</p><ul class="people-overview-list">{people_rows}</ul></section>'
     if data["email"]:
         email = data["email"]
         if any(c in email for c in "\r\n?&") or "@" not in email:
@@ -199,14 +208,14 @@ def render(data, lang, page="home", category=None):
         title = next(group[lang] for group in data["people_categories"] if group["id"] == category)
     document_title = f'{title} | {t["other_name"] if page == "home" else t["name"]}'
     menu = f'<a href="{local_home}"' + (' aria-current="page"' if page == "home" else '') + f'>{names["home"]}</a>'
+    menu += f'<a href="{local_home}#news">{names["news"]}</a>'
+    if t.get("recruitment") and t["recruitment"].get("enabled", True):
+        menu += f'<a href="{local_home}#recruitment">{"加入我们" if zh else "Recruitment"}</a>'
     menu += f'<a href="{local_home}#publications">{names["publications"]}</a>'
     people_home = local_home + "people/"
     submenu = f'<a href="{people_home}">{"全部成员" if zh else "All people"}</a>'
     submenu += "".join(f'<a href="{people_home}{g["id"]}/">{e(g[lang])}</a>' for g in data["people_categories"])
     menu += f'<details class="people-menu"><summary>{names["people"]}</summary><div class="people-submenu">{submenu}</div></details>'
-    menu += f'<a href="{local_home}#news">{names["news"]}</a>'
-    if t.get("recruitment") and t["recruitment"].get("enabled", True):
-        menu += f'<a href="{local_home}#recruitment">{"加入我们" if zh else "Recruitment"}</a>'
     if data["email"]:
         menu += f'<a href="mailto:{e(data["email"])}">{names["contact"]}</a>'
     content = home_content(data, lang) if page == "home" else people_content(data, lang, category)

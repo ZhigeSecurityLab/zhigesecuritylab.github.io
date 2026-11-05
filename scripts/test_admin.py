@@ -103,6 +103,24 @@ class EditorTests(unittest.TestCase):
         validate(data)
         self.assertNotIn('id="recruitment"', render(data, 'zh'))
 
+    def test_home_sections_and_navigation_follow_requested_order(self):
+        for language in ('en', 'zh'):
+            html = render(self.original, language)
+            navigation = html.split('<nav class="main-nav"', 1)[1].split('</nav>', 1)[0]
+            for earlier, later in zip(
+                ('"./"', '#news', '#recruitment', '#publications', 'people-menu', 'mailto:'),
+                ('#news', '#recruitment', '#publications', 'people-menu', 'mailto:', '</nav>'),
+            ):
+                if later != '</nav>':
+                    self.assertLess(navigation.index(earlier), navigation.index(later))
+            content = html.split('<main id="main">', 1)[1]
+            positions = [content.index(f'id="{section}"') for section in
+                         ('about', 'news', 'recruitment', 'publications', 'people', 'contact')]
+            self.assertEqual(positions, sorted(positions))
+            self.assertNotIn('class="text-link"', content)
+            for group in self.original['people_categories']:
+                self.assertIn(f'href="people/{group["id"]}/"', content)
+
     def test_http_save_restore_and_request_guards(self):
         with patch.object(admin.Handler, 'log_message', lambda *args: None):
             server = admin.ThreadingHTTPServer(('127.0.0.1', 0), admin.Handler)

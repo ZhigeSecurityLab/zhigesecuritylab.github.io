@@ -239,13 +239,11 @@ h1 {
   font-size:22px;
   line-height:1.7;
   margin:36px 0 15px;
-  max-width:650px;
 }
 .about-copy {
   margin:0;
   color:var(--muted);
   font-size:18px;
-  max-width:640px;
 }
 .text-link {
   display:inline-flex;
@@ -321,6 +319,30 @@ h3 {
   padding:0;
   list-style:none;
 }
+.people-overview-list {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 28px;
+  margin:20px 0 0;
+  padding:0;
+  list-style:none;
+}
+.people-overview-list li {
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  min-width:0;
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+}
+.people-overview-list a {
+  width:max-content;
+  max-width:100%;
+  overflow-wrap:anywhere;
+  text-decoration:none;
+}
+.people-overview-list a:hover { text-decoration:underline; }
+.people-overview-names { color:var(--muted);font-size:16px;overflow-wrap:anywhere; }
 .news-row {
   display:grid;
   grid-template-columns:100px minmax(0,1fr);
@@ -510,6 +532,7 @@ html[lang="zh-CN"] .intro {
     grid-template-columns:1fr;
     gap:2px;
   }
+  .people-overview-list { grid-template-columns:1fr; }
   footer {
     flex-wrap:wrap;
     gap:10px;
