@@ -73,5 +73,12 @@
       "zh": "毕业成员"
     }
   ],
-  "appearance": {}
+  "appearance": {
+    "body": 22,
+    "navigation": 22,
+    "eyebrow": 22,
+    "markdown": 18,
+    "tabs": 18,
+    "description": 20
+  }
 }
