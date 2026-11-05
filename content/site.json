@@ -19,13 +19,23 @@
       }
     ],
     "publications": [],
-    "people": [],
+    "people": [
+      {
+        "category": "faculty",
+        "github_username": "zhengfeiLian",
+        "name": "Young Happy",
+        "role": "q",
+        "url": "",
+        "bio_markdown": "## Biography\n\nWrite a short introduction.\n\n## Research Interests\n\n- Research topic 1\n- Research topic 2\n\n## Selected Publications\n\n- Add representative publications with links.\n\n## Projects and Service\n\nDescribe projects, awards, or academic service if relevant.\n\n## Contact\n\nAdd a public contact method if desired.\n",
+        "avatar": "assets/people/3ec87f6215724c6abe289e3f61e39604.png"
+      }
+    ],
     "recruitment": {
       "enabled": true,
       "title": "Recruitment",
       "body_markdown": "Interested in making intelligent and computing systems more secure? **Zhige Security Lab welcomes enquiries from prospective PhD students, master's students, postdoctoral researchers, and research assistants.**\n\nOur current research interests include:\n\n- **LLM & Agent Security and Privacy**\n- **System Security**\n\n### PhD and Master's Students\n\nIf you are interested in pursuing research in these areas, we would be glad to hear about your background and research interests. Tell us what questions you would like to explore, and share any relevant coursework, projects, or research experience.\n\n### Postdoctoral Researchers\n\n### Research Assistants\n\n### How to Get in Touch\n\nPlease email **zhige.sec.lab@hotmail.com** with:\n\n-\n-\n-\n-\n",
-      "cta_label": "Enquire about joining us",
-      "email_subject": ""
+      "cta_label": "happyyoung8310@gmail.com",
+      "email_subject": "happyyoung8310@gmail.com"
     }
   },
   "zh": {
@@ -37,7 +47,17 @@
     "about": "我们的研究围绕智能系统及其支撑计算系统中的安全与隐私问题展开。",
     "news": [],
     "publications": [],
-    "people": [],
+    "people": [
+      {
+        "category": "faculty",
+        "github_username": "zhengfeiLian",
+        "name": "Happy",
+        "role": "hg",
+        "url": "",
+        "bio_markdown": "",
+        "avatar": "assets/people/3ec87f6215724c6abe289e3f61e39604.png"
+      }
+    ],
     "recruitment": {
       "enabled": true,
       "title": "加入我们",
