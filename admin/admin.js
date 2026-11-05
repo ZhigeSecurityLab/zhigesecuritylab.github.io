@@ -4,8 +4,8 @@ let tab = 'overview', lang = 'en', previewTimer, previewSequence = 0;
 const selected = {};
 const $ = id => document.getElementById(id);
 const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[ch]));
-const titles = {overview:'简介与首页',news:'News · 新闻',publications:'Publications · 论文',people:'People · 成员',settings:'设置与备份'};
-const descriptions = {overview:'修改当前语言的实验室名称、所属单位和简介。',news:'用 Markdown 编辑新闻；英文和中文分别维护，草稿不会显示在网站。',publications:'维护论文信息，网站会按年份自动排序。',people:'选择成员分类，维护姓名、身份与个人主页。',settings:'联系方式、成员分类、内容导出与自动备份。'};
+const titles = {overview:'简介与首页',news:'News · 新闻',publications:'Publications · 论文',people:'People · 成员',recruitment:'Recruitment · 加入我们',settings:'设置与备份'};
+const descriptions = {overview:'修改当前语言的实验室名称、所属单位和简介。',news:'用 Markdown 编辑新闻；英文和中文分别维护，草稿不会显示在网站。',publications:'维护论文信息，网站会按年份自动排序。',people:'选择成员分类，维护姓名、身份与个人主页。',recruitment:'用 Markdown 维护招募对象、申请信息和邮件咨询入口。',settings:'联系方式、成员分类、内容导出与自动备份。'};
 
 function message(text, success = false) {
   $('message').hidden = !text;
@@ -17,7 +17,7 @@ function markDirty() {
   $('save-state').textContent = '有未保存修改';
   $('save-state').className = 'unsaved';
 }
-function current() { return data[lang][tab]?.[selected[`${lang}:${tab}`] ?? 0]; }
+function current() { return tab === 'recruitment' ? data[lang].recruitment : data[lang][tab]?.[selected[`${lang}:${tab}`] ?? 0]; }
 function field(key, label, value, options = {}) {
   const attrs = options.global ? 'data-global' : options.category != null ? `data-category="${options.category}" data-key` : 'data-field';
   const labelText = escapeHTML(label);
@@ -56,6 +56,10 @@ function render() {
   if (tab === 'overview') {
     const t = data[lang];
     $('editor').innerHTML = `<div class="card"><h2>${lang === 'en' ? '英文首页内容' : '中文首页内容'}</h2><div class="form-grid">${field('name','实验室名称',t.name)}${field('other_name','另一语言名称',t.other_name)}${field('institution','所属学校／单位（选填）',t.institution)}${field('eyebrow','页首关键词',t.eyebrow)}${field('intro','主要简介',t.intro,{textarea:true,wide:true})}${field('about','补充介绍',t.about,{textarea:true,wide:true})}</div><p class="helper">英文与中文分别维护。切换语言会保留当前修改，最后统一保存。</p></div>`;
+  } else if (tab === 'recruitment') {
+    const item = current();
+    $('editor').innerHTML = `<section class="card"><h2>${lang === 'en' ? '英文招募信息' : '中文招募信息'}</h2><label class="checkbox"><input type="checkbox" id="recruitment-enabled" ${item.enabled ? 'checked' : ''}> 在网站显示 Recruitment／加入我们栏目</label><div class="form-grid">${field('title','栏目标题',item.title)}${field('cta_label','邮件按钮文字',item.cta_label)}${field('email_subject','邮件默认主题',item.email_subject,{wide:true})}</div><div class="toolbar"><button type="button" data-insert="bold">加粗</button><button type="button" data-insert="link">链接</button><button type="button" data-insert="list">列表</button><button type="button" data-insert="code">代码</button><label class="file-label">导入 .md<input id="import-md" type="file" accept=".md,.markdown,text/markdown,text/plain"></label><button type="button" id="export-md">导出 .md</button></div><div class="markdown-layout"><label>Markdown 正文<textarea id="markdown" data-field="body_markdown" class="markdown-input" rows="18">${escapeHTML(item.body_markdown)}</textarea></label><div><label>排版预览</label><div id="markdown-preview" class="md-preview"></div></div></div><p class="helper">邮箱按钮使用公共设置中的联系邮箱。招生名额、时间与申请流程明确后，可在正文中补充。顶部保存按钮会同时保存各语言修改。</p></section>`;
+    updateMarkdown();
   } else if (tab === 'settings') {
     $('editor').innerHTML = `<div class="stack"><section class="card"><h2>公共设置</h2><div class="form-grid">${field('email','Contact Us 收件邮箱',data.email,{global:true,type:'email'})}${field('url','正式网站地址',data.url,{global:true,type:'url'})}${field('github','GitHub 组织地址',data.github,{global:true,type:'url',wide:true})}</div></section><section class="card"><h2>成员分类名称</h2><p class="helper">分类路径保持稳定，可修改各语言显示名称。</p>${data.people_categories.map((g,i)=>`<div class="category-row"><code>${escapeHTML(g.id)}</code>${field('en','英文名称',g.en,{category:i})}${field('zh','中文名称',g.zh,{category:i})}</div>`).join('')}</section><section class="card"><h2>备份与恢复</h2><p class="helper">每次成功保存前自动备份上一版，恢复操作前也会备份当前版本。备份仅保存在本机。</p><div class="backup-row"><label>选择备份<select id="backup">${backups.map(b=>`<option value="${escapeHTML(b)}">${escapeHTML(b)}</option>`).join('')}</select></label><button type="button" id="restore" ${backups.length ? '' : 'disabled'}>恢复此备份</button><button type="button" id="export-json">导出当前内容 JSON</button></div></section><section class="note">保存会更新本地内容文件及网站预览。准备上线时，将修改提交到 GitHub 仓库，GitHub Actions 会自动构建发布；本后台不会自动推送仓库。</section></div>`;
   } else {
@@ -85,7 +89,7 @@ async function api(path, payload) {
   return result;
 }
 async function updateMarkdown() {
-  if (tab !== 'news' || !current()) return;
+  if (!['news','recruitment'].includes(tab) || !current()) return;
   const sequence = ++previewSequence;
   try {
     const result = await api('/api/markdown', {markdown:current().body_markdown || ''});
@@ -98,6 +102,9 @@ async function updateMarkdown() {
 }
 function loadState(result) {
   data = result.data; revision = result.revision; token = result.token; backups = result.backups;
+  for (const language of ['en','zh']) {
+    if (!data[language].recruitment) data[language].recruitment = {enabled:false,title:language === 'en' ? 'Recruitment' : '加入我们',body_markdown:'',cta_label:language === 'en' ? 'Get in touch' : '邮件咨询',email_subject:'[Zhige Lab] Research opportunity enquiry'};
+  }
   dirty = false;
   $('save-state').textContent = '本地内容已保存'; $('save-state').className = '';
   $('save').disabled = false;
@@ -118,6 +125,7 @@ $('editor').addEventListener('input', event => {
   if (target.matches('[data-global]')) data[target.dataset.global] = target.value;
   else if (target.matches('[data-category]')) data.people_categories[Number(target.dataset.category)][target.dataset.key] = target.value;
   else if (target.id === 'published') current().draft = !target.checked;
+  else if (target.id === 'recruitment-enabled') current().enabled = target.checked;
   else if (target.matches('[data-field]')) {
     const object = tab === 'overview' ? data[lang] : current();
     object[target.dataset.field] = target.dataset.field === 'year' ? Number(target.value) : target.value;
@@ -133,10 +141,10 @@ $('editor').addEventListener('change', async event => {
   if (file.size > 400000) return message('Markdown 文件应小于 400 KB。');
   try {
     const text = await file.text(), heading = text.match(/^#\s+(.+)\r?\n/);
-    if (current().body_markdown && !confirm('导入会替换当前这条新闻的正文。继续吗？')) return;
+    if (current().body_markdown && !confirm('导入会替换当前正文；文件含一级标题时也会更新标题。继续吗？')) return;
     if (heading) {current().title = heading[1]; current().body_markdown = text.slice(heading[0].length).trimStart();}
     else current().body_markdown = text;
-    markDirty(); render(); message('Markdown 已导入。确认标题、日期及显示状态后，点击顶部保存。', true);
+    markDirty(); render(); message('Markdown 已导入。确认内容及显示状态后，点击顶部保存。', true);
   } catch (error) {message(error.message);}
 });
 $('editor').addEventListener('click', async event => {
@@ -155,7 +163,7 @@ $('editor').addEventListener('click', async event => {
     const snippets = {bold:`**${chosen || '重点内容'}**`,link:`[${chosen || '链接文字'}](https://example.org)`,list:`\n- ${chosen || '第一项'}\n- 第二项\n`,code:`\n\`\`\`\n${chosen || '代码'}\n\`\`\`\n`};
     input.setRangeText(snippets[button.dataset.insert],start,end,'end');input.dispatchEvent(new Event('input',{bubbles:true}));input.focus();
   } else if (button.id === 'export-md') {
-    const item = current(); download(`news-${item.date}.md`, `# ${item.title || item.text || ''}\n\n${item.body_markdown || ''}\n`, 'text/markdown;charset=utf-8');
+    const item = current(); download(tab === 'recruitment' ? `recruitment-${lang}.md` : `news-${item.date}.md`, `# ${item.title || item.text || ''}\n\n${item.body_markdown || ''}\n`, 'text/markdown;charset=utf-8');
   } else if (button.id === 'export-json') {
     download('zhige-site-content.json', JSON.stringify(data,null,2)+'\n','application/json');
   } else if (button.id === 'restore') {
