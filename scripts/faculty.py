@@ -12,6 +12,7 @@ import re
 import secrets
 import shutil
 import subprocess
+import sys
 import threading
 import webbrowser
 from urllib.request import Request, urlopen
@@ -19,6 +20,11 @@ from urllib.request import Request, urlopen
 import admin
 from build import ROOT, OUT, MARKDOWN, build, validate
 from media import store_avatar
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 OWNER = "garrisongys"
 BRANCH = "main"
