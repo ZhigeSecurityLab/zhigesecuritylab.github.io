@@ -8,7 +8,7 @@
     return hour >= 7 && hour < 19 ? 'light' : 'dark';
   }
   try {
-    var saved = localStorage.getItem('zhige-theme');
+    var saved = sessionStorage.getItem('zhige-theme');
     if (saved === 'light' || saved === 'dark') preference = saved;
   } catch (_) { /* Storage may be disabled; switching still works for this page. */ }
 
@@ -78,7 +78,7 @@
     var button = document.querySelector('[data-theme-toggle]');
     if (button) button.addEventListener('click', function () {
       preference = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      try { localStorage.setItem('zhige-theme', preference); } catch (_) {}
+      try { sessionStorage.setItem('zhige-theme', preference); } catch (_) {}
       applyTheme(preference);
     });
     loadCounter();
