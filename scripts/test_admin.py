@@ -124,8 +124,8 @@ class EditorTests(unittest.TestCase):
                 data = copy.deepcopy(self.original)
                 data['en']['intro'] = 'Changed via HTTP.'
                 saved = post('/api/save', {'data':data,'revision':state['revision']})
-                self.assertEqual(urlopen(base + '/preview/assets/logo.svg').status, 200)
-                self.assertEqual(urlopen(base + '/assets/logo.svg').status, 200)
+                self.assertEqual(urlopen(base + '/preview/assets/logo.jpg').status, 200)
+                self.assertEqual(urlopen(base + '/assets/logo.jpg').status, 200)
                 restored = post('/api/restore', {'backup':saved['backups'][0], 'revision':saved['revision']})
                 self.assertEqual(restored['data'], self.original)
                 self.assertEqual(len(restored['backups']), 2)

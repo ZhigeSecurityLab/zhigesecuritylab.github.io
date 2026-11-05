@@ -113,9 +113,11 @@ def home_content(data, lang):
     t = data[lang]
     zh = lang == "zh"
     names = labels(lang)
-    institution = f'<p class="institution">{e(t["institution"])}</p>' if t["institution"] else ""
+    institution = f' <span class="affiliation">@ {e(t["institution"])}</span>' if t["institution"] else ""
+    other = data['en' if zh else 'zh']
+    other_institution = f' <span class="affiliation">@ {e(other["institution"])}</span>' if other['institution'] else ""
     result = f'''<section id="about" class="intro-section">
-      <p class="eyebrow">{e(t['eyebrow'])}</p><h1>{e(t['name'])}</h1><p class="other-name">{e(t['other_name'])}</p>{institution}
+      <p class="eyebrow">{e(t['eyebrow'])}</p><h1>{e(t['name'])}{institution}</h1><p class="other-name">{e(t['other_name'])}{other_institution}</p>
       <p class="intro">{e(t['intro'])}</p><p class="about-copy">{e(t['about'])}</p>
       <a class="text-link" href="#publications">{names['publications']} <span aria-hidden="true">↓</span></a>
     </section>'''
@@ -215,15 +217,15 @@ def render(data, lang, page="home", category=None):
 <link rel="canonical" href="{e(base + '/' + canonical_path)}">
 <link rel="alternate" hreflang="en" href="{e(base + '/' + en_path)}"><link rel="alternate" hreflang="zh-CN" href="{e(base + '/' + zh_path)}">
 <link rel="alternate" hreflang="x-default" href="{e(base + '/' + en_path)}">
-<link rel="icon" type="image/svg+xml" href="{prefix}assets/favicon.svg"><script src="{prefix}assets/site.js"></script><link rel="stylesheet" href="{prefix}assets/style.css">
+<link rel="icon" type="image/jpeg" href="{prefix}assets/logo.jpg"><script src="{prefix}assets/site.js"></script><link rel="stylesheet" href="{prefix}assets/style.css">
 </head><body>
 <a class="skip-link" href="#main">{'跳转到正文' if zh else 'Skip to content'}</a>
 <div class="site-shell"><aside class="sidebar">
-<a class="brand" href="{local_home}" aria-label="Zhige Security Lab"><img class="brand-logo brand-logo-light" src="{prefix}assets/logo.svg" width="44" height="44" alt=""><img class="brand-logo brand-logo-dark" src="{prefix}assets/logo-dark.svg" width="44" height="44" alt=""><span class="brand-name">Zhige Security Lab</span></a>
+<a class="brand" href="{local_home}" aria-label="Zhige Security Lab — 止戈安全实验室"><img class="brand-logo" src="{prefix}assets/logo.jpg" width="210" height="210" alt="止戈安全实验室 · Zhige Security Lab @ SEU"></a>
 <nav class="main-nav" aria-label="{'主导航' if zh else 'Main navigation'}">{menu}</nav>
 <div class="sidebar-bottom"><button type="button" class="theme-toggle" data-theme-toggle hidden><svg class="theme-icon-night" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.5 13.1A8.7 8.7 0 0 1 10.9 3.5 8.7 8.7 0 1 0 20.5 13.1Z"/></svg><svg class="theme-icon-day" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4m0-14.2-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg><span data-theme-label>{'夜间模式' if zh else 'Night mode'}</span></button><a class="language-switch" href="{prefix}{switch_path or './'}" lang="{'en' if zh else 'zh-CN'}" hreflang="{'en' if zh else 'zh-CN'}">{'English' if zh else '中文'} <span aria-hidden="true">↗</span></a><a href="{link(data['github'])}">GitHub <span aria-hidden="true">↗</span></a></div>
 </aside><main id="main">{content}
-<footer><span>Zhige Security Lab <span class="footer-dot">·</span> 止戈实验室</span><div class="footer-meta"><span class="visit-counter" title="{'全站页面浏览次数，包含重复访问；由不蒜子提供统计' if zh else 'Total page views, including repeat visits; powered by Busuanzi'}">{'累计访问量' if zh else 'Site views'} <span id="busuanzi_value_site_pv" role="status" aria-live="polite">—</span></span><a href="{link(data['github'])}">GitHub ↗</a></div></footer>
+<footer><span>Zhige Security Lab <span class="footer-dot">·</span> 止戈安全实验室</span><div class="footer-meta"><span class="visit-counter" title="{'全站页面浏览次数，包含重复访问；由不蒜子提供统计' if zh else 'Total page views, including repeat visits; powered by Busuanzi'}">{'累计访问量' if zh else 'Site views'} <span id="busuanzi_value_site_pv" role="status" aria-live="polite">—</span></span><a href="{link(data['github'])}">GitHub ↗</a></div></footer>
 </main></div></body></html>'''
 
 
