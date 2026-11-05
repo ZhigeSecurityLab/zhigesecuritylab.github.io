@@ -4,7 +4,13 @@
   var root = document.documentElement;
   var preference = null;
   function timeTheme() {
-    var hour = new Date().getHours();
+    // The lab is in Nanjing; use its clock even when a browser runs in UTC.
+    var hour;
+    try {
+      hour = Number(new Intl.DateTimeFormat('en-GB', {timeZone:'Asia/Shanghai', hour:'2-digit', hourCycle:'h23'}).format(new Date()));
+    } catch (_) {
+      hour = new Date().getHours();
+    }
     return hour >= 7 && hour < 19 ? 'light' : 'dark';
   }
   try {
