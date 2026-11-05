@@ -19,7 +19,17 @@
       }
     ],
     "publications": [],
-    "people": [],
+    "people": [
+      {
+        "category": "faculty",
+        "github_username": "garrisongys",
+        "name": "Yansong (Garrison) Gao",
+        "role": "Professor",
+        "url": "",
+        "bio_markdown": "He is a Professor at Southeast University. Before that, he was a Lecturer (equivalent to an Assistant Professor in the US) at the University of Western Australia. Prior to that, he was a tenured Research Scientist and subsequently a Senior Research Scientist at Data61, CSIRO. He is a Senior Member of IEEE.\n\n## Editor\n\n- Senior Area Editor (Sep 2026—), *IEEE Transactions on Information Forensics and Security*\n- Associate Editor (Jan 2024—), *IEEE Transactions on Neural Networks and Learning Systems*\n- Associate Editor (Oct 2024—Oct 2026), *IEEE Transactions on Information Forensics and Security*\n\n## PC Member\n\n- 2027: USENIX Security, NDSS, AsiaCCS, EuroS&P, SaTML, ACISP, ASP-DAC\n- 2026: CCS, USENIX Security, ACSAC, EuroS&P, WWW, ICDCS, ACISP, IEEE GLOBECOM, IEEE CIC\n- 2025: AsiaCCS, ACSAC\n- 2024: AsiaCCS, ICDCS, ESORICS\n- 2023: ATS\n\n",
+        "avatar": "assets/people/8bd2a0ddd9f44d30bfcbedc36ad863a9.png"
+      }
+    ],
     "recruitment": {
       "enabled": true,
       "title": "Recruitment",
@@ -37,7 +47,17 @@
     "about": "我们的研究围绕智能系统及其支撑计算系统中的安全与隐私问题展开。",
     "news": [],
     "publications": [],
-    "people": [],
+    "people": [
+      {
+        "category": "faculty",
+        "github_username": "garrisongys",
+        "name": "高艳松",
+        "role": "教授",
+        "url": "",
+        "bio_markdown": "",
+        "avatar": "assets/people/8bd2a0ddd9f44d30bfcbedc36ad863a9.png"
+      }
+    ],
     "recruitment": {
       "enabled": true,
       "title": "加入我们",
