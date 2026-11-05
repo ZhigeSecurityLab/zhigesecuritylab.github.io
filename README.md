@@ -93,4 +93,4 @@ requirements.txt               构建依赖
 .github/workflows/pages.yml    自动发布工作流
 ```
 
-页眉使用止戈合文图形 Logo 和统一字号的“Zhige Security Lab”，浏览器使用配套网站图标。替换 Logo 时修改 `assets/logo.svg`，保持正方形画板和图形比例。导航中的 Contact Us／联系我们直接打开邮件客户端，收件人为 `content/site.json` 中的 `email`；首页联系栏目也显示该邮箱。所有资源均随网站提供。更换域名时同步修改 `content/site.json` 的 `url`，并配置 GitHub Pages 自定义域名。
+页眉使用止戈合文图形 Logo 和统一字号的“Zhige Security Lab”，浏览器使用配套网站图标。替换 Logo 时同步修改 `assets/logo.svg` 与夜间版 `assets/logo-dark.svg`，保持正方形画板和图形比例。导航中的 Contact Us／联系我们直接打开邮件客户端，收件人为 `content/site.json` 中的 `email`；首页联系栏目也显示该邮箱。页面支持记住偏好的日间／夜间模式，页脚显示不蒜子提供的全站浏览量，本地预览不计数。字体和 Logo 不依赖外部服务。更换域名时同步修改 `content/site.json` 的 `url`，并配置 GitHub Pages 自定义域名。
