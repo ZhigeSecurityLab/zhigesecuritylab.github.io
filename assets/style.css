@@ -1,16 +1,16 @@
 :root {
   color-scheme:light;
-  --bg:#f7f8f6;
-  --text:#273733;
-  --muted:#65746f;
-  --accent:#35625d;
-  --line:#dce3de;
+  --bg:#fff;
+  --text:#002449;
+  --muted:#435a70;
+  --accent:#002449;
+  --line:#d6dfe8;
   --paper:#fff;
-  --hover:#193f3a;
+  --hover:#9b6a08;
   --on-accent:#fff;
-  --code-bg:#edf1ee;
-  --serif:Georgia,"Times New Roman","Songti SC",serif;
-  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  --code-bg:#f1f4f7;
+  --serif:"Songti SC","STSong","SimSun",serif;
+  --sans:Arial,Helvetica,"PingFang SC","Microsoft YaHei",sans-serif;
 }
 * {
   box-sizing:border-box;
@@ -560,19 +560,25 @@ html[lang="zh-CN"] .intro {
 .markdown-body blockquote { border-left: 3px solid var(--line); margin: 15px 0; padding-left: 16px; color: var(--muted); }
 .markdown-body table { display: block; overflow-x: auto; border-collapse: collapse; margin: 14px 0; }
 .markdown-body td, .markdown-body th { padding: 6px 12px; border: 1px solid var(--line); }
+.person { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 22px; align-items: start; }
+.person-avatar { width: 112px; height: 112px; object-fit: cover; border-radius: 4px; background: var(--code-bg); }
+.person-description { white-space: pre-wrap; overflow-wrap: anywhere; }
+html[lang="en"] h1, html[lang="en"] h2, html[lang="en"] h3 { font-family: var(--sans); font-weight: 700; }
+html[lang="zh-CN"] body { font-family: var(--serif); }
+html[lang="zh-CN"] h1, html[lang="zh-CN"] h2, html[lang="zh-CN"] h3 { font-family: var(--serif); font-weight: 700; }
 
 /* Both explicit choice and a system preference work without changing page URLs. */
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #161f1c;
-  --text: #dce7e0;
-  --muted: #a0b1a7;
-  --accent: #a4c4b5;
-  --line: #30433a;
-  --paper: #1e2a24;
-  --hover: #d3e6da;
-  --on-accent: #14251d;
-  --code-bg: #1e2d25;
+  --bg: #001c42;
+  --text: #f6f8fb;
+  --muted: #b9c9d9;
+  --accent: #e0b45a;
+  --line: #355477;
+  --paper: #092b52;
+  --hover: #fff;
+  --on-accent: #001c42;
+  --code-bg: #11365e;
 }
 .theme-icon-day { display: none; }
 :root[data-theme="dark"] .theme-icon-night { display: none; }
@@ -580,15 +586,15 @@ html[lang="zh-CN"] .intro {
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #161f1c;
-    --text: #dce7e0;
-    --muted: #a0b1a7;
-    --accent: #a4c4b5;
-    --line: #30433a;
-    --paper: #1e2a24;
-    --hover: #d3e6da;
-    --on-accent: #14251d;
-    --code-bg: #1e2d25;
+    --bg: #001c42;
+    --text: #f6f8fb;
+    --muted: #b9c9d9;
+    --accent: #e0b45a;
+    --line: #355477;
+    --paper: #092b52;
+    --hover: #fff;
+    --on-accent: #001c42;
+    --code-bg: #11365e;
   }
 }
 .theme-toggle {

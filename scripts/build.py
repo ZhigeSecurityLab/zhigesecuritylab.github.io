@@ -3,6 +3,7 @@ from pathlib import Path
 from html import escape
 from urllib.parse import urlsplit, quote
 import json
+import re
 import shutil
 import xml.etree.ElementTree as ET
 from datetime import date
@@ -75,6 +76,13 @@ def validate(data):
                     string(item["role"], "成员身份")
                     if item["category"] not in slugs:
                         raise ValueError("成员分类不存在")
+                    avatar = item.get("avatar", "")
+                    if not isinstance(avatar, str) or not re.fullmatch(r"assets/people/[a-zA-Z0-9_-]+\.(?:jpg|png|webp)", avatar):
+                        raise ValueError("请上传成员头像")
+                    if not (ROOT / avatar).is_file():
+                        raise ValueError("成员头像文件不存在：" + avatar)
+                    string(item.get("bio_markdown", ""), "成员 Markdown 简介")
+                    string(item.get("description", ""), "成员描述")
 
 
 def e(value):
@@ -107,7 +115,10 @@ def members(data, lang, category):
         name = e(person["name"])
         if person.get("url"):
             name = f'<a href="{link(person["url"])}">{name}</a>'
-        rows += f'<li class="person"><h3>{name}</h3><p class="muted">{e(person["role"])}</p></li>'
+        rich = category in ("faculty", "postdocs")
+        description = (f'<div class="markdown-body">{MARKDOWN.render(person.get("bio_markdown", ""))}</div>'
+                       if rich else f'<p class="person-description">{e(person.get("description", ""))}</p>')
+        rows += f'<li class="person"><img class="person-avatar" src="/{e(person["avatar"])}" alt="" loading="lazy"><div><h3>{name}</h3><p class="muted">{e(person["role"])}</p>{description}</div></li>'
     return f'<ul class="plain-list people-list">{rows}</ul>'
 
 
@@ -222,7 +233,7 @@ def render(data, lang, page="home", category=None):
     return f'''<!doctype html>
 <html lang="{'zh-CN' if zh else 'en'}"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{e(document_title)}</title><meta name="description" content="{e(t['intro'])}"><meta name="theme-color" content="#f7f8f6">
+<title>{e(document_title)}</title><meta name="description" content="{e(t['intro'])}"><meta name="theme-color" content="#ffffff">
 <meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(t['intro'])}">
 <meta property="og:type" content="website"><meta property="og:url" content="{e(base + '/' + canonical_path)}">
 <link rel="canonical" href="{e(base + '/' + canonical_path)}">

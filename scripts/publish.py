@@ -16,7 +16,9 @@ from urllib.request import Request, urlopen
 from build import ROOT
 
 REPO = 'ZhigeSecurityLab/zhigesecuritylab.github.io'
+PUBLISHER = 'HappyYoung8310'
 LOCAL = ROOT / '.local'
+GH_CONFIG = LOCAL / 'github-student-auth'
 STATE_FILE = LOCAL / 'publish-state.json'
 MUTEX = threading.Lock()
 JOB = {'state': 'idle', 'message': '尚未发布。'}
@@ -34,10 +36,12 @@ def gh(args, payload=None, timeout=30):
     binary = gh_path()
     if not binary:
         raise RuntimeError('未安装 GitHub CLI。请按维护指南安装后重新检查连接。')
-    env = dict(os.environ, GH_PROMPT_DISABLED='1', GH_NO_UPDATE_NOTIFIER='1')
+    env = dict(os.environ, GH_PROMPT_DISABLED='1', GH_NO_UPDATE_NOTIFIER='1', GH_CONFIG_DIR=str(GH_CONFIG))
     result = subprocess.run([binary] + args, input=json.dumps(payload) if payload is not None else None,
                             text=True, capture_output=True, cwd=ROOT, env=env, timeout=timeout)
     if result.returncode:
+        if '404' in result.stderr:
+            raise RuntimeError('404')
         if '409' in result.stderr or '422' in result.stderr:
             raise RuntimeError('GitHub 内容已变化，请先同步远程内容后重试；本地修改已保留。')
         raise RuntimeError('GitHub 请求失败，请检查登录、仓库写入权限或网络后重试；本地修改已保留。')
@@ -51,11 +55,11 @@ def connection(force=False):
             try:
                 user = gh(['api', 'user'], timeout=10)
                 repo = gh(['api', 'repos/' + REPO], timeout=10)
-                AUTH.update(connected=bool(repo.get('permissions', {}).get('push')), account=user['login'])
+                AUTH.update(connected=bool(repo.get('permissions', {}).get('push')) and user['login'].lower() == PUBLISHER.lower(), account=user['login'])
             except (RuntimeError, subprocess.TimeoutExpired):
                 pass
     return {'installed': bool(gh_path()), 'connected': AUTH['connected'], 'account': AUTH['account'],
-            'repository': REPO, 'login': dict(LOGIN)}
+            'repository': REPO, 'expected_account': PUBLISHER, 'login': dict(LOGIN)}
 
 
 def begin_login():
@@ -74,7 +78,9 @@ def begin_login():
 
 def _login():
     try:
-        env = dict(os.environ, GH_BROWSER='/usr/bin/true', GH_NO_UPDATE_NOTIFIER='1')
+        GH_CONFIG.mkdir(parents=True, exist_ok=True)
+        GH_CONFIG.chmod(0o700)
+        env = dict(os.environ, GH_BROWSER='/usr/bin/true', GH_NO_UPDATE_NOTIFIER='1', GH_CONFIG_DIR=str(GH_CONFIG))
         process = subprocess.Popen([gh_path(), 'auth', 'login', '--web', '--hostname', 'github.com',
                                     '--git-protocol', 'https'], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                    stderr=subprocess.STDOUT, text=True, env=env, cwd=ROOT)
@@ -92,7 +98,9 @@ def _login():
             timer.cancel()
         AUTH['checked'] = float('-inf')
         if code == 0:
-            LOGIN.update(state='success', message='GitHub 已连接，可发布到网站。')
+            status = connection(force=True)
+            LOGIN.update(state='success' if status['connected'] else 'error',
+                         message='HappyYoung8310 已连接，可发布到网站。' if status['connected'] else '授权账号不是 HappyYoung8310，或缺少仓库写入权限。')
         else:
             LOGIN.update(state='error', message='连接未完成或已过期，请重新连接。')
         LOGIN.pop('code', None)
@@ -132,6 +140,8 @@ def begin_publish(raw):
             raise RuntimeError('已有发布正在进行，请等待完成。')
         if LOGIN['state'] == 'waiting':
             raise RuntimeError('请先完成 GitHub 连接。')
+        if not connection(force=True)['connected']:
+            raise RuntimeError('请先使用 HappyYoung8310 连接 GitHub，并确认拥有仓库写入权限。')
         JOB.clear()
         JOB.update(state='publishing', message='正在检查远程版本并提交到 GitHub…')
         threading.Thread(target=_publish, args=(raw,), daemon=True).start()
@@ -140,9 +150,33 @@ def begin_publish(raw):
 
 def _publish(raw):
     try:
+        content = json.loads(raw)
         endpoint = 'repos/' + REPO + '/contents/content/site.json'
         remote = gh(['api', endpoint + '?ref=main'])
         local_sha = blob_sha(raw)
+        if remote['sha'] != local_sha and remote['sha'] != base_sha():
+            raise RuntimeError('GitHub 上的内容已由其他人更新。请先同步后再发布，防止覆盖；本地修改已保留。')
+        avatars = sorted({person['avatar'] for lang in ('en','zh') for person in content.get(lang, {}).get('people', [])})
+        for path in avatars:
+            if not re.fullmatch(r'assets/people/[a-zA-Z0-9_-]+\.(?:jpg|png|webp)', path):
+                raise RuntimeError('成员头像路径无效。')
+            image = ROOT / path
+            if not image.is_file():
+                raise RuntimeError('成员头像文件不存在：' + path)
+            image_raw = image.read_bytes()
+            image_endpoint = 'repos/' + REPO + '/contents/' + path
+            try:
+                existing = gh(['api', image_endpoint + '?ref=main'])
+            except RuntimeError as exc:
+                if '404' not in str(exc):
+                    raise
+                existing = None
+            if existing and existing.get('sha') == blob_sha(image_raw):
+                continue
+            if existing:
+                raise RuntimeError('GitHub 上已有同名但内容不同的头像：' + path)
+            gh(['api', '--method', 'PUT', image_endpoint, '--input', '-'], {
+                'message': 'Add member avatar', 'content': base64.b64encode(image_raw).decode(), 'branch': 'main'})
         if remote['sha'] == local_sha:
             # An identical file needs no new commit; track the actual current main SHA.
             head = gh(['api', 'repos/' + REPO + '/commits/main'])['sha']

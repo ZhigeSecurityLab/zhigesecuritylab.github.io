@@ -6,7 +6,7 @@ const selected = {};
 const $ = id => document.getElementById(id);
 const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[ch]));
 const titles = {overview:'简介与首页',news:'News · 新闻',publications:'Publications · 论文',people:'People · 成员',recruitment:'Recruitment · 加入我们',appearance:'外观与字号',publishing:'网站发布',settings:'设置与备份'};
-const descriptions = {overview:'修改当前语言的实验室名称、所属单位和简介。',news:'用 Markdown 编辑新闻；英文和中文分别维护，草稿不会显示在网站。',publications:'维护论文信息，网站会按年份自动排序。',people:'选择成员分类，维护姓名、身份与个人主页。',recruitment:'用 Markdown 维护招募对象、申请信息和邮件咨询入口。',appearance:'调整公开网站的字体、行距与 Logo 大小，中英文共用。',publishing:'连接 GitHub，发布已保存的内容与外观设置，并查看部署结果。',settings:'联系方式、成员分类、内容导出与自动备份。'};
+const descriptions = {overview:'修改当前语言的实验室名称、所属单位和简介。',news:'用 Markdown 编辑新闻；英文和中文分别维护，草稿不会显示在网站。',publications:'维护论文信息，网站会按年份自动排序。',people:'上传成员头像；Faculty 和博士后可编辑 Markdown 简介，其他成员可写多行描述。',recruitment:'用 Markdown 维护招募对象、申请信息和邮件咨询入口。',appearance:'调整公开网站的字体、行距与 Logo 大小，中英文共用。',publishing:'使用 HappyYoung8310 连接 GitHub，发布已保存内容、头像与外观设置。',settings:'联系方式、成员分类、内容导出与自动备份。'};
 
 function message(text, success = false) {
   $('message').hidden = !text;
@@ -79,13 +79,14 @@ function render() {
       } else if (tab === 'publications') {
         fields = `<div class="form-grid">${field('title','论文标题',item.title,{wide:true})}${field('authors','作者',item.authors,{wide:true})}${field('venue','会议／期刊',item.venue)}${field('year','年份',item.year,{type:'number'})}${field('url','论文链接（选填）',item.url || '',{wide:true,type:'url'})}</div>`;
       } else {
-        fields = `<div class="form-grid">${field('name','姓名',item.name)}${field('role','身份／职务',item.role)}<label>成员分类<select data-field="category">${data.people_categories.map(g=>`<option value="${escapeHTML(g.id)}" ${g.id === item.category ? 'selected' : ''}>${escapeHTML(g[lang])}</option>`).join('')}</select></label>${field('url','个人主页（选填）',item.url || '',{type:'url'})}</div>`;
+        const rich = ['faculty','postdocs'].includes(item.category);
+        fields = `<div class="form-grid">${field('name','姓名',item.name)}${field('role','身份／职务',item.role)}<label>成员分类<select data-field="category">${data.people_categories.map(g=>`<option value="${escapeHTML(g.id)}" ${g.id === item.category ? 'selected' : ''}>${escapeHTML(g[lang])}</option>`).join('')}</select></label>${field('url','个人主页（选填）',item.url || '',{type:'url'})}</div><div class="avatar-upload"><label>成员头像（必填；JPEG、PNG 或 WebP，最大 2.5 MB）<input id="avatar-file" type="file" accept="image/jpeg,image/png,image/webp"></label>${item.avatar ? `<img src="/assets/${escapeHTML(item.avatar.replace(/^assets\//,''))}" alt="当前头像" width="112" height="112">` : '<span class="helper">尚未上传头像</span>'}</div>${rich ? `<div class="markdown-layout"><label>Markdown 简介<textarea id="markdown" data-field="bio_markdown" class="markdown-input" rows="14">${escapeHTML(item.bio_markdown || '')}</textarea></label><div><label>排版预览</label><div id="markdown-preview" class="md-preview"></div></div></div>` : field('description','成员描述（可自由换行）',item.description || '',{textarea:true,rows:10,wide:true})}`;
       }
       form = `<section class="card"><div class="record-top"><h2>编辑${tab === 'news' ? '新闻' : tab === 'publications' ? '论文' : '成员'}</h2><button type="button" id="delete-record" class="danger">移除此条</button></div>${fields}</section>`;
     }
     $('editor').innerHTML = `<div class="collection"><aside class="list-panel"><button type="button" id="add-record">＋ 新增${tab === 'news' ? '新闻' : tab === 'publications' ? '论文' : '成员'}</button><div id="record-list" class="record-list"></div></aside>${form}</div>`;
     renderList();
-    if (tab === 'news' && item) updateMarkdown();
+    if ((tab === 'news' || (tab === 'people' && ['faculty','postdocs'].includes(item?.category))) && item) updateMarkdown();
   }
   refreshPreview();
 }
@@ -96,10 +97,10 @@ async function api(path, payload) {
   return result;
 }
 async function updateMarkdown() {
-  if (!['news','recruitment'].includes(tab) || !current()) return;
+  if (!['news','recruitment','people'].includes(tab) || !current()) return;
   const sequence = ++previewSequence;
   try {
-    const result = await api('/api/markdown', {markdown:current().body_markdown || ''});
+    const result = await api('/api/markdown', {markdown:tab === 'people' ? current().bio_markdown || '' : current().body_markdown || ''});
     if (sequence === previewSequence && $('markdown-preview')) {
       $('markdown-preview').innerHTML = result.html || '<p class="muted">输入 Markdown 后将在这里显示排版。</p>';
     }
@@ -140,9 +141,24 @@ $('editor').addEventListener('input', event => {
     if (target.dataset.field === 'title' && tab === 'news') delete object.text;
   } else return;
   markDirty(); renderList();
+  if (target.dataset.field === 'category' && tab === 'people') {render(); return;}
   if (target.id === 'markdown') {clearTimeout(previewTimer); previewSequence++; previewTimer = setTimeout(updateMarkdown, 250);}
 });
 $('editor').addEventListener('change', async event => {
+  if (event.target.id === 'avatar-file') {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (file.size > 2500000) return message('头像最大 2.5 MB。');
+    try {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      let binary = '';
+      for (let i = 0; i < bytes.length; i += 8192) binary += String.fromCharCode(...bytes.subarray(i, i+8192));
+      const result = await api('/api/avatar', {data:btoa(binary)});
+      current().avatar = result.path;
+      markDirty(); render(); message('头像已上传到本地。保存并发布后，网站会显示新头像。', true);
+    } catch(error) {message(error.message);}
+    return;
+  }
   if (event.target.id !== 'import-md') return;
   const file = event.target.files[0];
   if (!file) return;
@@ -171,7 +187,7 @@ $('editor').addEventListener('click', async event => {
     finally {button.disabled=false;}
   } else if (button.dataset.index != null) {selected[`${lang}:${tab}`] = Number(button.dataset.index); render();}
   else if (button.id === 'add-record') {
-    const item = tab === 'news' ? {date:localDate(),title:'',body_markdown:'',url:'',draft:true} : tab === 'publications' ? {year:new Date().getFullYear(),title:'',authors:'',venue:'',url:''} : {name:'',role:'',category:data.people_categories[0].id,url:''};
+    const item = tab === 'news' ? {date:localDate(),title:'',body_markdown:'',url:'',draft:true} : tab === 'publications' ? {year:new Date().getFullYear(),title:'',authors:'',venue:'',url:''} : {name:'',role:'',category:data.people_categories[0].id,url:'',avatar:'',bio_markdown:'',description:''};
     data[lang][tab].push(item); selected[`${lang}:${tab}`] = data[lang][tab].length - 1;
     markDirty(); render();
   } else if (button.id === 'delete-record') {

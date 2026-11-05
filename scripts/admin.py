@@ -4,6 +4,7 @@ from pathlib import Path
 from urllib.parse import urlsplit, unquote
 from datetime import datetime, timezone
 import argparse
+import base64
 import hashlib
 import json
 import mimetypes
@@ -12,6 +13,7 @@ import secrets
 import shutil
 import tempfile
 import threading
+import uuid
 import webbrowser
 from urllib.request import urlopen
 
@@ -23,6 +25,7 @@ CONTENT = ROOT / "content/site.json"
 LOCAL = ROOT / ".local"
 BACKUPS = LOCAL / "backups"
 UI = ROOT / "admin"
+PEOPLE_ASSETS = ROOT / "assets/people"
 TOKEN = secrets.token_urlsafe(32)
 LOCK = threading.Lock()
 
@@ -152,6 +155,34 @@ class Handler(BaseHTTPRequestHandler):
                 with LOCK:
                     html = MARKDOWN.render(text)
                 return self.send(200, {"html": html})
+            if path == "/api/avatar":
+                encoded = payload.get("data", "")
+                if not isinstance(encoded, str):
+                    raise ValueError("头像格式无效")
+                try:
+                    raw = base64.b64decode(encoded, validate=True)
+                except (ValueError, base64.binascii.Error):
+                    raise ValueError("头像格式无效")
+                if not 0 < len(raw) <= 2_500_000:
+                    raise ValueError("头像最大 2.5 MB")
+                if raw.startswith(b"\xff\xd8\xff"):
+                    suffix = "jpg"
+                elif raw.startswith(b"\x89PNG\r\n\x1a\n"):
+                    suffix = "png"
+                elif raw.startswith(b"RIFF") and raw[8:12] == b"WEBP":
+                    suffix = "webp"
+                else:
+                    raise ValueError("头像只支持 JPEG、PNG 或 WebP")
+                PEOPLE_ASSETS.mkdir(parents=True, exist_ok=True)
+                name = uuid.uuid4().hex + "." + suffix
+                with tempfile.NamedTemporaryFile(dir=PEOPLE_ASSETS, delete=False) as temp:
+                    temp.write(raw)
+                    temp_name = temp.name
+                os.replace(temp_name, PEOPLE_ASSETS / name)
+                preview_dir = OUT / "assets/people"
+                if preview_dir.is_dir():
+                    shutil.copy2(PEOPLE_ASSETS / name, preview_dir / name)
+                return self.send(200, {"path": "assets/people/" + name})
             if path == "/api/save":
                 return self.send(200, save(payload["data"], payload["revision"]))
             if path == "/api/restore":

@@ -40,7 +40,7 @@ class PublishingTests(unittest.TestCase):
 
     def test_remote_edit_cannot_be_overwritten(self):
         with patch.object(publish, 'base_sha', return_value='old'), patch.object(publish, 'gh', return_value={'sha':'someone-elses-edit'}) as gh:
-            publish._publish(b'local edited content')
+            publish._publish(b'{"en":{"people":[]},"zh":{"people":[]}}')
             self.assertEqual(gh.call_count, 1)
             self.assertEqual(publish.JOB['state'], 'error')
             self.assertIn('其他人', publish.JOB['message'])
@@ -49,15 +49,15 @@ class PublishingTests(unittest.TestCase):
     def test_failed_put_does_not_advance_baseline_and_can_be_retried(self):
         with patch.object(publish, 'base_sha', return_value='old'), patch.object(publish, 'gh') as gh:
             gh.side_effect = [{'sha':'old'}, RuntimeError('network failed')]
-            publish._publish(b'new')
+            publish._publish(b'{"en":{"people":[]},"zh":{"people":[]},"x":1}')
             self.assertEqual(publish.JOB['state'], 'error')
             self.assertFalse(publish.STATE_FILE.exists())
             gh.side_effect = [{'sha':'old'}, {'commit':{'sha':'retry'}}]
-            publish._publish(b'new')
+            publish._publish(b'{"en":{"people":[]},"zh":{"people":[]},"x":1}')
             self.assertEqual(publish.JOB['commit'], 'retry')
 
     def test_same_content_does_not_create_duplicate_commit(self):
-        raw = b'unchanged'
+        raw = b'{"en":{"people":[]},"zh":{"people":[]}}'
         with patch.object(publish, 'gh') as gh:
             gh.side_effect = [{'sha':publish.blob_sha(raw)}, {'sha':'main-sha'}]
             publish._publish(raw)
@@ -65,8 +65,21 @@ class PublishingTests(unittest.TestCase):
             self.assertTrue(all('--method' not in c.args[0] for c in gh.call_args_list))
             self.assertEqual(publish.JOB['commit'], 'main-sha')
 
+    def test_avatar_is_uploaded_before_content(self):
+        avatar = 'assets/people/test-avatar.png'
+        raw = json.dumps({'en':{'people':[{'avatar':avatar}]},'zh':{'people':[]}}).encode()
+        image = Path(self.temp.name) / avatar
+        image.parent.mkdir(parents=True)
+        image.write_bytes(b'\x89PNG\r\n\x1a\nexample')
+        with patch.object(publish, 'ROOT', Path(self.temp.name)), patch.object(publish, 'base_sha', return_value='old'), patch.object(publish, 'gh') as gh:
+            gh.side_effect = [{'sha':'old'}, RuntimeError('404'), {'commit':{'sha':'image-commit'}}, {'commit':{'sha':'content-commit'}}]
+            publish._publish(raw)
+        self.assertEqual(publish.JOB['commit'], 'content-commit')
+        self.assertIn('assets/people/test-avatar.png', gh.call_args_list[2].args[0][3])
+        self.assertEqual(base64.b64decode(gh.call_args_list[2].args[1]['content']), image.read_bytes())
+
     def test_identical_content_can_retry_failed_deployment(self):
-        raw = b'content'
+        raw = b'{"en":{"people":[]},"zh":{"people":[]}}'
         publish.save_record({'state':'deploy_error','commit':'main-sha','run_id':42})
         with patch.object(publish, 'gh') as gh:
             gh.side_effect = [{'sha':publish.blob_sha(raw)}, {'sha':'main-sha'}, {}]
