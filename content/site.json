@@ -38,6 +38,16 @@
         "bio_markdown": "",
         "description": "First registration on macOS. One GitHub account, one PhD member record.",
         "avatar": "assets/people/default-male.svg"
+      },
+      {
+        "category": "masters",
+        "github_username": "zhengfeiLian",
+        "name": "Master Binding Test · zhengfeiLian",
+        "role": "",
+        "url": "",
+        "bio_markdown": "",
+        "description": "First registration on Windows. One GitHub account, one Master member record.",
+        "avatar": "assets/people/default-female.svg"
       }
     ],
     "recruitment": {
@@ -76,6 +86,16 @@
         "bio_markdown": "",
         "description": "macOS 首次登记：绑定博士生记录，后续只维护这一条资料。",
         "avatar": "assets/people/default-male.svg"
+      },
+      {
+        "category": "masters",
+        "github_username": "zhengfeiLian",
+        "name": "硕士生绑定测试 · zhengfeiLian",
+        "role": "",
+        "url": "",
+        "bio_markdown": "",
+        "description": "Windows 首次登记：绑定硕士生记录，后续只维护这一条资料。",
+        "avatar": "assets/people/default-female.svg"
       }
     ],
     "recruitment": {
