@@ -46,7 +46,7 @@
         "role": "PhD student · test only",
         "url": "",
         "bio_markdown": "",
-        "description": "macOS push validation — 2026-11-06\nSaved and previewed using the packaged macOS editor.\nTest branch only; not for the public site.",
+        "description": "macOS push validation — 2026-11-06\nSaved and previewed using the packaged macOS editor.\nTest branch only; not for the public site.\nFinal retest: authenticated HTTPS sync and standalone package baseline verified.",
         "avatar": "assets/people/default-male.svg"
       }
     ],
@@ -94,7 +94,7 @@
         "role": "博士生 · 仅测试",
         "url": "",
         "bio_markdown": "",
-        "description": "macOS 推送验证 — 2026-11-06\n使用 macOS 安装包完成编辑、保存和预览。\n仅测试分支，不用于正式网站。",
+        "description": "macOS 推送验证 — 2026-11-06\n使用 macOS 安装包完成编辑、保存和预览。\n仅测试分支，不用于正式网站。\n最终复测：已验证授权 HTTPS 同步和独立安装包的远程基线。",
         "avatar": "assets/people/default-male.svg"
       }
     ],
