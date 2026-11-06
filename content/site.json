@@ -37,6 +37,16 @@
         "url": "",
         "bio_markdown": "## Biography\n\nWrite a short introduction.\n\n## Research Interests\n\n- Research topic 1\n- Research topic 2\n\n## Selected Publications\n\n- Add representative publications with links.\n\n## Projects and Service\n\nDescribe projects, awards, or academic service if relevant.\n\n## Contact\n\nAdd a public contact method if desired.\n",
         "avatar": "assets/people/3ec87f6215724c6abe289e3f61e39604.png"
+      },
+      {
+        "category": "phd",
+        "github_username": "HappyYoung8310",
+        "name": "HappyYoung8310 · macOS Test",
+        "role": "PhD student · test only",
+        "url": "",
+        "bio_markdown": "",
+        "description": "macOS push validation — 2026-11-06\nSaved and previewed using the packaged macOS editor.\nTest branch only; not for the public site.",
+        "avatar": "assets/people/default-male.svg"
       }
     ],
     "recruitment": {
@@ -74,6 +84,16 @@
         "url": "",
         "bio_markdown": "",
         "avatar": "assets/people/3ec87f6215724c6abe289e3f61e39604.png"
+      },
+      {
+        "category": "phd",
+        "github_username": "HappyYoung8310",
+        "name": "HappyYoung8310 · macOS 测试",
+        "role": "博士生 · 仅测试",
+        "url": "",
+        "bio_markdown": "",
+        "description": "macOS 推送验证 — 2026-11-06\n使用 macOS 安装包完成编辑、保存和预览。\n仅测试分支，不用于正式网站。",
+        "avatar": "assets/people/default-male.svg"
       }
     ],
     "recruitment": {
