@@ -10,12 +10,14 @@ import mimetypes
 import os
 import re
 import secrets
+import ssl
 import shutil
 import subprocess
 import sys
 import threading
 import webbrowser
 from urllib.request import Request, urlopen
+import certifi
 
 import admin
 from build import ROOT, OUT, MARKDOWN, build, validate
@@ -40,6 +42,7 @@ FIELDS = ("name", "role", "url", "bio_markdown", "description")
 DRAFT_AVATAR = "assets/people/draft-preview.jpg"
 DRAFT_NAMES = {"en": "Faculty preview", "zh": "教师资料预览"}
 DEFAULT_AVATARS = {"assets/people/default-male.svg", "assets/people/default-female.svg"}
+SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 
 
 def gh(args, payload=None):
@@ -210,6 +213,8 @@ def baseline_hash(scope):
             return saved[scope + "_hash"]
     except (OSError, ValueError, KeyError):
         pass
+    if getattr(sys, "frozen", False):
+        raise RuntimeError("尚未建立线上同步基线，请联网重新启动编辑器。")
     try:
         raw = subprocess.check_output(["git", "show", "HEAD:content/site.json"], cwd=ROOT)
     except (OSError, subprocess.CalledProcessError):
@@ -226,7 +231,7 @@ def save_baseline(data):
 
 def fetch_remote():
     endpoint = f"https://api.github.com/repos/{REPO}/contents/content/site.json?ref={BRANCH}"
-    with urlopen(Request(endpoint, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20) as response:
+    with urlopen(Request(endpoint, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20, context=SSL_CONTEXT) as response:
         return json.loads(base64.b64decode(json.load(response)["content"]))
 
 
@@ -250,7 +255,7 @@ def sync_on_start():
                 target = ROOT / path
                 if not target.is_file():
                     url = f"https://raw.githubusercontent.com/{REPO}/{BRANCH}/{path}"
-                    with urlopen(Request(url, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20) as response:
+                    with urlopen(Request(url, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20, context=SSL_CONTEXT) as response:
                         raw = response.read(2_500_001)
                     if len(raw) > 2_500_000:
                         raise ValueError("线上头像文件过大")

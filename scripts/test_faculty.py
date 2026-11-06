@@ -58,6 +58,15 @@ class FacultyEditorTests(unittest.TestCase):
                 self.assertIn("**Secure systems**", next(p for p in merged["en"]["people"] if p.get("github_username") == faculty.OWNER)["bio_markdown"])
                 self.assertEqual(draft["avatar"], "")
 
+    def test_packaged_editor_requires_its_own_remote_baseline(self):
+        with tempfile.TemporaryDirectory() as temp:
+            with patch.object(faculty, "BASELINE", Path(temp) / "absent.json"), \
+                 patch.object(faculty.sys, "frozen", True, create=True), \
+                 patch.object(faculty.subprocess, "check_output") as git:
+                with self.assertRaisesRegex(RuntimeError, "同步基线"):
+                    faculty.baseline_hash("profile")
+                git.assert_not_called()
+
     def test_student_editor_only_changes_its_own_profile_and_accepts_default_avatar(self):
         source = copy.deepcopy(self.data)
         submitted = {"category": "phd", "avatar": "assets/people/default-female.svg",
