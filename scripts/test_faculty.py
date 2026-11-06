@@ -67,6 +67,14 @@ class FacultyEditorTests(unittest.TestCase):
                     faculty.baseline_hash("profile")
                 git.assert_not_called()
 
+    def test_member_sync_uses_authenticated_api(self):
+        response = {"content": base64.b64encode(json.dumps(self.data).encode()).decode()}
+        with patch.object(faculty, "STUDENT", True), patch.object(faculty, "gh", return_value=response) as gh, \
+             patch.object(faculty, "urlopen") as anonymous:
+            self.assertEqual(faculty.fetch_remote(), self.data)
+            gh.assert_called_once()
+            anonymous.assert_not_called()
+
     def test_student_editor_only_changes_its_own_profile_and_accepts_default_avatar(self):
         source = copy.deepcopy(self.data)
         submitted = {"category": "phd", "avatar": "assets/people/default-female.svg",

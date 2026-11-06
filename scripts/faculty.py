@@ -230,7 +230,11 @@ def save_baseline(data):
 
 
 def fetch_remote():
-    endpoint = f"https://api.github.com/repos/{REPO}/contents/content/site.json?ref={BRANCH}"
+    api_path = f"repos/{REPO}/contents/content/site.json?ref={BRANCH}"
+    # Member mode has already authenticated; use its larger API allowance.
+    if STUDENT:
+        return json.loads(base64.b64decode(gh(["api", api_path])["content"]))
+    endpoint = "https://api.github.com/" + api_path
     with urlopen(Request(endpoint, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20, context=SSL_CONTEXT) as response:
         return json.loads(base64.b64decode(json.load(response)["content"]))
 
