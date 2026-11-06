@@ -35,8 +35,9 @@
         "name": "Young Happy",
         "role": "q",
         "url": "",
-        "bio_markdown": "## Biography\n\nWrite a short introduction.\n\n## Research Interests\n\n- Research topic 1\n- Research topic 2\n\n## Selected Publications\n\n- Add representative publications with links.\n\n## Projects and Service\n\nDescribe projects, awards, or academic service if relevant.\n\n## Contact\n\nAdd a public contact method if desired.\n",
-        "avatar": "assets/people/3ec87f6215724c6abe289e3f61e39604.png"
+        "bio_markdown": "## Biography\n\nWrite a short introduction.\n\n## Research Interests\n\n- Research topic 1\n- Research topic 2\n\n## Selected Publications\n\n- Add representative publications with links.\n\n## Projects and Service\n\nDescribe projects, awards, or academic service if relevant.\n\n## Contact\n\nAdd a public contact method if desired.\n\n## Windows push validation — 2026-11-06\n\nEdited, saved, and previewed using the Windows executable on Yang-PC.\n\nTest branch only.\n",
+        "avatar": "assets/people/default-female.svg",
+        "description": ""
       },
       {
         "category": "phd",
@@ -82,8 +83,9 @@
         "name": "Happy",
         "role": "hg",
         "url": "",
-        "bio_markdown": "",
-        "avatar": "assets/people/3ec87f6215724c6abe289e3f61e39604.png"
+        "bio_markdown": "## Windows 推送验证 — 2026-11-06\n\n在 Yang-PC 上运行 Windows 可执行程序，完成资料编辑、保存和预览。\n\n仅测试分支。\n",
+        "avatar": "assets/people/default-female.svg",
+        "description": ""
       },
       {
         "category": "phd",
