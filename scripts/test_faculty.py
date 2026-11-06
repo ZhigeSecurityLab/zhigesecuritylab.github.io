@@ -73,6 +73,57 @@ class FacultyEditorTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Recruitment"):
                 faculty.merge(source, recruitment={lang: source[lang]["recruitment"] for lang in ("en", "zh")})
 
+    def test_member_binds_once_and_repeated_edits_update_the_same_record(self):
+        with tempfile.TemporaryDirectory() as temp:
+            binding = Path(temp) / "binding.json"
+            content = Path(temp) / "site.json"
+            submitted = self.submitted("assets/people/default-male.svg")
+            submitted["category"] = "masters"
+            with patch.object(faculty, "STUDENT", True), patch.object(faculty, "OWNER", "student-example"), \
+                 patch.object(faculty, "BINDING", binding), patch.object(faculty.admin, "CONTENT", content):
+                first = faculty.merge(self.data, submitted)
+                faculty.bind_member(first)
+                content.write_text(json.dumps(first))
+                self.assertTrue(faculty.current_state()["category_locked"])
+                self.assertEqual(faculty.member_binding()["owner"], "student-example")
+                submitted["en"]["name"] = "Renamed Student"
+                second = faculty.merge(first, submitted)
+                own = [p for p in second["en"]["people"] if p.get("github_username") == "student-example"]
+                self.assertEqual(len(own), 1)
+                self.assertEqual(own[0]["name"], "Renamed Student")
+                submitted["category"] = "phd"
+                with self.assertRaisesRegex(ValueError, "已绑定身份"):
+                    faculty.merge(second, submitted)
+                with patch.object(faculty, "OWNER", ""), patch.object(faculty, "sync_on_start") as sync:
+                    with self.assertRaisesRegex(RuntimeError, "已绑定 student-example"):
+                        faculty.select_student_owner("another-student")
+                    sync.assert_not_called()
+
+    def test_first_registration_only_allows_phd_or_masters(self):
+        with tempfile.TemporaryDirectory() as temp:
+            with patch.object(faculty, "STUDENT", True), patch.object(faculty, "OWNER", "new-student"), \
+                 patch.object(faculty, "BINDING", Path(temp) / "absent.json"):
+                submitted = {**self.submitted("assets/people/default-male.svg"), "category": "faculty"}
+                with self.assertRaisesRegex(ValueError, "博士生或硕士生"):
+                    faculty.merge(self.data, submitted)
+
+    def test_packaged_editor_requires_its_own_remote_baseline(self):
+        with tempfile.TemporaryDirectory() as temp:
+            with patch.object(faculty, "BASELINE", Path(temp) / "absent.json"), \
+                 patch.object(faculty.sys, "frozen", True, create=True), \
+                 patch.object(faculty.subprocess, "check_output") as git:
+                with self.assertRaisesRegex(RuntimeError, "同步基线"):
+                    faculty.baseline_hash("profile")
+                git.assert_not_called()
+
+    def test_member_sync_uses_authenticated_api(self):
+        response = {"content": base64.b64encode(json.dumps(self.data).encode()).decode()}
+        with patch.object(faculty, "STUDENT", True), patch.object(faculty, "gh", return_value=response) as gh, \
+             patch.object(faculty, "urlopen") as anonymous:
+            self.assertEqual(faculty.fetch_remote(), self.data)
+            gh.assert_called_once()
+            anonymous.assert_not_called()
+
     def test_student_publish_with_default_avatar_only_updates_own_record(self):
         source = copy.deepcopy(self.data)
         submitted = {"category": "masters", "avatar": "assets/people/default-male.svg",

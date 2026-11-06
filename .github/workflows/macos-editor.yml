@@ -29,8 +29,9 @@ jobs:
           python -m PyInstaller --noconfirm --onedir --contents-directory . --name ZhigeMemberEditor --paths scripts --add-data "assets:assets" --add-data "content:content" --add-data "faculty_editor:faculty_editor" --add-data "student_editor:student_editor" scripts/faculty.py
           cp "$(command -v gh)" dist/ZhigeMemberEditor/gh
           cp portable/Start-Member-Editor.command dist/ZhigeMemberEditor/
+          cp portable/Start-Member-Test.command dist/ZhigeMemberEditor/
           cp portable/README-macOS.txt dist/ZhigeMemberEditor/
-          chmod +x dist/ZhigeMemberEditor/gh dist/ZhigeMemberEditor/ZhigeMemberEditor dist/ZhigeMemberEditor/Start-Member-Editor.command
+          chmod +x dist/ZhigeMemberEditor/gh dist/ZhigeMemberEditor/ZhigeMemberEditor dist/ZhigeMemberEditor/Start-Member-Editor.command dist/ZhigeMemberEditor/Start-Member-Test.command
       - name: Smoke test member editor
         run: |
           dist/ZhigeMemberEditor/ZhigeMemberEditor --student --port 18005 > member-out.txt 2> member-err.txt &
@@ -45,6 +46,18 @@ jobs:
           done
           if [ "$ready" -ne 1 ]; then cat member-out.txt member-err.txt; exit 1; fi
           curl --silent --fail http://127.0.0.1:18005/ | grep -q 'id="category"'
+      - name: Verify packaged HTTPS synchronization
+        run: |
+          ditto dist/ZhigeMemberEditor smoke-editor
+          smoke-editor/ZhigeMemberEditor --user zhengfeiLian --branch faculty-editor-test --port 18007 > sync-out.txt 2> sync-err.txt &
+          sync_pid=$!
+          trap 'kill "$sync_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:18007/api/state -o /dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          if [ "$ready" -ne 1 ] || [ ! -f smoke-editor/.local/faculty-baseline-zhengfeilian-faculty-editor-test.json ]; then cat sync-out.txt sync-err.txt; exit 1; fi
       - name: Package zip preserving executable permissions
         run: ditto -c -k --sequesterRsrc --keepParent dist/ZhigeMemberEditor Zhige-Member-Editor-macOS-${{ matrix.arch }}.zip
       - uses: actions/upload-artifact@v4

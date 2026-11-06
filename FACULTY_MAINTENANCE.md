@@ -55,7 +55,7 @@
 
 ## Windows 免安装包与测试账号
 
-如果不想安装 Python、Git 和 GitHub CLI，可以从仓库 **Actions → Build portable Windows editor** 的最新成功运行中下载 `Zhige-Faculty-Editor-Windows`，完整解压到“文档”等可写目录。包中已经带有运行环境和 GitHub CLI。
+如果不想安装 Python、Git 和 GitHub CLI，可以从仓库 **Actions → Build portable Windows editor** 的最新成功运行中下载 `Zhige-Member-Editor-Windows`，完整解压到“文档”等可写目录。包中已经带有运行环境和 GitHub CLI。
 
 - 正式维护：双击 `Start-Faculty-Editor.bat`，以 `garrisongys` 授权，发布到 `main`，会更新正式网站。
 - 测试演练：双击 `Start-Test-Editor.bat`，以 `zhengfeiLian` 授权，发布到 `faculty-editor-test`。该分支不会触发正式网站部署。编辑器里也会明确显示账号和目标分支。

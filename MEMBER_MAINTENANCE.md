@@ -6,7 +6,7 @@
 
 打开仓库的 Actions 页面，选择最新成功的 **Build portable Windows editor** 或 **Build portable macOS member editor** 运行，在页面底部下载 Artifacts：
 
-- Windows：`Zhige-Faculty-Editor-Windows`，解压后双击 `Start-Member-Editor.bat`。
+- Windows：`Zhige-Member-Editor-Windows`，解压后双击 `Start-Member-Editor.bat`。
 - macOS Apple Silicon：`Zhige-Member-Editor-macOS-Apple-Silicon`，解压里面的 ZIP，双击 `Start-Member-Editor.command`。
 - macOS Intel：`Zhige-Member-Editor-macOS-Intel`，操作相同。
 
@@ -16,11 +16,15 @@
 
 1. 负责人先把成员的个人 GitHub 账号加入组织，并赋予网站仓库 **Write** 权限。成员接受邀请。
 2. 启动安装包，点击“连接 GitHub”，在设备授权页面用**自己的账号**完成授权。编辑器显示识别到的用户名后才开放表单。
-3. 选成员类别，填写中英文姓名与身份，选择一张默认头像或上传照片。Faculty 与博士后可编辑 Markdown；博士、硕士等类别使用不限行数的描述。
-4. 点击“保存并更新本地预览”，分别检查中英文页面。资料可以先作为本地草稿保存；正式推送前须填写中英文姓名并选头像。
+3. 首次登记时选择“博士生”或“硕士生”，填写中英文姓名与身份，选择默认头像或上传照片，填写可自由换行的个人描述。已有线上记录的账号会自动载入并绑定原记录。
+4. 点击“保存并更新本地预览”。第一次保存后，本机安装包即绑定当前 GitHub 账号和这一条成员记录，身份选择会锁定。后续修改姓名、头像或描述都更新原条目，不会另建成员。资料可先作为本地草稿保存；正式推送前须填写中英文姓名并选头像。
 5. 点击“推送更新”。程序先读取 GitHub 上的最新内容，只合并本人资料；若本人资料已被其他人改动，会拒绝覆盖并提示重新同步。推送到 `main` 后，GitHub Pages 自动部署。
 
-每人请保留自己的安装包文件夹；本地 `.local` 中有登录凭据和草稿，不要分享这个文件夹。若下载了新版安装包，把旧文件夹中的 `.local` 和本人尚未发布的草稿先妥善保存，避免丢失。
+每人使用自己的 GitHub 账号和一份独立解压目录。首次保存后改用其他账号登录，会提示重新连接原绑定账号。若需要从硕士生转为博士生、改到 Alumni 等类别，由负责人在主维护后台调整；成员下次同步后会继续维护同一条记录。
+
+本地 `.local` 中有登录凭据、绑定文件和草稿，不要分享使用过的安装包文件夹。资料已推送后，新解压一份安装包并登录原账号，也会从 GitHub 找到原记录并自动绑定；尚未推送的草稿须保留旧目录。
+
+包中另有 `Start-Member-Test.bat`／`Start-Member-Test.command`，固定发布到 `member-editor-test` 分支，只供测试。正式维护使用 `Start-Member-Editor` 入口。
 
 ## 权限边界
 

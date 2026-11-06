@@ -10,12 +10,14 @@ import mimetypes
 import os
 import re
 import secrets
+import ssl
 import shutil
 import subprocess
 import sys
 import threading
 import webbrowser
 from urllib.request import Request, urlopen
+import certifi
 
 import admin
 from build import ROOT, OUT, MARKDOWN, build, validate
@@ -33,6 +35,7 @@ REPO = "ZhigeSecurityLab/zhigesecuritylab.github.io"
 UI = ROOT / "faculty_editor"
 CONFIG = ROOT / ".local/faculty-github-auth"
 BASELINE = ROOT / ".local/faculty-baseline.json"
+BINDING = ROOT / ".local/member-binding-main.json"
 TOKEN = secrets.token_urlsafe(32)
 AUTH_STATE = {"state": "idle"}
 LOCK = threading.Lock()
@@ -40,6 +43,7 @@ FIELDS = ("name", "role", "url", "bio_markdown", "description")
 DRAFT_AVATAR = "assets/people/draft-preview.jpg"
 DRAFT_NAMES = {"en": "Faculty preview", "zh": "教师资料预览"}
 DEFAULT_AVATARS = {"assets/people/default-male.svg", "assets/people/default-female.svg"}
+SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 
 
 def gh(args, payload=None):
@@ -66,6 +70,7 @@ def gh_binary():
 def connection():
     if not gh_binary():
         return {"installed": False, "connected": False, "account": "", "login": dict(AUTH_STATE)}
+    user = ""
     try:
         user = gh(["api", "user"])["login"]
         repo = gh(["api", "repos/" + REPO])
@@ -74,8 +79,8 @@ def connection():
             select_student_owner(user)
         return {"installed": True, "connected": user.lower() == OWNER.lower() and allowed,
                 "account": user, "login": dict(AUTH_STATE)}
-    except (RuntimeError, subprocess.TimeoutExpired):
-        return {"installed": True, "connected": False, "account": "", "login": dict(AUTH_STATE)}
+    except (RuntimeError, subprocess.TimeoutExpired) as exc:
+        return {"installed": True, "connected": False, "account": user, "login": dict(AUTH_STATE), "error": str(exc) if user else ""}
 
 
 def login():
@@ -131,6 +136,50 @@ def profiles(data):
             for lang in ("en", "zh")}
 
 
+def member_binding():
+    if not STUDENT:
+        return None
+    try:
+        binding = json.loads(BINDING.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return None
+    except (OSError, ValueError):
+        raise RuntimeError("本机成员绑定文件无法读取，请联系负责人处理。")
+    if (binding.get("repo") != REPO or binding.get("branch") != BRANCH
+            or not re.fullmatch(r"[A-Za-z0-9-]{1,39}", str(binding.get("owner", "")))
+            or not re.fullmatch(r"[a-z0-9-]+", str(binding.get("category", "")))):
+        raise RuntimeError("本机成员绑定信息无效，请联系负责人处理。")
+    return binding
+
+
+def bound_category(data):
+    categories = {record["category"] for lang in ("en", "zh") if (record := own_record(data, lang))}
+    if len(categories) > 1:
+        raise ValueError("本人中英文成员类别不一致，请联系负责人处理。")
+    if categories:
+        return next(iter(categories))
+    binding = member_binding()
+    if binding and binding["owner"].lower() == OWNER.lower():
+        return binding["category"]
+    return None
+
+
+def bind_member(data):
+    if not STUDENT or not OWNER:
+        return
+    category = bound_category(data)
+    if not category:
+        return
+    binding = member_binding()
+    if binding and binding["owner"].lower() != OWNER.lower():
+        raise RuntimeError("此安装包已绑定其他 GitHub 账号。")
+    BINDING.parent.mkdir(parents=True, exist_ok=True)
+    candidate = BINDING.with_suffix(".tmp")
+    candidate.write_text(json.dumps({"repo": REPO, "branch": BRANCH, "owner": OWNER,
+                                     "category": category}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    os.replace(candidate, BINDING)
+
+
 def merge(data, submitted=None, recruitment=None):
     result = copy.deepcopy(data)
     if submitted is not None:
@@ -140,6 +189,12 @@ def merge(data, submitted=None, recruitment=None):
         category = submitted.get("category", "faculty")
         if category not in {group["id"] for group in result["people_categories"]} or (not STUDENT and category != "faculty"):
             raise ValueError("成员分类无效")
+        if STUDENT:
+            locked = bound_category(result)
+            if locked and category != locked:
+                raise ValueError("该成员已绑定身份，不能改为其他类别；请联系负责人调整。")
+            if not locked and category not in {"phd", "masters"}:
+                raise ValueError("首次登记请选择博士生或硕士生。")
         for lang in ("en", "zh"):
             source = submitted[lang]
             if not isinstance(source, dict) or set(source) not in (set(FIELDS), set(FIELDS) - {"description"}):
@@ -185,11 +240,15 @@ def current_state():
     raw = admin.CONTENT.read_bytes()
     data = json.loads(raw)
     p = profiles(data)
+    locked = bound_category(data) if STUDENT else "faculty"
+    category = locked or ("" if STUDENT else "faculty")
+    categories = [group for group in data["people_categories"]
+                  if not STUDENT or group["id"] in ({category} if locked else {"phd", "masters"})]
     return {"profiles": {lang: {field: ("" if field == "name" and p[lang].get("name") == DRAFT_NAMES[lang]
                                         else p[lang].get(field, "")) for field in FIELDS} for lang in ("en", "zh")},
             "avatar": "" if p["en"].get("avatar") == DRAFT_AVATAR else (p["en"].get("avatar", "") or p["zh"].get("avatar", "")),
-            "category": p["en"].get("category", "phd" if STUDENT else "faculty"),
-            "categories": data["people_categories"], "student": STUDENT,
+            "category": category, "category_locked": bool(locked),
+            "categories": categories, "student": STUDENT,
             "recruitment": {lang: data[lang]["recruitment"] for lang in ("en", "zh")},
             "owner": OWNER, "branch": BRANCH, "revision": admin.revision(raw), "token": TOKEN}
 
@@ -210,6 +269,8 @@ def baseline_hash(scope):
             return saved[scope + "_hash"]
     except (OSError, ValueError, KeyError):
         pass
+    if getattr(sys, "frozen", False):
+        raise RuntimeError("尚未建立线上同步基线，请联网重新启动编辑器。")
     try:
         raw = subprocess.check_output(["git", "show", "HEAD:content/site.json"], cwd=ROOT)
     except (OSError, subprocess.CalledProcessError):
@@ -225,8 +286,11 @@ def save_baseline(data):
 
 
 def fetch_remote():
-    endpoint = f"https://api.github.com/repos/{REPO}/contents/content/site.json?ref={BRANCH}"
-    with urlopen(Request(endpoint, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20) as response:
+    api_path = f"repos/{REPO}/contents/content/site.json?ref={BRANCH}"
+    if STUDENT:
+        return json.loads(base64.b64decode(gh(["api", api_path])["content"]))
+    endpoint = "https://api.github.com/" + api_path
+    with urlopen(Request(endpoint, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20, context=SSL_CONTEXT) as response:
         return json.loads(base64.b64decode(json.load(response)["content"]))
 
 
@@ -250,7 +314,7 @@ def sync_on_start():
                 target = ROOT / path
                 if not target.is_file():
                     url = f"https://raw.githubusercontent.com/{REPO}/{BRANCH}/{path}"
-                    with urlopen(Request(url, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20) as response:
+                    with urlopen(Request(url, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20, context=SSL_CONTEXT) as response:
                         raw = response.read(2_500_001)
                     if len(raw) > 2_500_000:
                         raise ValueError("线上头像文件过大")
@@ -270,10 +334,14 @@ def select_student_owner(user):
         return
     if not re.fullmatch(r"[A-Za-z0-9-]{1,39}", user):
         raise ValueError("GitHub 用户名无效")
+    binding = member_binding()
+    if binding and binding["owner"].lower() != user.lower():
+        raise RuntimeError(f"此安装包已绑定 {binding['owner']}，当前登录为 {user}；请连接绑定账号。")
     OWNER = user
     BASELINE = ROOT / (".local/student-baseline-" + user.lower() + "-" + BRANCH + ".json")
     sync_on_start()
     build()
+    bind_member(json.loads(admin.CONTENT.read_bytes()))
 
 
 def blob_sha(raw):
@@ -399,6 +467,7 @@ class Handler(admin.Handler):
                     merged = merge(json.loads(original), preview_profile(payload.get("profile")), payload.get("recruitment"))
                     validate(merged)
                     admin.save(merged, payload["revision"])
+                    bind_member(merged)
                     return self.send(200, current_state())
             if path == "/api/publish":
                 with LOCK:
@@ -419,7 +488,7 @@ if __name__ == "__main__":
     parser.add_argument("--port", type=int, default=8002)
     parser.add_argument("--open", action="store_true")
     parser.add_argument("--user", default="garrisongys", choices=("garrisongys", "zhengfeiLian"))
-    parser.add_argument("--branch", default="main", choices=("main", "faculty-editor-test"))
+    parser.add_argument("--branch", default="main", choices=("main", "faculty-editor-test", "member-editor-test"))
     parser.add_argument("--student", action="store_true", help="Self-service member editor; account comes from GitHub login")
     args = parser.parse_args()
     STUDENT = args.student
@@ -427,11 +496,10 @@ if __name__ == "__main__":
     BRANCH = args.branch
     if not STUDENT and (OWNER, BRANCH) not in {("garrisongys", "main"), ("zhengfeiLian", "faculty-editor-test")}:
         parser.error("账号与目标分支不匹配")
-    if STUDENT and BRANCH != "main":
-        parser.error("通用成员入口只发布到 main")
     UI = ROOT / ("student_editor" if STUDENT else "faculty_editor")
     CONFIG = ROOT / (".local/member-github-auth" if STUDENT else ".local/faculty-github-auth-" + OWNER.lower())
     BASELINE = ROOT / (".local/member-baseline-pending.json" if STUDENT else ".local/faculty-baseline-" + OWNER.lower() + "-" + BRANCH + ".json")
+    BINDING = ROOT / (".local/member-binding-" + BRANCH + ".json")
     if STUDENT:
         connection()
         if not OWNER:
@@ -444,4 +512,7 @@ if __name__ == "__main__":
     print("Faculty 资料维护：" + url, flush=True)
     if args.open:
         webbrowser.open(url)
-    server.serve_forever()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        server.server_close()

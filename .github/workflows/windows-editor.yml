@@ -24,6 +24,7 @@ jobs:
           Copy-Item portable/Start-Faculty-Editor.bat dist/ZhigeFacultyEditor/
           Copy-Item portable/Start-Test-Editor.bat dist/ZhigeFacultyEditor/
           Copy-Item portable/Start-Member-Editor.bat dist/ZhigeFacultyEditor/
+          Copy-Item portable/Start-Member-Test.bat dist/ZhigeFacultyEditor/
           Copy-Item portable/README-Windows.txt dist/ZhigeFacultyEditor/
       - name: Smoke test executable
         shell: pwsh
@@ -40,6 +41,7 @@ jobs:
               } catch {}
             }
             if (-not $ready) { Get-Content smoke-out.txt; Get-Content smoke-err.txt; throw 'Portable editor did not start' }
+            if (-not (Test-Path 'smoke-editor/.local/faculty-baseline-zhengfeilian-faculty-editor-test.json')) { Get-Content smoke-out.txt; throw 'Remote HTTPS synchronization failed' }
             $profile = @{ en = @{ name = ''; role = ''; url = ''; bio_markdown = '## Windows preview check' }; zh = @{ name = ''; role = ''; url = ''; bio_markdown = '## 中文预览' }; avatar = '' }
             $body = @{ revision = $state.revision; profile = $profile; recruitment = $null } | ConvertTo-Json -Depth 10
             Invoke-RestMethod -Uri 'http://127.0.0.1:18003/api/save' -Method Post -ContentType 'application/json; charset=utf-8' -Headers @{ 'X-Editor-Token' = $state.token } -Body ([System.Text.Encoding]::UTF8.GetBytes($body)) | Out-Null
@@ -62,6 +64,6 @@ jobs:
           } finally { Stop-Process -Id $member.Id -Force -ErrorAction SilentlyContinue }
       - uses: actions/upload-artifact@v4
         with:
-          name: Zhige-Faculty-Editor-Windows
+          name: Zhige-Member-Editor-Windows
           path: dist/ZhigeFacultyEditor/
           retention-days: 30
