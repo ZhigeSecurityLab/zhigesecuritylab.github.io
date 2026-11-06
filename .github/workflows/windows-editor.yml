@@ -21,7 +21,6 @@ jobs:
         run: |
           python -m PyInstaller --noconfirm --onedir --contents-directory . --name ZhigeFacultyEditor --paths scripts --add-data "assets;assets" --add-data "content;content" --add-data "faculty_editor;faculty_editor" --add-data "student_editor;student_editor" scripts/faculty.py
           Copy-Item (Get-Command gh).Source dist/ZhigeFacultyEditor/gh.exe
-          Copy-Item portable/Start-Faculty-Editor.bat dist/ZhigeFacultyEditor/
           Copy-Item portable/Start-Test-Editor.bat dist/ZhigeFacultyEditor/
           Copy-Item portable/Start-Member-Editor.bat dist/ZhigeFacultyEditor/
           Copy-Item portable/README-Windows.txt dist/ZhigeFacultyEditor/
@@ -53,7 +52,7 @@ jobs:
               Start-Sleep -Seconds 1
               try {
                 $state = Invoke-RestMethod -Uri 'http://127.0.0.1:18004/api/state' -TimeoutSec 2
-                if ($state.student -eq $true -and $state.branch -eq 'main') { $ready = $true; break }
+                if ($state.student -eq $true -and $state.branch -eq 'faculty-editor-test') { $ready = $true; break }
               } catch {}
             }
             if (-not $ready) { Get-Content member-out.txt; Get-Content member-err.txt; throw 'Member editor did not start' }

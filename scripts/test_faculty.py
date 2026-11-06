@@ -55,7 +55,7 @@ class FacultyEditorTests(unittest.TestCase):
                 self.assertEqual(prepared["avatar"], faculty.DRAFT_AVATAR)
                 self.assertEqual(prepared["en"]["name"], faculty.DRAFT_NAMES["en"])
                 self.assertTrue((root / faculty.DRAFT_AVATAR).is_file())
-                self.assertIn("**Secure systems**", merged["en"]["people"][-1]["bio_markdown"])
+                self.assertIn("**Secure systems**", next(p for p in merged["en"]["people"] if p.get("github_username") == faculty.OWNER)["bio_markdown"])
                 self.assertEqual(draft["avatar"], "")
 
     def test_student_editor_only_changes_its_own_profile_and_accepts_default_avatar(self):

@@ -39,7 +39,7 @@ jobs:
           ready=0
           for attempt in $(seq 1 30); do
             if curl --silent --fail http://127.0.0.1:18005/api/state -o state.json; then
-              if python -c 'import json; s=json.load(open("state.json")); assert s["student"] and s["branch"] == "main"'; then ready=1; break; fi
+              if python -c 'import json; s=json.load(open("state.json")); assert s["student"] and s["branch"] == "faculty-editor-test"'; then ready=1; break; fi
             fi
             sleep 1
           done

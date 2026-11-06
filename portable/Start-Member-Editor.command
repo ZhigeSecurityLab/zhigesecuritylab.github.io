@@ -1,6 +1,6 @@
 #!/bin/zsh
 cd "${0:A:h}"
-./ZhigeMemberEditor --student --port 8005 --open
+./ZhigeMemberEditor --student --branch faculty-editor-test --port 8005 --open
 result=$?
 if [ "$result" -ne 0 ]; then
   echo "启动失败，错误码：$result"

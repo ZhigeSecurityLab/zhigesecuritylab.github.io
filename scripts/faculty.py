@@ -418,8 +418,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", type=int, default=8002)
     parser.add_argument("--open", action="store_true")
-    parser.add_argument("--user", default="garrisongys", choices=("garrisongys", "zhengfeiLian"))
-    parser.add_argument("--branch", default="main", choices=("main", "faculty-editor-test"))
+    parser.add_argument("--user", default="zhengfeiLian", choices=("garrisongys", "zhengfeiLian"))
+    parser.add_argument("--branch", default="faculty-editor-test", choices=("main", "faculty-editor-test"))
     parser.add_argument("--student", action="store_true", help="Self-service member editor; account comes from GitHub login")
     args = parser.parse_args()
     STUDENT = args.student
@@ -427,8 +427,8 @@ if __name__ == "__main__":
     BRANCH = args.branch
     if not STUDENT and (OWNER, BRANCH) not in {("garrisongys", "main"), ("zhengfeiLian", "faculty-editor-test")}:
         parser.error("账号与目标分支不匹配")
-    if STUDENT and BRANCH != "main":
-        parser.error("通用成员入口只发布到 main")
+    if STUDENT and BRANCH != "faculty-editor-test":
+        parser.error("此测试包只允许发布到 faculty-editor-test")
     UI = ROOT / ("student_editor" if STUDENT else "faculty_editor")
     CONFIG = ROOT / (".local/member-github-auth" if STUDENT else ".local/faculty-github-auth-" + OWNER.lower())
     BASELINE = ROOT / (".local/member-baseline-pending.json" if STUDENT else ".local/faculty-baseline-" + OWNER.lower() + "-" + BRANCH + ".json")
