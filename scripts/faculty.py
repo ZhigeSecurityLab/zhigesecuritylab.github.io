@@ -296,9 +296,9 @@ def fetch_remote():
     api_path = f"repos/{REPO}/contents/content/site.json?ref={BRANCH}"
     if STUDENT:
         return json.loads(base64.b64decode(gh(["api", api_path])["content"]))
-    endpoint = "https://api.github.com/" + api_path
+    endpoint = f"https://raw.githubusercontent.com/{REPO}/{BRANCH}/content/site.json"
     with urlopen(Request(endpoint, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20, context=SSL_CONTEXT) as response:
-        return json.loads(base64.b64decode(json.load(response)["content"]))
+        return json.load(response)
 
 
 def sync_on_start():
