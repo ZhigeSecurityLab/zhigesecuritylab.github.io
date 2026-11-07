@@ -20,6 +20,7 @@ from urllib.request import Request, urlopen
 import certifi
 
 import admin
+import publications
 from build import ROOT, OUT, MARKDOWN, build, validate
 from media import store_avatar
 
@@ -197,7 +198,7 @@ def merge(data, submitted=None, recruitment=None):
                 raise ValueError("首次登记请选择博士生或硕士生。")
         for lang in ("en", "zh"):
             source = submitted[lang]
-            if not isinstance(source, dict) or set(source) not in (set(FIELDS), set(FIELDS) - {"description"}):
+            if not isinstance(source, dict) or not set(source) <= set(FIELDS) | {"orcid", "publications"} or not (set(FIELDS) - {"description"}) <= set(source):
                 raise ValueError("资料字段无效")
             record = own_record(result, lang)
             if record is None:
@@ -205,6 +206,11 @@ def merge(data, submitted=None, recruitment=None):
                 result[lang]["people"].append(record)
             for field in FIELDS:
                 record[field] = source.get(field, "")
+            if not STUDENT:
+                for key, default in (("orcid", ""), ("publications", [])):
+                    if key in source:
+                        record[key] = (publications.orcid_id(source[key]) if source[key] else "") if key == "orcid" else copy.deepcopy(source[key])
+                publications.validate_profile(record)
             record["category"] = category
             record["avatar"] = avatar
     if STUDENT and recruitment is not None:
@@ -250,6 +256,7 @@ def current_state():
             "category": category, "category_locked": bool(locked),
             "categories": categories, "student": STUDENT,
             "recruitment": {lang: data[lang]["recruitment"] for lang in ("en", "zh")},
+            "orcid": p["en"].get("orcid", ""), "publications": p["en"].get("publications", []),
             "owner": OWNER, "branch": BRANCH, "revision": admin.revision(raw), "token": TOKEN}
 
 
@@ -392,6 +399,8 @@ def publish_profile():
         submitted["category"] = local_profiles["en"].get("category", "faculty")
         for lang in ("en", "zh"):
             submitted[lang] = {field: local_profiles[lang].get(field, "") for field in FIELDS}
+            if not STUDENT:
+                submitted[lang].update(orcid=local_profiles[lang].get("orcid", ""), publications=local_profiles[lang].get("publications", []))
     recruitment = ({lang: local[lang]["recruitment"] for lang in ("en", "zh")}
                    if "recruitment" in scopes else None)
     updated = merge(remote, submitted, recruitment)
@@ -443,12 +452,20 @@ class Handler(admin.Handler):
             return self.send(403, {"error": "请求校验失败"})
         try:
             length = int(self.headers.get("Content-Length", "0"))
-            if not 0 < length <= 4_000_000 or self.headers.get_content_type() != "application/json":
+            if not 0 < length <= 12_000_000 or self.headers.get_content_type() != "application/json":
                 return self.send(413, {"error": "请求格式或大小无效"})
             payload = json.loads(self.rfile.read(length))
             path = urlsplit(self.path).path
             if path == "/api/connect":
                 return self.send(200, login())
+            if path in ("/api/orcid", "/api/publication"):
+                if STUDENT:
+                    raise ValueError("此接口仅供 Faculty 使用")
+                if path == "/api/orcid":
+                    return self.send(200, publications.sync(payload.get("orcid", "")))
+                item = payload.get("publication")
+                publications.validate_profile({"publications": [item]})
+                return self.send(200, publications.enrich(item))
             if path == "/api/avatar":
                 return self.send(200, {"path": store_avatar(payload.get("data"))})
             if path == "/api/markdown":
@@ -488,13 +505,13 @@ if __name__ == "__main__":
     parser.add_argument("--port", type=int, default=8002)
     parser.add_argument("--open", action="store_true")
     parser.add_argument("--user", default="garrisongys", choices=("garrisongys", "zhengfeiLian"))
-    parser.add_argument("--branch", default="main", choices=("main", "faculty-editor-test", "member-editor-test"))
+    parser.add_argument("--branch", default="main", choices=("main", "faculty-editor-test", "member-editor-test", "faculty-publications-test"))
     parser.add_argument("--student", action="store_true", help="Self-service member editor; account comes from GitHub login")
     args = parser.parse_args()
     STUDENT = args.student
     OWNER = "" if STUDENT else args.user
     BRANCH = args.branch
-    if not STUDENT and (OWNER, BRANCH) not in {("garrisongys", "main"), ("zhengfeiLian", "faculty-editor-test")}:
+    if not STUDENT and (OWNER, BRANCH) not in {("garrisongys", "main"), ("zhengfeiLian", "faculty-editor-test"), ("zhengfeiLian", "faculty-publications-test")}:
         parser.error("账号与目标分支不匹配")
     UI = ROOT / ("student_editor" if STUDENT else "faculty_editor")
     CONFIG = ROOT / (".local/member-github-auth" if STUDENT else ".local/faculty-github-auth-" + OWNER.lower())

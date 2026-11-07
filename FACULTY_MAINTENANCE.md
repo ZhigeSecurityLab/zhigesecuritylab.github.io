@@ -63,3 +63,19 @@
 两个模式请分别解压到不同目录，避免本地草稿和登录配置混用。首次启动需要联网获取当前分支内容；之后可编辑离线草稿，发布时仍需联网。下载的包有有效期，过期后可重新运行构建工作流。
 
 Recruitment 的现有英文和中文内容会自动填入编辑器；可以单独修改 Recruitment，无需先填写 Faculty 头像。保存后可预览独立的 Recruitment 页面。发布时只合并本账号 Faculty 条目与 Recruitment 两个范围中实际修改的部分。
+
+
+## v1.2: ORCID 与成果维护
+
+完整 Faculty 包包含 `Start-Faculty-Editor` 正式入口及 `Start-Faculty-Test` 测试入口。
+正式入口为 garrisongys/main；测试入口为 zhengfeiLian/faculty-publications-test。
+
+可直接选择与网页配色统一的男女默认头像，或上传个人照片。
+ORCID 输入号码/网址，点击“同步公开成果”，核对记录姓名；这是公开标识关联，不是 OAuth 身份认证。
+新成果默认不选；重复同步按 DOI/ORCID 工作编号去重，并保留既有手工修改和选择。
+展开成果可编辑类型、作者、年份、会议/期刊、层次 A/B/C、BibTeX、PDF链接。
+A/B/C 由本人确认，不能据此声称自动取得 CCF 分级。
+勾选成果自动尝试补充公开 Crossref/DOI 元数据；网络或来源缺失时可再点获取或手工补充。
+只将勾选成果展示在本人 Faculty 及实验室 Publications；取消勾选不会删除本地成果。
+公开数据未给出 PDF/BibTeX 时明确显示待补充，不伪造下载地址。出版商 PDF 可能需要访问权限。
+保存与推送仍有账号范围限制、远程冲突检查，测试分支不影响 main。

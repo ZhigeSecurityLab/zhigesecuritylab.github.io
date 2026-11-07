@@ -22,6 +22,8 @@ jobs:
           python -m PyInstaller --noconfirm --onedir --contents-directory . --name ZhigeFacultyEditor --paths scripts --add-data "assets;assets" --add-data "content;content" --add-data "faculty_editor;faculty_editor" --add-data "student_editor;student_editor" scripts/faculty.py
           Copy-Item (Get-Command gh).Source dist/ZhigeFacultyEditor/gh.exe
           Copy-Item portable/Start-Faculty-Editor.bat dist/ZhigeFacultyEditor/
+          Copy-Item portable/Start-Faculty-Test.bat dist/ZhigeFacultyEditor/
+          Copy-Item portable/Faculty-README.txt dist/ZhigeFacultyEditor/
           Copy-Item portable/Start-Test-Editor.bat dist/ZhigeFacultyEditor/
           Copy-Item portable/Start-Member-Editor.bat dist/ZhigeFacultyEditor/
           Copy-Item portable/Start-Member-Test.bat dist/ZhigeFacultyEditor/
@@ -65,5 +67,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Zhige-Member-Editor-Windows
+          path: dist/ZhigeFacultyEditor/
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Zhige-Faculty-Editor-Windows
           path: dist/ZhigeFacultyEditor/
           retention-days: 30

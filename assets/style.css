@@ -643,3 +643,5 @@ html[lang="zh-CN"] h1, html[lang="zh-CN"] h2, html[lang="zh-CN"] h3 { font-famil
   font-size: 16px;
 }
 .recruitment-cta:hover { background: var(--code-bg); }
+
+.faculty-publications{margin-top:2rem}.publication-actions details{margin-top:.7rem}.publication-actions pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.85em;padding:1rem;background:var(--bg)}.publication-actions summary{cursor:pointer;color:#CA9429}

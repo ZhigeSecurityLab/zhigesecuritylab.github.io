@@ -1,4 +1,5 @@
 """Bilingual static site generator with Markdown news support; Python 3.9+."""
+import publications
 from pathlib import Path
 from html import escape
 from urllib.parse import urlsplit, quote
@@ -91,6 +92,7 @@ def validate(data):
                         raise ValueError("成员头像文件不存在：" + avatar)
                     string(item.get("bio_markdown", ""), "成员 Markdown 简介")
                     string(item.get("description", ""), "成员描述")
+                    publications.validate_profile(item)
 
 
 def e(value):
@@ -126,6 +128,36 @@ def news_list(data, lang):
     return f'<ul class="plain-list">{rows}</ul>' if rows else empty("最新动态待更新。" if lang == "zh" else "News and updates will be added.")
 
 
+def publication_list(items, lang):
+    selected = [p for p in items if p.get("selected")]
+    if not selected:
+        return ""
+    result = '<div class="faculty-publications">'
+    for kind, title in (("conference", "会议论文" if lang == "zh" else "Conference Papers"), ("journal", "期刊论文" if lang == "zh" else "Journal Articles"), ("other", "其他成果" if lang == "zh" else "Other Works")):
+        group = [p for p in selected if p.get("kind", "other") == kind]
+        if not group:
+            continue
+        result += f'<h2>{title}</h2>'
+        for tier in publications.TIERS:
+            papers = [p for p in group if p.get("tier", "Unrated") == tier]
+            if not papers:
+                continue
+            label = ("未分级" if lang == "zh" else "Unrated") if tier == "Unrated" else f'{tier} · ' + ("作者确认层次" if lang == "zh" else "Author-assigned tier")
+            result += f'<h3>{label}</h3><ul class="plain-list">'
+            for p in sorted(papers, key=lambda x: (-x["year"], x["title"])):
+                title = e(p["title"])
+                if p.get("url"):
+                    title = f'<a href="{link(p["url"])}">{title}</a>'
+                actions = f'<a href="{link(p["pdf_url"])}" target="_blank" rel="noopener">PDF ↗</a>' if p.get("pdf_url") else '<span class="muted">PDF ' + ("待补充" if lang == "zh" else "unavailable") + '</span>'
+                if p.get("bibtex"):
+                    actions += f'<a download="citation.bib" href="data:application/x-bibtex;charset=utf-8,{quote(p["bibtex"], safe="")}">BibTeX ↓</a><details><summary>View BibTeX</summary><pre><code>{e(p["bibtex"])}</code></pre></details>'
+                else:
+                    actions += '<span class="muted"> · BibTeX ' + ("待补充" if lang == "zh" else "unavailable") + '</span>'
+                result += f'<li class="publication"><h3>{title}</h3><p>{e(p.get("authors", ""))}</p><p class="muted">{e(p.get("venue", ""))} · {p["year"]}</p><div class="publication-actions">{actions}</div></li>'
+            result += '</ul>'
+    return result + '</div>'
+
+
 def members(data, lang, category):
     items = [person for person in data[lang]["people"] if person["category"] == category]
     if not items:
@@ -138,7 +170,10 @@ def members(data, lang, category):
         rich = category in ("faculty", "postdocs")
         description = (f'<div class="markdown-body">{MARKDOWN.render(person.get("bio_markdown", ""))}</div>'
                        if rich else f'<p class="person-description">{e(person.get("description", ""))}</p>')
-        rows += f'<li class="person"><img class="person-avatar" src="/{e(person["avatar"])}" alt="" loading="lazy"><div><h3>{name}</h3><p class="muted">{e(person["role"])}</p>{description}</div></li>'
+        orcid = person.get("orcid", "")
+        identity = f'<p><a href="https://orcid.org/{e(orcid)}" target="_blank" rel="noopener">ORCID: {e(orcid)}</a></p>' if orcid else ''
+        papers = publication_list(person.get("publications", []), lang) if rich else ''
+        rows += f'<li class="person"><img class="person-avatar" src="/{e(person["avatar"])}" alt="" loading="lazy"><div><h3>{name}</h3><p class="muted">{e(person["role"])}</p>{identity}{description}{papers}</div></li>'
     return f'<ul class="plain-list people-list">{rows}</ul>'
 
 
@@ -174,13 +209,17 @@ def section_content(data, lang, page):
             contact = f'<a class="recruitment-cta" href="mailto:{e(data["email"])}?subject={subject}">{e(cta)} <span aria-hidden="true">↗</span></a>'
         result += f'<section id="recruitment" class="section recruitment-section"><div class="markdown-body recruitment-copy">{MARKDOWN.render(recruitment["body_markdown"])}</div>{contact}</section>'
     if page == "publications":
-        rows = ""
-        for item in sorted(t["publications"], key=lambda x: x["year"], reverse=True):
-            title = e(item["title"])
-            if item.get("url"):
-                title = f'<a href="{link(item["url"])}">{title}</a>'
-            rows += f'<li class="publication"><h3>{title}</h3><p>{e(item["authors"])}</p><p class="muted">{e(item["venue"])} · {e(item["year"])}</p></li>'
-        result += f'<section id="publications" class="section"><ul class="plain-list">{rows}</ul></section>' if rows else empty("论文信息待更新。" if zh else "Publication information will be added.")
+        works = list(t["publications"])
+        for person in t["people"]:
+            works.extend(p for p in person.get("publications", []) if p.get("selected"))
+        seen = set()
+        unique = []
+        for paper in works:
+            key = paper.get("doi") or paper.get("id") or paper["title"].casefold()
+            if key not in seen:
+                seen.add(key)
+                unique.append(dict(paper, selected=True))
+        result += publication_list(unique, lang) or empty("论文信息待更新。" if zh else "Publication information will be added.")
     if page == "contact" and data["email"]:
         email = data["email"]
         if any(c in email for c in "\r\n?&") or "@" not in email:

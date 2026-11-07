@@ -29,9 +29,10 @@ jobs:
           python -m PyInstaller --noconfirm --onedir --contents-directory . --name ZhigeMemberEditor --paths scripts --add-data "assets:assets" --add-data "content:content" --add-data "faculty_editor:faculty_editor" --add-data "student_editor:student_editor" scripts/faculty.py
           cp "$(command -v gh)" dist/ZhigeMemberEditor/gh
           cp portable/Start-Member-Editor.command dist/ZhigeMemberEditor/
+          cp portable/Start-Faculty-Editor.command portable/Start-Faculty-Test.command portable/Faculty-README.txt dist/ZhigeMemberEditor/
           cp portable/Start-Member-Test.command dist/ZhigeMemberEditor/
           cp portable/README-macOS.txt dist/ZhigeMemberEditor/
-          chmod +x dist/ZhigeMemberEditor/gh dist/ZhigeMemberEditor/ZhigeMemberEditor dist/ZhigeMemberEditor/Start-Member-Editor.command dist/ZhigeMemberEditor/Start-Member-Test.command
+          chmod +x dist/ZhigeMemberEditor/Start-Faculty-Editor.command dist/ZhigeMemberEditor/Start-Faculty-Test.command dist/ZhigeMemberEditor/gh dist/ZhigeMemberEditor/ZhigeMemberEditor dist/ZhigeMemberEditor/Start-Member-Editor.command dist/ZhigeMemberEditor/Start-Member-Test.command
       - name: Smoke test member editor
         run: |
           dist/ZhigeMemberEditor/ZhigeMemberEditor --student --port 18005 > member-out.txt 2> member-err.txt &
@@ -64,4 +65,11 @@ jobs:
         with:
           name: Zhige-Member-Editor-macOS-${{ matrix.arch }}
           path: Zhige-Member-Editor-macOS-${{ matrix.arch }}.zip
+          retention-days: 30
+      - name: Package Faculty editor
+        run: ditto -c -k --sequesterRsrc --keepParent dist/ZhigeMemberEditor Zhige-Faculty-Editor-macOS-${{ matrix.arch }}.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Zhige-Faculty-Editor-macOS-${{ matrix.arch }}
+          path: Zhige-Faculty-Editor-macOS-${{ matrix.arch }}.zip
           retention-days: 30

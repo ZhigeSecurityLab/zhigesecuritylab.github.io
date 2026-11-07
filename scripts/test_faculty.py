@@ -32,6 +32,21 @@ class FacultyEditorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             faculty.merge(source, {**self.submitted(), "news": []})
 
+    def test_orcid_and_publications_stay_with_owner_and_survive_legacy_save(self):
+        source = copy.deepcopy(self.data)
+        submitted = self.submitted("assets/people/default-male.svg")
+        paper = dict(id="doi:10.1234/test", title="Paper", authors="Author", venue="Venue", year=2026,
+                     kind="conference", tier="Unrated", selected=True, doi="10.1234/test", url="", pdf_url="", bibtex="")
+        for lang in ("en", "zh"):
+            submitted[lang].update(orcid="https://orcid.org/0000-0001-6029-5064", publications=[paper])
+        updated = faculty.merge(source, submitted)
+        validate(updated)
+        self.assertEqual(faculty.own_record(updated, "en")["orcid"], "0000-0001-6029-5064")
+        self.assertEqual(updated["en"]["publications"], source["en"]["publications"])
+        legacy = faculty.merge(updated, self.submitted("assets/people/default-female.svg"))
+        self.assertEqual(faculty.own_record(legacy, "en")["publications"], [paper])
+        self.assertEqual(legacy["en"]["recruitment"], source["en"]["recruitment"])
+
     def test_recruitment_can_be_edited_before_faculty_photo_exists(self):
         source = copy.deepcopy(self.data)
         recruitment = {lang: copy.deepcopy(source[lang]["recruitment"]) for lang in ("en", "zh")}
