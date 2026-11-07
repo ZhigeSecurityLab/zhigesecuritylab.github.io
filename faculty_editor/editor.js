@@ -49,14 +49,14 @@ function renderPapers(){
     for(const p of group){
       const details=document.createElement('details');details.className='paper-card';const summary=document.createElement('summary');
       const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.checked=p.selected;
-      checkbox.addEventListener('click',e=>e.stopPropagation());checkbox.addEventListener('change',async()=>{p.selected=checkbox.checked;modified('profile');if(p.selected&&p.doi&&(!p.bibtex||!p.pdf_url)){checkbox.disabled=true;try{Object.assign(p,await api('/api/publication',{publication:p}));modified('profile');renderPapers();}catch(error){message(error.message);}finally{checkbox.disabled=false;}}});
+      checkbox.addEventListener('click',e=>e.stopPropagation());checkbox.addEventListener('change',async()=>{p.selected=checkbox.checked;modified('profile');if(p.selected&&(!p.bibtex||!p.pdf_url)){checkbox.disabled=true;try{Object.assign(p,await api('/api/publication',{publication:p}));modified('profile');renderPapers();}catch(error){message(error.message);}finally{checkbox.disabled=false;}}});
       const title=document.createElement('span');title.textContent=` ${p.year} · ${p.title} · ${p.tier}`;summary.append(checkbox,title);details.append(summary);
       const grid=document.createElement('div');grid.className='columns';
       for(const [key,label,choices] of [['kind','类型',[['conference','会议'],['journal','期刊'],['other','其他']]],['tier','层次（本人确认）',[['A','A'],['B','B'],['C','C'],['Unrated','未分级']]]]){
         const labelEl=document.createElement('label');labelEl.textContent=label;const select=document.createElement('select');for(const [value,text] of choices){const option=new Option(text,value);select.add(option);}select.value=p[key];select.addEventListener('change',()=>{p[key]=select.value;modified('profile');renderPapers();});labelEl.append(select);grid.append(labelEl);
       }
       for(const [key,label] of [['title','论文标题'],['authors','作者'],['venue','会议／期刊'],['year','年份'],['url','论文页面链接'],['pdf_url','PDF 链接（可补充）']])grid.append(paperField(label,p[key],value=>p[key]=key==='year'?Number(value):value));
-      details.append(grid,paperField('BibTeX（支持编辑与复制）',p.bibtex,value=>p.bibtex=value,true));
+      if(p.bibtex_source){const note=document.createElement('p');note.className='hint';note.textContent='此 BibTeX 根据公开元数据生成，请核对作者与字段。';details.append(note);}details.append(grid,paperField('BibTeX（支持编辑与复制）',p.bibtex,value=>p.bibtex=value,true));
       const enrich=document.createElement('button');enrich.type='button';enrich.textContent='获取／补全 BibTeX、PDF 与元数据';enrich.addEventListener('click',async()=>{enrich.disabled=true;try{Object.assign(p,await api('/api/publication',{publication:p}));modified('profile');renderPapers();message(p.pdf_url&&p.bibtex?'已获取，可检查后保存。':'已尝试获取；缺失内容可手工补充。',true);}catch(error){message(error.message);}finally{enrich.disabled=false;}});details.append(enrich);root.append(details);
     }
   }

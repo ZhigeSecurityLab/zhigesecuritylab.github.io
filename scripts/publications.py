@@ -84,7 +84,7 @@ def enrich(item):
     """Only fixed DOI resolver/Crossref endpoints, never fetch user-supplied PDF URLs."""
     doi = item.get('doi', '')
     if not isinstance(doi, str) or not re.fullmatch(r'10\.\d{4,9}/\S{1,500}', doi):
-        return item
+        return fallback_bibtex(item)
     encoded = quote(doi, safe='')
     try:
         data = request('https://api.crossref.org/works/' + encoded)['message']
@@ -101,6 +101,20 @@ def enrich(item):
             item['bibtex'] = request('https://doi.org/' + encoded, 'application/x-bibtex')
         except Exception:
             pass
+    return fallback_bibtex(item)
+
+
+def fallback_bibtex(item):
+    if item.get('bibtex'):
+        return item
+    def escape(value):
+        return str(value).replace('\\', r'\textbackslash{}').replace('{', r'\{').replace('}', r'\}').replace('&', r'\&').replace('%', r'\%').replace('_', r'\_')
+    kind = {'conference': 'inproceedings', 'journal': 'article'}.get(item.get('kind'), 'misc')
+    fields = [('title', item.get('title')), ('author', item.get('authors', '').replace(', ', ' and ')),
+              ('year', item.get('year')), ('booktitle' if kind == 'inproceedings' else 'journal', item.get('venue')),
+              ('doi', item.get('doi')), ('url', item.get('url'))]
+    item['bibtex'] = '@' + kind + '{zhige' + str(item.get('year', '')) + ',\n' + ',\n'.join('  ' + key + ' = {' + escape(value) + '}' for key, value in fields if value) + '\n}'
+    item['bibtex_source'] = 'Generated from public metadata; please verify author names and fields.'
     return item
 
 

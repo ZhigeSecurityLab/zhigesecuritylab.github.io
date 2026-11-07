@@ -33,6 +33,8 @@ class PublicationsTests(unittest.TestCase):
         with patch.object(p,'request',side_effect=OSError('offline')):
             result=p.enrich(paper)
         self.assertEqual(result['pdf_url'],'')
+        self.assertIn('@inproceedings',result['bibtex'])
+        self.assertIn('bibtex_source',result)
         self.assertIn('PDF unavailable',publication_list([result],'en'))
 
     def test_normalization_and_dedup(self):
