@@ -35,7 +35,7 @@
         "name": "Faculty Publications Test — Windows",
         "role": "Professor",
         "url": "",
-        "bio_markdown": "## ORCID maintenance test\n\nTest fixture based on publicly available publications of Yansong Gao. Not the test account’s own research.",
+        "bio_markdown": "## ORCID maintenance test\n\nTest fixture based on publicly available publications of Yansong Gao. Not the test account’s own research.\n\nFinal Windows v1.2.0 package: authenticated fresh synchronization, local preview and test-only push verified.",
         "description": "",
         "orcid": "0000-0001-6029-5064",
         "publications": [
@@ -2008,7 +2008,7 @@
             "selected": false
           }
         ],
-        "avatar": "assets/people/default-female.svg"
+        "avatar": "assets/people/default-male.svg"
       }
     ],
     "recruitment": {
@@ -4017,7 +4017,7 @@
             "selected": false
           }
         ],
-        "avatar": "assets/people/default-female.svg"
+        "avatar": "assets/people/default-male.svg"
       }
     ],
     "recruitment": {
