@@ -47,6 +47,13 @@ class FacultyEditorTests(unittest.TestCase):
         self.assertEqual(faculty.own_record(legacy, "en")["publications"], [paper])
         self.assertEqual(legacy["en"]["recruitment"], source["en"]["recruitment"])
 
+    def test_authorized_faculty_sync_prefers_current_api_over_cdn(self):
+        remote = {"content": base64.b64encode(json.dumps(self.data).encode()).decode()}
+        with patch.object(faculty, "STUDENT", False), patch.object(faculty, "gh", return_value=remote) as request, patch.object(faculty, "urlopen") as raw:
+            self.assertEqual(faculty.fetch_remote(), self.data)
+            self.assertIn("contents/content/site.json", request.call_args.args[0][1])
+            raw.assert_not_called()
+
     def test_recruitment_can_be_edited_before_faculty_photo_exists(self):
         source = copy.deepcopy(self.data)
         recruitment = {lang: copy.deepcopy(source[lang]["recruitment"]) for lang in ("en", "zh")}

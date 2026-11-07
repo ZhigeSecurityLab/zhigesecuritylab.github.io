@@ -296,6 +296,11 @@ def fetch_remote():
     api_path = f"repos/{REPO}/contents/content/site.json?ref={BRANCH}"
     if STUDENT:
         return json.loads(base64.b64decode(gh(["api", api_path])["content"]))
+    # Once authorized, prefer the contents API over the raw CDN (which can lag a recent push).
+    try:
+        return json.loads(base64.b64decode(gh(["api", api_path])["content"]))
+    except (RuntimeError, FileNotFoundError, subprocess.TimeoutExpired):
+        pass
     endpoint = f"https://raw.githubusercontent.com/{REPO}/{BRANCH}/content/site.json"
     with urlopen(Request(endpoint, headers={"User-Agent": "Zhige-faculty-editor"}), timeout=20, context=SSL_CONTEXT) as response:
         return json.load(response)
