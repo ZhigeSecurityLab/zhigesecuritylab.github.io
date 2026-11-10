@@ -3,8 +3,8 @@ let works=[], orcid='', state, profile, recruitment, facultyLang='en', recruitme
 let profileDirty=false, recruitmentDirty=false, busy=false, previewTimer, connectionWaiting=false;
 const $=id=>document.getElementById(id);
 const templates={
-  en:'## Biography\n\nWrite a short introduction.\n\n## Research Interests\n\n- Research topic 1\n- Research topic 2\n\n## Selected Publications\n\n- Add representative publications with links.\n\n## Projects and Service\n\nDescribe projects, awards, or academic service if relevant.\n\n## Contact\n\nAdd a public contact method if desired.\n',
-  zh:'## 个人简介\n\n在这里填写简短介绍。\n\n## 研究方向\n\n- 研究方向一\n- 研究方向二\n\n## 代表性论文\n\n- 添加论文及链接。\n\n## 项目与学术服务\n\n根据需要填写项目、荣誉或学术服务。\n\n## 联系方式\n\n根据需要填写公开联系方式。\n'
+  en:'## Biography\n\nWrite a short introduction.\n\n## Research Interests\n\n- Research topic 1\n- Research topic 2\n\n## Projects and Service\n\nDescribe projects, awards, or academic service if relevant.\n\n## Contact\n\nAdd a public contact method if desired.\n',
+  zh:'## 个人简介\n\n在这里填写简短介绍。\n\n## 研究方向\n\n- 研究方向一\n- 研究方向二\n\n## 项目与学术服务\n\n根据需要填写项目、荣誉或学术服务。\n\n## 联系方式\n\n根据需要填写公开联系方式。\n'
 };
 function message(text,ok=false){$('message').textContent=text;$('message').className=ok?'success':'';}
 function modified(section){if(section==='profile')profileDirty=true;else recruitmentDirty=true;message('有尚未保存的修改。');}
