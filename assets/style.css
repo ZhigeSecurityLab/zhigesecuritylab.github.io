@@ -647,3 +647,26 @@ html[lang="zh-CN"] h1, html[lang="zh-CN"] h2, html[lang="zh-CN"] h3 { font-famil
 .faculty-publications{margin-top:2rem}.publication-actions details{margin-top:.7rem}.publication-actions pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.85em;padding:1rem;background:var(--bg)}.publication-actions summary{cursor:pointer;color:#CA9429}
 
 .publication-actions{display:flex;flex-wrap:wrap;gap:.65rem 1.2rem}.publication-actions details{flex-basis:100%;min-width:0}
+
+/* Subdued SEU watermark; original official source asset is unchanged. */
+body { position:relative; isolation:isolate; }
+body::before {
+  content:""; position:fixed; width:min(64vw,820px); aspect-ratio:1;
+  right:clamp(-110px,-5vw,-35px); bottom:-145px;
+  background:url("seu-watermark.png") center/contain no-repeat;
+  filter:grayscale(1); opacity:.055; mix-blend-mode:multiply;
+  pointer-events:none; z-index:-1;
+}
+:root[data-theme="dark"] body::before {
+  filter:grayscale(1) invert(1); opacity:.065; mix-blend-mode:screen;
+}
+@media(prefers-color-scheme:dark) {
+  :root:not([data-theme="light"]) body::before {
+    filter:grayscale(1) invert(1); opacity:.065; mix-blend-mode:screen;
+  }
+}
+@media(max-width:760px) {
+  body::before { width:490px; right:-220px; bottom:-110px; opacity:.04; }
+  :root[data-theme="dark"] body::before { opacity:.05; }
+}
+@media print { body::before { display:none; } }
