@@ -2,7 +2,7 @@ import copy
 import unittest
 from unittest.mock import patch
 import publications as p
-from build import publication_list
+from build import publication_list, members, section_content, people_content, ROOT
 
 class PublicationsTests(unittest.TestCase):
     def paper(self):
@@ -45,3 +45,19 @@ class PublicationsTests(unittest.TestCase):
         self.assertEqual(len(result['works']),1)
         self.assertEqual(result['works'][0]['kind'],'journal')
         self.assertFalse(result['works'][0]['selected'])
+
+    def test_selected_papers_only_appear_on_publications_page(self):
+        import json
+        data=json.loads((ROOT/'content/site.json').read_text())
+        paper=dict(self.paper(),title='Dedicated publications visibility regression')
+        for lang in ('en','zh'):
+            person=data[lang]['people'][0]
+            person['publications']=[copy.deepcopy(paper)]
+            postdoc=copy.deepcopy(person);postdoc['category']='postdocs';postdoc['github_username']='visibility-postdoc';data[lang]['people'].append(postdoc)
+            self.assertNotIn(paper['title'],members(data,lang,'faculty'))
+            self.assertNotIn(paper['title'],members(data,lang,'postdocs'))
+            self.assertNotIn(paper['title'],people_content(data,lang,None))
+            public=section_content(data,lang,'publications')
+            self.assertEqual(public.count(paper['title']),1)
+            self.assertIn('paper.pdf',public)
+            self.assertIn('BibTeX',public)

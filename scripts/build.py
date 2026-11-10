@@ -172,8 +172,7 @@ def members(data, lang, category):
                        if rich else f'<p class="person-description">{e(person.get("description", ""))}</p>')
         orcid = person.get("orcid", "")
         identity = f'<p><a href="https://orcid.org/{e(orcid)}" target="_blank" rel="noopener">ORCID: {e(orcid)}</a></p>' if orcid else ''
-        papers = publication_list(person.get("publications", []), lang) if rich else ''
-        rows += f'<li class="person"><img class="person-avatar" src="/{e(person["avatar"])}" alt="" loading="lazy"><div><h3>{name}</h3><p class="muted">{e(person["role"])}</p>{identity}{description}{papers}</div></li>'
+        rows += f'<li class="person"><img class="person-avatar" src="/{e(person["avatar"])}" alt="" loading="lazy"><div><h3>{name}</h3><p class="muted">{e(person["role"])}</p>{identity}{description}</div></li>'
     return f'<ul class="plain-list people-list">{rows}</ul>'
 
 
