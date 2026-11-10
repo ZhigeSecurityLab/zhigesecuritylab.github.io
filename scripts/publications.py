@@ -6,6 +6,7 @@ import ssl
 from urllib.request import Request, urlopen
 from urllib.parse import quote
 import certifi
+from ccf import classify
 
 CONTEXT = ssl.create_default_context(cafile=certifi.where())
 TIERS = ('A', 'B', 'C', 'Unrated')
@@ -50,11 +51,11 @@ def normalize(work, oid):
     citation = work.get('citation') or {}
     bib = citation.get('citation-value', '') if citation.get('citation-type') == 'bibtex' else ''
     url = val(work.get('url'))
-    return {'id': 'doi:' + doi if doi else 'orcid:' + oid + ':' + str(work['put-code']),
+    return classify({'id': 'doi:' + doi if doi else 'orcid:' + oid + ':' + str(work['put-code']),
             'title': title, 'year': year, 'authors': authors, 'venue': val(work.get('journal-title')),
             'kind': kind, 'tier': 'Unrated', 'doi': doi, 'url': 'https://doi.org/' + doi if doi else url,
             'pdf_url': url if re.search(r'\.pdf(?:[?#]|$)', url, re.I) else '', 'bibtex': bib,
-            'orcid': oid, 'put_code': work['put-code'], 'selected': False}
+            'orcid': oid, 'put_code': work['put-code'], 'selected': False})
 
 
 def sync(value):
@@ -84,7 +85,7 @@ def enrich(item):
     """Only fixed DOI resolver/Crossref endpoints, never fetch user-supplied PDF URLs."""
     doi = item.get('doi', '')
     if not isinstance(doi, str) or not re.fullmatch(r'10\.\d{4,9}/\S{1,500}', doi):
-        return fallback_bibtex(item)
+        return classify(fallback_bibtex(item))
     encoded = quote(doi, safe='')
     try:
         data = request('https://api.crossref.org/works/' + encoded)['message']
@@ -101,7 +102,7 @@ def enrich(item):
             item['bibtex'] = request('https://doi.org/' + encoded, 'application/x-bibtex')
         except Exception:
             pass
-    return fallback_bibtex(item)
+    return classify(fallback_bibtex(item))
 
 
 def fallback_bibtex(item):

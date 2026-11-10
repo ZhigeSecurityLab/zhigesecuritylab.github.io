@@ -44,7 +44,7 @@ class FacultyEditorTests(unittest.TestCase):
         self.assertEqual(faculty.own_record(updated, "en")["orcid"], "0000-0001-6029-5064")
         self.assertEqual(updated["en"]["publications"], source["en"]["publications"])
         legacy = faculty.merge(updated, self.submitted("assets/people/default-female.svg"))
-        self.assertEqual(faculty.own_record(legacy, "en")["publications"], [paper])
+        self.assertEqual(faculty.own_record(legacy, "en")["publications"][0]["id"], paper["id"])
         self.assertEqual(legacy["en"]["recruitment"], source["en"]["recruitment"])
 
     def test_authorized_faculty_sync_prefers_current_api_over_cdn(self):

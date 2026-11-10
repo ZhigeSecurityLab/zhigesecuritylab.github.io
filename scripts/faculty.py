@@ -210,6 +210,8 @@ def merge(data, submitted=None, recruitment=None):
                 for key, default in (("orcid", ""), ("publications", [])):
                     if key in source:
                         record[key] = (publications.orcid_id(source[key]) if source[key] else "") if key == "orcid" else copy.deepcopy(source[key])
+                for paper in record.get("publications", []):
+                    publications.classify(paper)
                 publications.validate_profile(record)
             record["category"] = category
             record["avatar"] = avatar
@@ -256,7 +258,7 @@ def current_state():
             "category": category, "category_locked": bool(locked),
             "categories": categories, "student": STUDENT,
             "recruitment": {lang: data[lang]["recruitment"] for lang in ("en", "zh")},
-            "orcid": p["en"].get("orcid", ""), "publications": p["en"].get("publications", []),
+            "orcid": p["en"].get("orcid", ""), "publications": [publications.classify(copy.deepcopy(paper)) for paper in p["en"].get("publications", [])],
             "owner": OWNER, "branch": BRANCH, "revision": admin.revision(raw), "token": TOKEN}
 
 

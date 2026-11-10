@@ -1,0 +1,4222 @@
+{
+  "edition": "CCF 第七版（2026，2026-04-09 勘误）",
+  "checked": "2026-11-10",
+  "source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/2026-03-31/870181.shtml",
+  "pdf_sha256": "271b630b576bf8a4f802e767f5694caded93680e22b3a19bef7902591c45c1d3",
+  "records": [
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TOCS",
+      "name": "ACMTransactionsonComputerSystems",
+      "page": 2
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TOS",
+      "name": "ACMTransactionsonStorage",
+      "page": 2
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TCAD",
+      "name": "IEEETransactionsonComputer-AidedDesignofIntegratedCircuitsandSystems",
+      "page": 2
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TC",
+      "name": "IEEETransactionsonComputers",
+      "page": 2
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TPDS",
+      "name": "IEEETransactionsonParallelandDistributedSystems",
+      "page": 2
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TACO",
+      "name": "ACMTransactionsonArchitectureandCodeOptimization",
+      "page": 2
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TAAS",
+      "name": "ACMTransactionsonAutonomousandAdaptiveSystems",
+      "page": 3
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TODAES",
+      "name": "ACMTransactionsonDesignAutomationofElectronicSystems",
+      "page": 3
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TECS",
+      "name": "ACMTransactionsonEmbeddedComputingSystems",
+      "page": 3
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TRETS",
+      "name": "ACMTransactionsonReconfigurableTechnologyandSystems",
+      "page": 3
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TVLSI",
+      "name": "IEEETransactionsonVeryLargeScaleIntegration(VLSI)Systems",
+      "page": 3
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "JPDC",
+      "name": "JournalofParallelandDistributedComputing",
+      "page": 3
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "JSA",
+      "name": "JournalofSystemsArchitecture:EmbeddedSoftwareDesign",
+      "page": 3
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "ParallelComputing",
+      "page": 3
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "PerformanceEvaluation:AnInternationalJournal",
+      "page": 3
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TCC",
+      "name": "IEEETransactionsonCloudComputing",
+      "page": 3
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JETC",
+      "name": "ACMJournalonEmergingTechnologiesinComputingSystems",
+      "page": 4
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "ConcurrencyandComputation:PracticeandExperience",
+      "page": 4
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "DC",
+      "name": "DistributedComputing",
+      "page": 4
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "FGCS",
+      "name": "FutureGenerationComputerSystems",
+      "page": 4
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "Integration",
+      "name": "Integration,theVLSIJournal",
+      "page": 4
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JETTA",
+      "name": "JournalofElectronicTesting-TheoryandApplications",
+      "page": 4
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JGC",
+      "name": "JournalofGridcomputing",
+      "page": 4
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "RTS",
+      "name": "Real-TimeSystems",
+      "page": 4
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TJSC",
+      "name": "TheJournalofSupercomputing",
+      "page": 4
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TCASI",
+      "name": "IEEETransactionsonCircuitsandSystemsI:RegularPapers",
+      "page": 4
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TSUSC",
+      "name": "IEEETransactionsonSustainableComputing",
+      "page": 4
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "PPoPP",
+      "name": "ACMSIGPLANSymposiumonPrinciples&PracticeofParallelProgramming",
+      "page": 5
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "FAST",
+      "name": "USENIXConferenceonFileandStorageTechnologies",
+      "page": 5
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "DAC",
+      "name": "DesignAutomationConference",
+      "page": 5
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "HPCA",
+      "name": "IEEEInternationalSymposiumonHighPerformanceComputerArchitecture",
+      "page": 5
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "MICRO",
+      "name": "IEEE/ACMInternationalSymposiumonMicroarchitecture",
+      "page": 5
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "SC",
+      "name": "InternationalConferenceforHighPerformanceComputing,Networking,Storage,andAnalysis",
+      "page": 5
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "ASPLOS",
+      "name": "InternationalConferenceonArchitecturalSupportforProgrammingLanguagesandOperatingSystems",
+      "page": 5
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "ISCA",
+      "name": "InternationalSymposiumonComputerArchitecture",
+      "page": 5
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "ACMSIGOPSATC（原USENIXATC）",
+      "name": "ACMSIGOPSAnnualTechnicalConference",
+      "page": 5
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "EuroSys",
+      "name": "EuropeanConferenceonComputerSystems",
+      "page": 5
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "HPDC",
+      "name": "TheInternationalACMSymposiumonHigh-PerformanceParallelandDistributedComputing",
+      "page": 5
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "SoCC",
+      "name": "ACMSymposiumonCloudComputing",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "SPAA",
+      "name": "ACMSymposiumonParallelisminAlgorithmsandArchitectures",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "PODC",
+      "name": "ACMSymposiumonPrinciplesofDistributedComputing",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "FPGA",
+      "name": "ACM/SIGDAInternationalSymposiumonField-ProgrammableGateArrays",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CGO",
+      "name": "TheInternationalSymposiumonCodeGenerationandOptimization",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "DATE",
+      "name": "Design,Automation&TestinEurope",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "HOTCHIPS",
+      "name": "HotChips:ASymposiumonHighPerformanceChips",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CLUSTER",
+      "name": "IEEEInternationalConferenceonClusterComputing",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICCD",
+      "name": "InternationalConferenceonComputerDesign",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICCAD",
+      "name": "InternationalConferenceonComputer-AidedDesign",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICDCS",
+      "name": "IEEEInternationalConferenceonDistributedComputingSystems",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CODES+ISSS",
+      "name": "InternationalConferenceonHardware/SoftwareCo-designandSystemSynthesis",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "HiPEAC",
+      "name": "InternationalConferenceonHighPerformanceandEmbeddedArchitecturesandCompilers",
+      "page": 6
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "SIG-METRICS",
+      "name": "InternationalConferenceonMeasurementandModelingofComputerSystems",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "PACT",
+      "name": "InternationalConferenceonParallelArchitecturesandCompilationTechniques",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICPP",
+      "name": "InternationalConferenceonParallelProcessing",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICS",
+      "name": "InternationalConferenceonSupercomputing",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "VEE",
+      "name": "InternationalConferenceonVirtualExecutionEnvironments",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "IPDPS",
+      "name": "IEEEInternationalParallel&DistributedProcessingSymposium",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "Performance",
+      "name": "InternationalSymposiumonComputerPerformance,Modeling,MeasurementsandEvaluation",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ITC",
+      "name": "InternationalTestConference",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "LISA",
+      "name": "LargeInstallationSystemAdministrationConference",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "MSST",
+      "name": "MassStorageSystemsandTechnologies",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "RTAS",
+      "name": "IEEEReal-TimeandEmbeddedTechnologyandApplicationsSymposium",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "Euro-Par",
+      "name": "EuropeanConferenceonParallelandDistributedComputingSpringer",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ISCAS",
+      "name": "IEEEInternationalSymposiumonCircuitsandSystems",
+      "page": 7
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CF",
+      "name": "ACMInternationalConferenceonComputingFrontiers",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SYSTOR",
+      "name": "ACMInternationalSystemsandStorageConference",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "NOCS",
+      "name": "ACM/IEEEInternationalSymposiumonNetworks-on-Chip",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ASAP",
+      "name": "IEEEInternationalConferenceonApplication-SpecificSystems,Architectures,andProcessors",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ASP-DAC",
+      "name": "AsiaandSouthPacificDesignAutomationConference",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ETS",
+      "name": "IEEEEuropeanTestSymposium",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "FPL",
+      "name": "InternationalConferenceonField-ProgrammableLogicandApplications",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "FCCM",
+      "name": "IEEESymposiumonField-ProgrammableCustomComputingMachines",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "GLSVLSI",
+      "name": "GreatLakesSymposiumonVLSI",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ATS",
+      "name": "IEEEAsianTestSymposium",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "HPCC",
+      "name": "IEEEInternationalConferenceonHighPerformanceComputingandCommunications",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "HiPC",
+      "name": "IEEEInternationalConferenceonHighPerformanceComputing,DataandAnalytics",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "MASCOTS",
+      "name": "InternationalSymposiumonModeling,Analysis,andSimulationofComputerandTelecommunicationSystems",
+      "page": 8
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ISPA",
+      "name": "IEEEInternationalSymposiumonParallelandDistributedProcessingwithApplications",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CCGRID",
+      "name": "IEEE/ACMInternationalSymposiumonCluster,CloudandGridComputing",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "NPC",
+      "name": "IFIPInternationalConferenceonNetworkandParallelComputing",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICA3PP",
+      "name": "InternationalConferenceonAlgorithmsandArchitecturesforParallelProcessing",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CASES",
+      "name": "InternationalConferenceonCompilers,Architectures,andSynthesisforEmbeddedSystems",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "FPT",
+      "name": "InternationalConferenceonField-ProgrammableTechnology",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICPADS",
+      "name": "InternationalConferenceonParallelandDistributedSystems",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ISLPED",
+      "name": "InternationalSymposiumonLowPowerElectronicsandDesign",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ISPD",
+      "name": "InternationalSymposiumonPhysicalDesign",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "HOTI",
+      "name": "IEEESymposiumonHigh-PerformanceInterconnects",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "VTS",
+      "name": "IEEEVLSITestSymposium",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ITC-Asia",
+      "name": "InternationalTestConferenceinAsia",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SEC",
+      "name": "ACM/IEEESymposiumonEdgeComputing",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "NAS",
+      "name": "InternationalConferenceonNetworking,ArchitectureandStorages",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "HotStorage",
+      "name": "HotStorage",
+      "page": 9
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "APPT",
+      "name": "InternationalSymposiumonAdvancedParallelProcessingTechnology",
+      "page": 9
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "JSAC",
+      "name": "IEEEJournalonSelectedAreasinCommunications",
+      "page": 10
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TMC",
+      "name": "IEEETransactionsonMobileComputing",
+      "page": 10
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TON",
+      "name": "IEEETransactionsonNetworking（原IEEE/ACMTransactionsonNetworking）",
+      "page": 10
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TOIT",
+      "name": "ACMTransactionsonInternetTechnology",
+      "page": 11
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TOMM",
+      "name": "ACMTransactionsonMultimediaComputing,CommunicationsandApplications",
+      "page": 11
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TOSN",
+      "name": "ACMTransactionsonSensorNetworks",
+      "page": 11
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "CN",
+      "name": "ComputerNetworks",
+      "page": 11
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TCOM",
+      "name": "IEEETransactionsonCommunications",
+      "page": 11
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TWC",
+      "name": "IEEETransactionsonWirelessCommunications",
+      "page": 11
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "AdHocNetworks",
+      "page": 12
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "CC",
+      "name": "ComputerCommunications",
+      "page": 12
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TNSM",
+      "name": "IEEETransactionsonNetworkandServiceManagement",
+      "page": 12
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "IETCommunications",
+      "page": 12
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JNCA",
+      "name": "JournalofNetworkandComputerApplications",
+      "page": 12
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "MONET",
+      "name": "MobileNetworksandApplications",
+      "page": 12
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "Networks",
+      "page": 12
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "PPNA",
+      "name": "Peer-to-PeerNetworkingandApplications",
+      "page": 12
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "WCMC",
+      "name": "WirelessCommunicationsandMobileComputing",
+      "page": 12
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "WirelessNetworks",
+      "page": 12
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IOT",
+      "name": "IEEEInternetofThingsJournal",
+      "page": 12
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TIOT",
+      "name": "ACMTransactionsonInternetofThings",
+      "page": 12
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "SIGCOMM",
+      "name": "ACMInternationalConferenceonApplications,Technologies,Architectures,andProtocolsforComputerCommunication",
+      "page": 13
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "MobiCom",
+      "name": "ACMInternationalConferenceonMobileComputingandNetworking",
+      "page": 13
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "INFOCOM",
+      "name": "IEEEInternationalConferenceonComputerCommunications",
+      "page": 13
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "NSDI",
+      "name": "SymposiumonNetworkSystemDesignandImplementation",
+      "page": 13
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "SenSys",
+      "name": "ACMConferenceonEmbeddedNetworkedSensorSystems",
+      "page": 14
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CoNEXT",
+      "name": "ACMInternationalConferenceonEmergingNetworkingExperimentsandTechnologies",
+      "page": 14
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "SECON",
+      "name": "IEEEInternationalConferenceonSensing,Communication,andNetworking",
+      "page": 14
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "IPSN",
+      "name": "InternationalConferenceonInformationProcessinginSensorNetworks",
+      "page": 14
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "MobiSys",
+      "name": "ACMInternationalConferenceonMobileSystems,Applications, andServices",
+      "page": 14
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICNP",
+      "name": "IEEEInternationalConferenceonNetworkProtocols",
+      "page": 14
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "MobiHoc",
+      "name": "InternationalSymposiumonTheory,AlgorithmicFoundations, andProtocolDesignforMobileNetworksandMobile Computing IEEE/",
+      "page": 14
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "NOSSDAV",
+      "name": "InternationalWorkshoponNetworkandOperatingSystemSupportforDigitalAudioandVideo",
+      "page": 14
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "IWQoS",
+      "name": "IEEE/ACMInternationalWorkshoponQualityofService",
+      "page": 14
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ANCS",
+      "name": "ACM/IEEESymposiumonArchitecturesforNetworkingandCommunicationSystems",
+      "page": 15
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "FORTE",
+      "name": "InternationalConferenceonFormalTechniquesforDistributed Objects,Components,andSystems",
+      "page": 15
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "LCN",
+      "name": "IEEEConferenceonLocalComputerNetworks",
+      "page": 15
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "GLOBECOM",
+      "name": "IEEEGlobalCommunicationsConference",
+      "page": 15
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICC",
+      "name": "IEEEInternationalConferenceonCommunications",
+      "page": 15
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICCCN",
+      "name": "IEEEInternationalConferenceonComputerCommunicationsandNetworks",
+      "page": 15
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "MASS",
+      "name": "IEEEInternationalConferenceonMobileAdhocandSensorSystems",
+      "page": 15
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "P2P",
+      "name": "IEEEInternationalConferenceonPeer-to-PeerComputing",
+      "page": 15
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "IPCCC",
+      "name": "IEEEInternationalPerformanceComputingandCommunicationsConference",
+      "page": 15
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "WoWMoM",
+      "name": "IEEEInternationalSymposiumonaWorldofWireless,MobileandMultimediaNetworks",
+      "page": 15
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ISCC",
+      "name": "IEEESymposiumonComputersandCommunications",
+      "page": 15
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "WCNC",
+      "name": "IEEEWirelessCommunicationsandNetworkingConference",
+      "page": 15
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "MSN",
+      "name": "InternationalConferenceonMobility,SensingandNetworking",
+      "page": 16
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "MSWiM",
+      "name": "InternationalConferenceonModeling,AnalysisandSimulationofWirelessandMobileSystems",
+      "page": 16
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "WASA",
+      "name": "TheInternationalConferenceonWirelessArtificialIntelligentComputingSystemsandApplications",
+      "page": 16
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "HotNets",
+      "name": "ACMTheWorkshoponHotTopicsinNetworks",
+      "page": 16
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "APNet",
+      "name": "Asia-PacificWorkshoponNetworking",
+      "page": 16
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TDSC",
+      "name": "IEEETransactionsonDependableandSecureComputing",
+      "page": 17
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TIFS",
+      "name": "IEEETransactionsonInformationForensicsandSecurity",
+      "page": 17
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "",
+      "name": "JournalofCryptology",
+      "page": 17
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TOPS",
+      "name": "ACMTransactionsonPrivacyandSecurity",
+      "page": 18
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "Computers&Security",
+      "page": 18
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "Designs,CodesandCryptography",
+      "page": 18
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "JCS",
+      "name": "JournalofComputerSecurity",
+      "page": 18
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "Cybersecurity",
+      "name": "Cybersecurity",
+      "page": 18
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "CLSR",
+      "name": "ComputerLaw&SecurityReview",
+      "page": 19
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "EURASIPJournalonInformationSecurity",
+      "page": 19
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "IETInformationSecurity",
+      "page": 19
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IMCS",
+      "name": "InformationandComputerSecurity",
+      "page": 19
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IJICS",
+      "name": "InternationalJournalofInformationandComputerSecurity",
+      "page": 19
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IJISP",
+      "name": "InternationalJournalofInformationSecurityandPrivacy",
+      "page": 19
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JISA",
+      "name": "JournalofInformationSecurityandApplications",
+      "page": 19
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "SCN",
+      "name": "SecurityandCommunicationNetworks",
+      "page": 19
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "HCC",
+      "name": "High-ConfidenceComputing",
+      "page": 19
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "CCS",
+      "name": "ACMConferenceonComputerandCommunicationsSecurity",
+      "page": 20
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "EUROCRYPT",
+      "name": "InternationalConferenceontheTheoryandApplicationsof CryptographicTechniques",
+      "page": 20
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "S&P",
+      "name": "IEEESymposiumonSecurityandPrivacy",
+      "page": 20
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "CRYPTO",
+      "name": "InternationalCryptologyConference",
+      "page": 20
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "USENIXSecurity",
+      "name": "USENIXSecuritySymposium",
+      "page": 20
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "NDSS",
+      "name": "NetworkandDistributedSystemSecuritySymposium",
+      "page": 20
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ACSAC",
+      "name": "AnnualComputerSecurityApplicationsConference",
+      "page": 21
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ASIACRYPT",
+      "name": "AnnualInternationalConferenceontheTheoryandApplicationofCryptologyandInformationSecurity",
+      "page": 21
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ESORICS",
+      "name": "EuropeanSymposiumonResearchinComputerSecurity",
+      "page": 21
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "FSE",
+      "name": "FastSoftwareEncryption",
+      "page": 21
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CSFW",
+      "name": "IEEEComputerSecurityFoundationsWorkshop",
+      "page": 21
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "SRDS",
+      "name": "IEEEInternationalSymposiumonReliableDistributedSystems",
+      "page": 21
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CHES",
+      "name": "InternationalConferenceonCryptographicHardwareandEmbeddedSystems",
+      "page": 21
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "DSN",
+      "name": "InternationalConferenceonDependableSystemsandNetworks",
+      "page": 21
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "RAID",
+      "name": "InternationalSymposiumonRecentAdvancesinIntrusionDetection",
+      "page": 21
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "PKC",
+      "name": "InternationalWorkshoponPracticeandTheoryinPublicKeyCryptography",
+      "page": 21
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "TCC",
+      "name": "TheoryofCryptographyConference",
+      "page": 21
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "WiSec",
+      "name": "ACMConferenceonSecurityandPrivacyinWirelessandMobileNetworks",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SACMAT",
+      "name": "ACMSymposiumonAccessControlModelsandTechnologies",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "DRM",
+      "name": "ACMWorkshoponDigitalRightsManagement",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "IH&MMSec",
+      "name": "ACMWorkshoponInformationHidingandMultimediaSecurity",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ACNS",
+      "name": "InternationalConferenceonAppliedCryptographyandNetworkSecurity",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "AsiaCCS",
+      "name": "ACMAsiaConferenceonComputerandCommunicationsSecurity",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ACISP",
+      "name": "AustralasiaConferenceonInformationSecurityandPrivacy",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CT-RSA",
+      "name": "TheCryptographer'sTrackatRSAConference",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "DIMVA",
+      "name": "ConferenceonDetectionofIntrusionsandMalware&VulnerabilityAssessment",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "DFRWS",
+      "name": "DigitalForensicResearchWorkshop",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "FC",
+      "name": "FinancialCryptographyandDataSecurity",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "TrustCom",
+      "name": "IEEEInternationalConferenceonTrust,SecurityandPrivacyinComputingandCommunications",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SEC",
+      "name": "IFIPInternationalInformationSecurityConference",
+      "page": 22
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "IFIPWG11.9",
+      "name": "IFIPWorkingGroup11.9InternationalConferenceonDigitalForensics",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ISC",
+      "name": "InformationSecurityConference",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICDF2C",
+      "name": "InternationalConferenceonDigitalForensics&CyberCrime",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICICS",
+      "name": "InternationalConferenceonInformationandCommunicationsSecurity",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SecureComm",
+      "name": "InternationalConferenceonSecurityandPrivacyinCommunicationNetworks",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "NSPW",
+      "name": "NewSecurityParadigmsWorkshop",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "PAM",
+      "name": "PassiveandActiveMeasurementConference",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "PETS",
+      "name": "PrivacyEnhancingTechnologiesSymposium",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SAC",
+      "name": "SelectedAreasinCryptography",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SOUPS",
+      "name": "SymposiumOnUsablePrivacyandSecurity",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "HotSec",
+      "name": "USENIXWorkshoponHotTopicsinSecurity",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "EuroS&P",
+      "name": "IEEEEuropeanSymposiumonSecurityandPrivacy",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "Inscrypt",
+      "name": "InternationalConferenceonInformationSecurityandCryptology",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CODASPY",
+      "name": "ConferenceonDataandApplicationSecurityandPrivacy",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "BlockSys",
+      "name": "InternationalConferenceonBlockchain,ArtificialIntelligence,andTrustworthySystems",
+      "page": 23
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CSCloud",
+      "name": "InternationalConferenceonCyberSecurityandCloudComputing",
+      "page": 23
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TOPLAS",
+      "name": "ACMTransactionsonProgrammingLanguagesandSystems",
+      "page": 24
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TOSEM",
+      "name": "ACMTransactionsonSoftwareEngineeringandMethodology",
+      "page": 24
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TSE",
+      "name": "IEEETransactionsonSoftwareEngineering",
+      "page": 24
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TSC",
+      "name": "IEEETransactionsonServicesComputing",
+      "page": 24
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "ASE",
+      "name": "AutomatedSoftwareEngineering",
+      "page": 25
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "ESE",
+      "name": "EmpiricalSoftwareEngineering",
+      "page": 25
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "IETS",
+      "name": "IETSoftware",
+      "page": 25
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "IST",
+      "name": "InformationandSoftwareTechnology",
+      "page": 25
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "JournalofSoftware:EvolutionandProcess",
+      "page": 25
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "JSS",
+      "name": "JournalofSystemsandSoftware",
+      "page": 25
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "RE",
+      "name": "RequirementsEngineering",
+      "page": 25
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "SCP",
+      "name": "ScienceofComputerProgramming",
+      "page": 25
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "SoSyM",
+      "name": "SoftwareandSystemsModeling",
+      "page": 25
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "STVR",
+      "name": "SoftwareTesting,VerificationandReliability",
+      "page": 25
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "SPE",
+      "name": "Software:PracticeandExperience",
+      "page": 25
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "CL",
+      "name": "ComputerLanguages,SystemsandStructures",
+      "page": 26
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "STTT",
+      "name": "InternationalJournalofSoftwareToolsforTechnologyTransfer",
+      "page": 26
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JLAMP",
+      "name": "JournalofLogicalandAlgebraicMethodsinProgramming",
+      "page": 26
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "SOCA",
+      "name": "ServiceOrientedComputingandApplications",
+      "page": 26
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "SQJ",
+      "name": "SoftwareQualityJournal",
+      "page": 26
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "PACMPL",
+      "name": "ProceedingsoftheACMonProgrammingLanguages",
+      "page": 26
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "PLDI",
+      "name": "ACMSIGPLANConferenceonProgrammingLanguageDesignandImplementation",
+      "page": 27
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "POPL",
+      "name": "ACMSIGPLAN-SIGACTSymposiumonPrinciplesofProgrammingLanguages",
+      "page": 27
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "FSE",
+      "name": "ACMInternationalConferenceontheFoundationsofSoftwareEngineering",
+      "page": 27
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "SOSP",
+      "name": "ACMSymposiumonOperatingSystemsPrinciples",
+      "page": 27
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "OOPSLA",
+      "name": "ConferenceonObject-OrientedProgrammingSystems,Languages,andApplications",
+      "page": 27
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "ASE",
+      "name": "InternationalConferenceonAutomatedSoftwareEngineering",
+      "page": 27
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "ICSE",
+      "name": "InternationalConferenceonSoftwareEngineering",
+      "page": 27
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "ISSTA",
+      "name": "InternationalSymposiumonSoftwareTestingandAnalysis",
+      "page": 27
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "OSDI",
+      "name": "USENIXSymposiumonOperatingSystemsDesignandImplementation",
+      "page": 27
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ETAPS",
+      "name": "EuropeanJointConferencesonTheoryandPracticeofSoftware",
+      "page": 28
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICPC",
+      "name": "IEEEInternationalConferenceonProgramComprehension",
+      "page": 28
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "RE",
+      "name": "IEEEInternationalRequirementsEngineeringConference",
+      "page": 28
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CAiSE",
+      "name": "InternationalConferenceonAdvancedInformationSystemsEngineering",
+      "page": 28
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICFP",
+      "name": "ACMSIGPLANInternationalConferenceonFunctionProgramming",
+      "page": 28
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "LCTES",
+      "name": "ACMSIGPLAN/SIGBEDInternationalConferenceonLanguages,CompilersandToolsforEmbeddedSystems",
+      "page": 28
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "MoDELS",
+      "name": "ACM/IEEEInternationalConferenceonModelDrivenEngineeringLanguagesandSystems",
+      "page": 28
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CP",
+      "name": "InternationalConferenceonPrinciplesandPracticeofConstraintProgramming",
+      "page": 28
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICSOC",
+      "name": "InternationalConferenceonServiceOrientedComputing",
+      "page": 28
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "SANER",
+      "name": "IEEEInternationalConferenceonSoftwareAnalysis,Evolution, andReengineering",
+      "page": 29
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICSME",
+      "name": "InternationalConferenceonSoftwareMaintenanceandEvolution",
+      "page": 29
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "VMCAI",
+      "name": "InternationalConferenceonVerification,ModelCheckingandAbstractInterpretation",
+      "page": 29
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICWS",
+      "name": "IEEEInternationalConferenceonWebServices",
+      "page": 29
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "SAS",
+      "name": "InternationalStaticAnalysisSymposium",
+      "page": 29
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ESEM",
+      "name": "InternationalSymposiumonEmpiricalSoftwareEngineeringandMeasurement",
+      "page": 29
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ISSRE",
+      "name": "IEEEInternationalSymposiumonSoftwareReliabilityEngineering",
+      "page": 29
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "HotOS",
+      "name": "USENIXWorkshoponHotTopicsinOperatingSystems",
+      "page": 29
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CC",
+      "name": "InternationalConferenceonCompilerConstruction",
+      "page": 29
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "PEPM",
+      "name": "ACMSIGPLANWorkshoponPartialEvaluationandProgramManipulation",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "PASTE",
+      "name": "ACMSIGPLAN-SIGSOFTWorkshoponProgramAnalysisforSoftwareToolsandEngineering",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "APLAS",
+      "name": "AsianSymposiumonProgrammingLanguagesandSystems",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "APSEC",
+      "name": "Asia-PacificSoftwareEngineeringConference",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "EASE",
+      "name": "InternationalConferenceonEvaluationandAssessmentinSoftwareEngineering",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICECCS",
+      "name": "InternationalConferenceonEngineeringofComplexComputerSystems",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICST",
+      "name": "IEEEInternationalConferenceonSoftwareTesting,VerificationandValidation",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ISPASS",
+      "name": "IEEEInternationalSymposiumonPerformanceAnalysisofSystemsandSoftware",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SCAM",
+      "name": "IEEEInternationalWorkingConferenceonSourceCodeAnalysisandManipulation",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "COMPSAC",
+      "name": "InternationalComputerSoftwareandApplicationsConference",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICFEM",
+      "name": "InternationalConferenceonFormalEngineeringMethods",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SSE",
+      "name": "IEEEInternationalConferenceonSoftwareServicesEngineering",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICSSP",
+      "name": "InternationalConferenceonSoftwareandSystemProcess",
+      "page": 30
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "QRS",
+      "name": "InternationalConferenceonSoftwareQuality,ReliabilityandSecurity",
+      "page": 31
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICSR",
+      "name": "InternationalConferenceonSoftwareReuse",
+      "page": 31
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICWE",
+      "name": "InternationalConferenceonWebEngineering",
+      "page": 31
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SPIN",
+      "name": "InternationalSymposiumonModelCheckingofSoftware",
+      "page": 31
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ATVA",
+      "name": "InternationalSymposiumonAutomatedTechnologyforVerificationandAnalysis",
+      "page": 31
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "LOPSTR",
+      "name": "InternationalSymposiumonLogic-basedProgramSynthesisandTransformation",
+      "page": 31
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "TASE",
+      "name": "TheoreticalAspectsofSoftwareEngineeringConference",
+      "page": 31
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "MSR",
+      "name": "MiningSoftwareRepositories",
+      "page": 31
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "REFSQ",
+      "name": "RequirementsEngineering:FoundationforSoftwareQuality",
+      "page": 31
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "WICSA",
+      "name": "WorkingIEEE/IFIP ConferenceonSoftwareArchitecture",
+      "page": 31
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "Internetware",
+      "name": "Asia-PacificSymposiumonInternetware",
+      "page": 31
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "RV",
+      "name": "InternationalConferenceonRuntimeVerification",
+      "page": 31
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "MEMOCODE",
+      "name": "InternationalConferenceonFormalMethodsandModelsforCo-Design",
+      "page": 31
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TODS",
+      "name": "ACMTransactionsonDatabaseSystems",
+      "page": 32
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TOIS",
+      "name": "ACMTransactionsonInformationSystems",
+      "page": 32
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TKDE",
+      "name": "IEEETransactionsonKnowledgeandDataEngineering",
+      "page": 32
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "VLDBJ",
+      "name": "TheVLDBJournal",
+      "page": 32
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TKDD",
+      "name": "ACMTransactionsonKnowledgeDiscoveryfromData",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TWEB",
+      "name": "ACMTransactionsontheWeb",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "AEI",
+      "name": "AdvancedEngineeringInformatics",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "DKE",
+      "name": "Data&KnowledgeEngineering",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "DMKD",
+      "name": "DataMiningandKnowledgeDiscovery",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "EJIS",
+      "name": "EuropeanJournalofInformationSystems",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "GeoInformatica",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "IPM",
+      "name": "InformationProcessingandManagement",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "InformationSciences",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "IS",
+      "name": "InformationSystems",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "JASIST",
+      "name": "JournaloftheAssociationforInformationScienceandTechnology",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "JWS",
+      "name": "JournalofWebSemantics",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "KAIS",
+      "name": "KnowledgeandInformationSystems",
+      "page": 33
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "DPD",
+      "name": "DistributedandParallelDatabases",
+      "page": 34
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "I&M",
+      "name": "Information&Management",
+      "page": 34
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IPL",
+      "name": "InformationProcessingLetters",
+      "page": 34
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "（原IR）",
+      "name": "DiscoverComputing（原InformationRetrievalJournal）",
+      "page": 34
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IJGIS",
+      "name": "InternationalJournalofGeographicalInformationScience",
+      "page": 34
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IJIS",
+      "name": "InternationalJournalofIntelligentSystems",
+      "page": 34
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JIIS",
+      "name": "JournalofIntelligentInformationSystems",
+      "page": 34
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JSIS",
+      "name": "TheJournalofStrategicInformationSystems",
+      "page": 34
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TIST",
+      "name": "ACMTransactionsonIntelligentSystemsandTechnology",
+      "page": 34
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TORS",
+      "name": "ACMTransactionsonRecommenderSystems",
+      "page": 34
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "SIGMOD",
+      "name": "ACMSIGMODConference",
+      "page": 35
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "SIGKDD",
+      "name": "ACMSIGKDDConferenceonKnowledgeDiscoveryandDataMining",
+      "page": 35
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "ICDE",
+      "name": "IEEEInternationalConferenceonDataEngineering",
+      "page": 35
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "SIGIR",
+      "name": "InternationalACMSIGIRConferenceonResearchandDevelopmentinInformationRetrieval",
+      "page": 35
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "VLDB",
+      "name": "InternationalConferenceonVeryLargeDataBases Morgan Kaufmann/",
+      "page": 35
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CIKM",
+      "name": "ACMInternationalConferenceonInformationandKnowledgeManagement",
+      "page": 36
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "WSDM",
+      "name": "ACMInternationalConferenceonWebSearchandDataMining",
+      "page": 36
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "PODS",
+      "name": "ACMSIGMOD-SIGACT-SIGAISymposiumonPrinciplesofDatabaseSystems",
+      "page": 36
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "DASFAA",
+      "name": "InternationalConferenceonDatabaseSystemsforAdvancedApplications",
+      "page": 36
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ECML-PKDD",
+      "name": "EuropeanConferenceonMachineLearning andPrinciplesandPracticeofKnowledgeDiscoveryinDatabases",
+      "page": 36
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ISWC",
+      "name": "IEEEInternationalSemanticWebConference",
+      "page": 36
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICDM",
+      "name": "IEEEInternationalConferenceonDataMining",
+      "page": 36
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICDT",
+      "name": "InternationalConferenceonDatabaseTheory",
+      "page": 36
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "EDBT",
+      "name": "InternationalConferenceonExtendingDatabaseTechnology",
+      "page": 36
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "SDM",
+      "name": "SIAMInternationalConferenceonDataMining",
+      "page": 36
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "RecSys",
+      "name": "ACMConferenceonRecommenderSystems",
+      "page": 36
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "WISE",
+      "name": "WebInformationSystemsEngineeringConference",
+      "page": 36
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "APWeb",
+      "name": "AsiaPacificWebConference",
+      "page": 37
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "DEXA",
+      "name": "InternationalConferenceonDatabaseandExpertSystemApplications",
+      "page": 37
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ECIR",
+      "name": "EuropeanConferenceonInformationRetrieval",
+      "page": 37
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ESWC",
+      "name": "ExtendedSemanticWebConference",
+      "page": 37
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "WebDB",
+      "name": "InternationalWorkshoponWeband Databases",
+      "page": 37
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ER",
+      "name": "InternationalConferenceonConceptualModeling",
+      "page": 37
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "MDM",
+      "name": "InternationalConferenceonMobileDataManagement",
+      "page": 37
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SSDBM",
+      "name": "InternationalConferenceonScientificandStatisticalDatabaseManagement",
+      "page": 37
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "WAIM",
+      "name": "InternationalConferenceonWebAgeInformationManagement",
+      "page": 37
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SSTD",
+      "name": "InternationalSymposiumonSpatialandTemporalDatabases",
+      "page": 37
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "PAKDD",
+      "name": "Pacific-AsiaConferenceonKnowledgeDiscoveryandDataMining",
+      "page": 37
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ADMA",
+      "name": "InternationalConferenceonAdvancedDataMiningandApplications",
+      "page": 37
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "WISA",
+      "name": "WebInformationSystemsandApplications",
+      "page": 37
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TIT",
+      "name": "IEEETransactionsonInformationTheory",
+      "page": 38
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "IANDC",
+      "name": "InformationandComputation",
+      "page": 38
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "SICOMP",
+      "name": "SIAMJournalonComputing",
+      "page": 38
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TALG",
+      "name": "ACMTransactionsonAlgorithms",
+      "page": 39
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TOCL",
+      "name": "ACMTransactionsonComputationalLogic",
+      "page": 39
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TOMS",
+      "name": "ACMTransactionsonMathematicalSoftware",
+      "page": 39
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "Algorithmica",
+      "name": "Algorithmica",
+      "page": 39
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "CC",
+      "name": "ComputationalComplexity",
+      "page": 39
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "FAC",
+      "name": "FormalAspectsofComputing",
+      "page": 39
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "FMSD",
+      "name": "FormalMethodsinSystemDesign",
+      "page": 39
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "JCSS",
+      "name": "JournalofComputerandSystemSciences",
+      "page": 39
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "JGO",
+      "name": "JournalofGlobalOptimization",
+      "page": 39
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "JSC",
+      "name": "JournalofSymbolicComputation",
+      "page": 39
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TCS",
+      "name": "TheoreticalComputerScience",
+      "page": 39
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "ACTA",
+      "name": "ActaInformatica",
+      "page": 40
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "APAL",
+      "name": "AnnalsofPureandAppliedLogic",
+      "page": 40
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "DAM",
+      "name": "DiscreteAppliedMathematics",
+      "page": 40
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "FUIN",
+      "name": "FundamentaInformaticae",
+      "page": 40
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IPL",
+      "name": "InformationProcessingLetters",
+      "page": 40
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JCOMPLEXITY",
+      "name": "JournalofComplexity",
+      "page": 40
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "LOGCOM",
+      "name": "JournalofLogicandComputation",
+      "page": 40
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "SIDMA",
+      "name": "SIAMJournalonDiscreteMathematics",
+      "page": 40
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "TheoryofComputingSystems",
+      "page": 40
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TQC",
+      "name": "ACMTransactionsinQuantumComputing",
+      "page": 40
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "STOC",
+      "name": "ACMSymposiumontheTheoryofComputing",
+      "page": 41
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "SODA",
+      "name": "ACM-SIAMSymposiumonDiscreteAlgorithms",
+      "page": 41
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "CAV",
+      "name": "InternationalConferenceonComputerAidedVerification",
+      "page": 41
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "FOCS",
+      "name": "IEEEAnnualSymposiumonFoundationsofComputerScience",
+      "page": 41
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "LICS",
+      "name": "ACM/IEEESymposiumonLogicinComputerScience",
+      "page": 41
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "SoCG",
+      "name": "InternationalSymposiumonComputationalGeometry",
+      "page": 42
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ESA",
+      "name": "EuropeanSymposiumonAlgorithms",
+      "page": 42
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CCC",
+      "name": "ConferenceonComputationalComplexity",
+      "page": 42
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICALP",
+      "name": "InternationalColloquiumonAutomata,LanguagesandProgramming",
+      "page": 42
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CADE",
+      "name": "ConferenceonAutomatedDeduction",
+      "page": 42
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "CONCUR",
+      "name": "InternationalConferenceonConcurrencyTheory",
+      "page": 42
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "SAT",
+      "name": "InternationalConferenceonTheoryandApplicationsofSatisfiabilityTesting",
+      "page": 42
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "COCOON",
+      "name": "InternationalComputingandCombinatoricsConference",
+      "page": 42
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "FMCAD",
+      "name": "FormalMethodsinComputer-AidedDesign",
+      "page": 42
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CSL",
+      "name": "ComputerScienceLogic",
+      "page": 43
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "DSAA",
+      "name": "IEEEInternationalConferenceonDataScienceandAdvancedAnalytics",
+      "page": 43
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICTAC",
+      "name": "InternationalColloquiumonTheoreticalAspectsofComputing",
+      "page": 43
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "IPCO",
+      "name": "InternationalConferenceonIntegerProgrammingandCombinatorialOptimization",
+      "page": 43
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ISAAC",
+      "name": "InternationalSymposiumonAlgorithmsandComputation",
+      "page": 43
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "MFCS",
+      "name": "InternationalConferenceonMathematicalFoundationsofComputerScience",
+      "page": 43
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "STACS",
+      "name": "SymposiumonTheoreticalAspectsofComputerScience",
+      "page": 43
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SETTA",
+      "name": "InternationalSymposiumonSoftwareEngineering:Theories,Tools,andApplications",
+      "page": 43
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TOG",
+      "name": "ACMTransactionsonGraphics",
+      "page": 44
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TIP",
+      "name": "IEEETransactionsonImageProcessing",
+      "page": 44
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TVCG",
+      "name": "IEEETransactionsonVisualizationandComputerGraphics",
+      "page": 44
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TMM",
+      "name": "IEEETransactionsonMultimedia",
+      "page": 44
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TOMM",
+      "name": "ACMTransactionsonMultimediaComputing,CommunicationsandApplications",
+      "page": 45
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "CAGD",
+      "name": "ComputerAidedGeometricDesign",
+      "page": 45
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "CGF",
+      "name": "ComputerGraphicsForum",
+      "page": 45
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "CAD",
+      "name": "Computer-AidedDesign",
+      "page": 45
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TCSVT",
+      "name": "IEEETransactionsonCircuitsandSystemsforVideoTechnology",
+      "page": 45
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "SIIMS",
+      "name": "SIAMJournalonImagingSciences",
+      "page": 45
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "SPECOM",
+      "name": "SpeechCommunication",
+      "page": 45
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "CGTA",
+      "name": "ComputationalGeometry:TheoryandApplications",
+      "page": 46
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "CAVW",
+      "name": "Computeranimation&virtualworlds",
+      "page": 46
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "C&G",
+      "name": "Computers&Graphics",
+      "page": 46
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "DCG",
+      "name": "Discrete&ComputationalGeometry",
+      "page": 46
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "SPL",
+      "name": "IEEESignalProcessingLetters",
+      "page": 46
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IET-IPR",
+      "name": "IETImageProcessing",
+      "page": 46
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JVCIR",
+      "name": "JournalofVisualCommunicationandImage Representation",
+      "page": 46
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "MS",
+      "name": "MultimediaSystems",
+      "page": 46
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "MTA",
+      "name": "MultimediaToolsandApplications",
+      "page": 46
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "SIGPRO",
+      "name": "SignalProcessing",
+      "page": 46
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IMAGE",
+      "name": "SignalProcessing:ImageCommunication",
+      "page": 46
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TVC",
+      "name": "TheVisualComputer",
+      "page": 46
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "GMOD",
+      "name": "GraphicalModels",
+      "page": 46
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "ACMMM",
+      "name": "ACMInternationalConferenceonMultimedia",
+      "page": 47
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "SIGGRAPH",
+      "name": "ACMSpecialInterestGrouponComputerGraphics",
+      "page": 47
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "VR",
+      "name": "IEEEConferenceonVirtualRealityand3DUserInterfaces（原IEEEVirtualReality）",
+      "page": 47
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "IEEEVIS",
+      "name": "IEEEVisualizationConference",
+      "page": 47
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICMR",
+      "name": "ACMSIGMMInternationalConferenceonMultimediaRetrieval",
+      "page": 48
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "I3D",
+      "name": "ACMSIGGRAPHSymposiumonInteractive3DGraphicsandGames",
+      "page": 48
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "SCA",
+      "name": "ACMSIGGRAPH/EurographicsSymposiumonComputerAnimation",
+      "page": 48
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "DCC",
+      "name": "DataCompressionConference",
+      "page": 48
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "EuroVis",
+      "name": "EurographicsConferenceonVisualization",
+      "page": 48
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICASSP",
+      "name": "IEEEInternationalConferenceonAcoustics,SpeechandSignalProcessing",
+      "page": 48
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICME",
+      "name": "IEEEInternationalConferenceon Multimedia&Expo",
+      "page": 48
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ISMAR",
+      "name": "InternationalSymposiumonMixedandAugmentedReality",
+      "page": 48
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "VRST",
+      "name": "ACMSymposiumonVirtualRealitySoftwareandTechnology",
+      "page": 49
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CASAXR（原CASA）",
+      "name": "InternationalConferenceonComputerAnimation,SocialAgents,andExtendedReality（原InternationalConferenceonComputerAnimationandSocialAgents）",
+      "page": 49
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CGI",
+      "name": "ComputerGraphicsInternational",
+      "page": 49
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "GMP",
+      "name": "GeometricModelingandProcessing",
+      "page": 49
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "PacificVis",
+      "name": "IEEEPacificVisualizationSymposium",
+      "page": 49
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "3DV",
+      "name": "InternationalConferenceon3DVision",
+      "page": 49
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CAD/Graphics",
+      "name": "InternationalConferenceonComputer-AidedDesignandComputerGraphicsProcessing",
+      "page": 49
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICIP",
+      "name": "IEEEInternationalConferenceonImageProcessing",
+      "page": 49
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "MMM",
+      "name": "InternationalConferenceonMultimediaModeling",
+      "page": 49
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "MMAsia",
+      "name": "ACMMultimediaAsia",
+      "page": 49
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SMI",
+      "name": "ShapeModelingInternational",
+      "page": 49
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "PRCV",
+      "name": "ChineseConferenceonPatternRecognitionandComputerVision",
+      "page": 49
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICIG",
+      "name": "InternationalConferenceonImageandGraphics",
+      "page": 50
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "AI",
+      "name": "ArtificialIntelligence",
+      "page": 51
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TPAMI",
+      "name": "IEEETransactionsonPatternAnalysisandMachineIntelligence",
+      "page": 51
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "IJCV",
+      "name": "InternationalJournalofComputerVision",
+      "page": 51
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "JMLR",
+      "name": "JournalofMachineLearningResearch",
+      "page": 51
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TAP",
+      "name": "ACMTransactionsonAppliedPerception",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "AAMAS",
+      "name": "AutonomousAgentsandMulti-AgentSystems",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "ComputationalLinguistics",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "CVIU",
+      "name": "ComputerVisionandImageUnderstanding",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "DKE",
+      "name": "Data&KnowledgeEngineering",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "EvolutionaryComputation",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TAC",
+      "name": "IEEETransactionsonAffectiveComputing",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TASLP",
+      "name": "IEEETransactionsonAudio,SpeechandLanguage Processing （原IEEE/ACMTransactionsonAudio,Speechand LanguageProcessing）",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "IEEETransactionsonCybernetics",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TEC",
+      "name": "IEEETransactionsonEvolutionaryComputation",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TFS",
+      "name": "IEEETransactionsonFuzzySystems",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TNNLS",
+      "name": "IEEETransactionsonNeuralNetworksandlearningsystems",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "IJAR",
+      "name": "InternationalJournalofApproximateReasoning",
+      "page": 52
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "JAIR",
+      "name": "JournalofArtificialIntelligenceResearch",
+      "page": 53
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "JournalofAutomatedReasoning",
+      "page": 53
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "MachineLearning",
+      "page": 53
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "NeuralComputation",
+      "page": 53
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "NeuralNetworks",
+      "page": 53
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "PR",
+      "name": "PatternRecognition",
+      "page": 53
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TALLIP",
+      "name": "ACMTransactionsonAsianandLow-ResourceLanguageInformationProcessing",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "AppliedIntelligence",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "AIM",
+      "name": "ArtificialIntelligenceinMedicine",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "ArtificialLife",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "ComputationalIntelligence",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "ComputerSpeech&Language",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "ConnectionScience",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "DSS",
+      "name": "DecisionSupportSystems",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "EAAI",
+      "name": "EngineeringApplicationsofArtificialIntelligence",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "ESWA",
+      "name": "ExpertSystemswithApplications",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "FuzzySetsandSystems",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TG",
+      "name": "IEEETransactionsonGames",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IET-CVI",
+      "name": "IETComputerVision",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "IETSignalProcessing",
+      "page": 54
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IVC",
+      "name": "ImageandVisionComputing",
+      "page": 55
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IDA",
+      "name": "IntelligentDataAnalysis",
+      "page": 55
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IJIS",
+      "name": "InternationalJournalofIntelligentSystems",
+      "page": 55
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "IJDAR",
+      "name": "InternationalJournalonDocumentAnalysisandRecognition",
+      "page": 55
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JETAI",
+      "name": "JournalofExperimentalandTheoreticalArtificialIntelligence",
+      "page": 55
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "KBS",
+      "name": "Knowledge-BasedSystems",
+      "page": 55
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "MachineTranslation",
+      "page": 55
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "MachineVisionandApplications",
+      "page": 55
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "NaturalComputing",
+      "page": 55
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "NCA",
+      "name": "NeuralComputingandApplications",
+      "page": 55
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "NPL",
+      "name": "NeuralProcessingLetters",
+      "page": 56
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "Neurocomputing",
+      "page": 56
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "PAA",
+      "name": "PatternAnalysisandApplications",
+      "page": 56
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "PRL",
+      "name": "PatternRecognitionLetters",
+      "page": 56
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "SoftComputing",
+      "page": 56
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "WI",
+      "name": "WebIntelligence",
+      "page": 56
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TIIS",
+      "name": "ACMTransactionsonInteractiveIntelligentSystems",
+      "page": 56
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TELO",
+      "name": "ACMTransactionsonEvolutionaryLearningandOptimization",
+      "page": 56
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "AAAI",
+      "name": "AAAIConferenceonArtificialIntelligence",
+      "page": 57
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "NeurIPS",
+      "name": "ConferenceonNeuralInformationProcessingSystems",
+      "page": 57
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "ACL",
+      "name": "AnnualMeetingoftheAssociationforComputationalLinguistics",
+      "page": 57
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "CVPR",
+      "name": "IEEE/CVFComputerVisionandPatternRecognitionConference",
+      "page": 57
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "ICCV",
+      "name": "InternationalConferenceonComputerVision",
+      "page": 57
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "ICML",
+      "name": "InternationalConferenceonMachineLearning",
+      "page": 57
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "COLT",
+      "name": "AnnualConferenceonComputationalLearningTheory",
+      "page": 58
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "EMNLP",
+      "name": "ConferenceonEmpirical MethodsinNaturalLanguageProcessing",
+      "page": 58
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ECAI",
+      "name": "EuropeanConferenceonArtificialIntelligence",
+      "page": 58
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ECCV",
+      "name": "EuropeanConferenceonComputerVision",
+      "page": 58
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICRA",
+      "name": "IEEEInternationalConferenceonRoboticsandAutomation",
+      "page": 58
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICAPS",
+      "name": "InternationalConferenceonAutomatedPlanningandScheduling",
+      "page": 58
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICCBR",
+      "name": "InternationalConferenceonCase-BasedReasoning",
+      "page": 58
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "AAMAS",
+      "name": "InternationalJointConferenceonAutonomousAgentsandMulti-agentSystems",
+      "page": 58
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "PPSN",
+      "name": "ParallelProblemSolvingfrom Nature",
+      "page": 58
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ACCV",
+      "name": "AsianConferenceonComputerVision",
+      "page": 59
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "NLPCC",
+      "name": "CCFInternationalConferenceonNaturalLanguageProcessingandChineseComputing",
+      "page": 59
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "GECCO",
+      "name": "GeneticandEvolutionaryComputationConference",
+      "page": 59
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICTAI",
+      "name": "IEEEInternationalConferenceonToolswithArtificialIntelligence",
+      "page": 59
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "IROS",
+      "name": "IEEE\\RSJInternationalConferenceonIntelligentRobotsandSystems",
+      "page": 59
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ALT",
+      "name": "InternationalConferenceonAlgorithmicLearningTheory",
+      "page": 59
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICANN",
+      "name": "InternationalConferenceonArtificialNeuralNetworks",
+      "page": 59
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "FG",
+      "name": "IEEEInternationalConferenceonAutomaticFaceandGestureRecognition",
+      "page": 59
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICDAR",
+      "name": "InternationalConferenceonDocumentAnalysisandRecognition",
+      "page": 60
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ILP",
+      "name": "InternationalConferenceonInductiveLogicProgramming",
+      "page": 60
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "KSEM",
+      "name": "InternationalconferenceonKnowledgeScience,EngineeringandManagement",
+      "page": 60
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICONIP",
+      "name": "InternationalConferenceonNeuralInformationProcessing",
+      "page": 60
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICPR",
+      "name": "InternationalConferenceonPatternRecognition",
+      "page": 60
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "IJCB",
+      "name": "InternationalJointConferenceonBiometrics",
+      "page": 60
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "IJCNN",
+      "name": "InternationalJointConferenceonNeuralNetworks",
+      "page": 60
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "PRICAI",
+      "name": "PacificRimInternationalConferenceonArtificialIntelligence",
+      "page": 60
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "IEEECEC",
+      "name": "CongressonEvolutionaryComputation",
+      "page": 60
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "TOCHI",
+      "name": "ACMTransactionsonComputer-HumanInteraction",
+      "page": 61
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "IJHCS",
+      "name": "InternationalJournalofHuman-ComputerStudies",
+      "page": 61
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "CSCW",
+      "name": "ComputerSupportedCooperativeWork",
+      "page": 62
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "HCI",
+      "name": "Human-ComputerInteraction",
+      "page": 62
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "IEEETransactionsonHuman-MachineSystems",
+      "page": 62
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "IJHCI",
+      "name": "InternationalJournalofHuman-ComputerInteraction",
+      "page": 62
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "UMUAI",
+      "name": "UserModelingandUser-AdaptedInteraction",
+      "page": 62
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TSMC",
+      "name": "IEEETransactionsonSystems,Man,andCybernetics:Systems",
+      "page": 62
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "BIT",
+      "name": "Behaviour&InformationTechnology",
+      "page": 63
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "PUC",
+      "name": "PersonalandUbiquitousComputing",
+      "page": 63
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "PMC",
+      "name": "PervasiveandMobileComputing",
+      "page": 63
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "PACMHCI",
+      "name": "ProceedingsoftheACMonHuman-ComputerInteraction",
+      "page": 63
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "THRI",
+      "name": "ACMTransactionsonHuman-RobotInteraction",
+      "page": 63
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "CSCW",
+      "name": "ACMConferenceOnComputer-SupportedCooperativeWorkAndSocialComputing",
+      "page": 64
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "CHI",
+      "name": "ACMConferenceonHumanFactorsinComputingSystems",
+      "page": 64
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "UbiComp",
+      "name": "ACMinternationaljointconferenceonPervasiveandUbiquitousComputing",
+      "page": 64
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "UIST",
+      "name": "ACMSymposiumonUserInterfaceSoftwareandTechnology",
+      "page": 64
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "GROUP",
+      "name": "ACMInternationalConferenceonSupportingGroupWork",
+      "page": 65
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "IUI",
+      "name": "ACMInternationalConferenceonIntelligentUserInterfaces",
+      "page": 65
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ISS",
+      "name": "ACMInternationalConferenceonInteractiveSurfacesandSpaces",
+      "page": 65
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ECSCW",
+      "name": "EuropeanConferenceonComputerSupportedCooperativeWork",
+      "page": 65
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "PERCOM",
+      "name": "IEEEInternationalConferenceonPervasiveComputingandCommunications",
+      "page": 65
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "MobileHCI",
+      "name": "ACMInternationalConferenceonMobileHuman-ComputerInteraction",
+      "page": 65
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "ICWSM",
+      "name": "TheInternationalAAAIConferenceonWebandSocialMedia",
+      "page": 65
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "DIS",
+      "name": "ACMSIGCHIConferenceonDesigningInteractiveSystems",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICMI",
+      "name": "ACMInternationalConferenceonMultimodalInteraction",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ASSETS",
+      "name": "InternationalACMSIGACCESSConferenceonComputersandAccessibility",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "GI",
+      "name": "GraphicsInterface",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "UIC",
+      "name": "IEEEInternationalConferenceonUbiquitousIntelligenceand Computing",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "IEEEWorldHapticsConference",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "IDC",
+      "name": "ACMInteractionDesignandChildren",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CollaborateCom",
+      "name": "InternationalConferenceonCollaborativeComputing:Networking,ApplicationsandWorksharing",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CSCWD",
+      "name": "InternationalConferenceonComputerSupportedCooperativeWorkinDesign",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "CoopIS",
+      "name": "InternationalConferenceonCooperativeInformationSystems",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "MobiQuitous",
+      "name": "InternationalConferenceonMobileandUbiquitousSystems:Computing,NetworkingandServices",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "AVI",
+      "name": "InternationalWorkingConferenceonAdvancedVisualInterfaces",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "GPC",
+      "name": "ConferenceonGreen,PervasiveandCloudComputing",
+      "page": 66
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ICXR",
+      "name": "CCFInternationalConferenceonExtendedReality",
+      "page": 66
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "JACM",
+      "name": "JournaloftheACM",
+      "page": 67
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "Proc.IEEE",
+      "name": "ProceedingsoftheIEEE",
+      "page": 67
+    },
+    {
+      "kind": "journal",
+      "tier": "A",
+      "abbreviation": "Bioinformatics",
+      "name": "Bioinformatics",
+      "page": 67
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "BriefingsinBioinformatics",
+      "page": 68
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "Cognition",
+      "name": "Cognition",
+      "page": 68
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TASAE",
+      "name": "IEEETransactionsonAutomationScienceandEngineering",
+      "page": 68
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TGARS",
+      "name": "IEEETransactionsonGeoscienceandRemoteSensing",
+      "page": 68
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TITS",
+      "name": "IEEETransactionsonIntelligentTransportationSystems",
+      "page": 68
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TMI",
+      "name": "IEEETransactionsonMedicalImaging",
+      "page": 68
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TR",
+      "name": "IEEETransactionsonRobotics",
+      "page": 68
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "TCBB",
+      "name": "IEEE/ACMTransactionsonComputationalBiologyandBioinformatics",
+      "page": 68
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "",
+      "name": "TheComputerJournal",
+      "page": 68
+    },
+    {
+      "kind": "journal",
+      "tier": "B",
+      "abbreviation": "WWW",
+      "name": "WorldWideWeb",
+      "page": 68
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "BMCBioinformatics",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "CyberneticsandSystems",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "IEEEGeoscienceandRemoteSensingLetters",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JBHI",
+      "name": "IEEEJournalofBiomedicalandHealthInformatics",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TBD",
+      "name": "IEEETransactionsonBigData",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "IETIntelligentTransportSystems",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "JBI",
+      "name": "JournalofBiomedicalInformatics",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "MedicalImageAnalysis",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TII",
+      "name": "IEEETransactionsonIndustrialInformatics",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TCPS",
+      "name": "ACMTransactionsonCyber-PhysicalSystems",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TOCE",
+      "name": "ACMTransactionsonComputingEducation",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "TCSS",
+      "name": "IEEETransactionsonComputationalSocialSystems",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "",
+      "name": "IEEETransactionsonReliability",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "HEALTH",
+      "name": "ACMTransactionsonComputingforHealthcare",
+      "page": 69
+    },
+    {
+      "kind": "journal",
+      "tier": "C",
+      "abbreviation": "ACMDLT",
+      "name": "ACMDistributedLedgerTechnologies:ResearchandPractice",
+      "page": 69
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "WWW",
+      "name": "TheWebConference（原InternationalWorldWideWebConference）",
+      "page": 70
+    },
+    {
+      "kind": "conference",
+      "tier": "A",
+      "abbreviation": "RTSS",
+      "name": "IEEEReal-TimeSystemsSymposium",
+      "page": 70
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "BIBM",
+      "name": "IEEEInternationalConferenceonBioinformaticsandBiomedicine",
+      "page": 71
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "RECOMB",
+      "name": "AnnualInternationalConferenceonResearchinComputationalMolecularBiology",
+      "page": 71
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "MICCAI",
+      "name": "InternationalConferenceonMedicalImageComputingandComputer-AssistedIntervention",
+      "page": 71
+    },
+    {
+      "kind": "conference",
+      "tier": "B",
+      "abbreviation": "WINE",
+      "name": "ConferenceonWebandInternet Economics",
+      "page": 71
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "APBC",
+      "name": "AsiaPacificBioinformaticsConference",
+      "page": 72
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "IEEEBigData",
+      "name": "IEEEInternationalConferenceonBigData",
+      "page": 72
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "IEEECLOUD",
+      "name": "IEEEInternationalConferenceonCloudComputing",
+      "page": 72
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SMC",
+      "name": "IEEEInternationalConferenceonSystems,Man,andCybernetics",
+      "page": 72
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "COSIT",
+      "name": "InternationalConferenceonSpatialInformationTheory",
+      "page": 72
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "ISBRA",
+      "name": "InternationalSymposiumonBioinformaticsResearchandApplications",
+      "page": 72
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SAGT",
+      "name": "InternationalSymposiumonAlgorithmicGameTheory",
+      "page": 72
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "SIGSPATIAL",
+      "name": "ACMSpecialInterestGrouponSpatialInformation",
+      "page": 72
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "AFT",
+      "name": "AdvancesinFinancialTechnologies",
+      "page": 72
+    },
+    {
+      "kind": "conference",
+      "tier": "C",
+      "abbreviation": "IJTCS-FAW",
+      "name": "InternationalJointConferenceonTheoreticalComputerScience-FrontierofAlgorithmicWisdom",
+      "page": 72
+    }
+  ]
+}

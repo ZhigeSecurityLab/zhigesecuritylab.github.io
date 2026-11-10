@@ -129,7 +129,7 @@ def news_list(data, lang):
 
 
 def publication_list(items, lang):
-    selected = [p for p in items if p.get("selected")]
+    selected = [publications.classify(dict(p)) for p in items if p.get("selected")]
     if not selected:
         return ""
     result = '<div class="faculty-publications">'
@@ -142,7 +142,7 @@ def publication_list(items, lang):
             papers = [p for p in group if p.get("tier", "Unrated") == tier]
             if not papers:
                 continue
-            label = ("未分级" if lang == "zh" else "Unrated") if tier == "Unrated" else f'{tier} · ' + ("作者确认层次" if lang == "zh" else "Author-assigned tier")
+            label = ("CCF 待核验" if lang == "zh" else "CCF unverified") if tier == "Unrated" else f'CCF {tier} · 2026'
             result += f'<h3>{label}</h3><ul class="plain-list">'
             for p in sorted(papers, key=lambda x: (-x["year"], x["title"])):
                 title = e(p["title"])
