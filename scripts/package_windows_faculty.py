@@ -19,5 +19,5 @@ for name in ('scripts','assets','content','faculty_editor','student_editor'):
     shutil.copytree(ROOT/name,OUT/name,dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__','*.pyc'))
 shutil.copy2(shutil.which('gh'),OUT/'gh.exe')
 (OUT/'runtime/python312._pth').write_text('python312.zip\n.\n../scripts\n')
-(OUT/'Start-Faculty-Test.bat').write_text('@echo off\nchcp 65001 >nul\ncd /d "%~dp0"\nruntime\\python.exe scripts\\faculty.py --user zhengfeiLian --branch faculty-ccf-test --port 8003 --open\nif errorlevel 1 pause\n')
+(OUT/'Start-Faculty-Editor.bat').write_text('@echo off\nchcp 65001 >nul\ncd /d "%~dp0"\nruntime\\python.exe scripts\\faculty.py --user garrisongys --branch main --port 8002 --open\nif errorlevel 1 pause\n')
 shutil.copy2(ROOT/'portable/Faculty-README.txt',OUT/'Faculty-README.txt')

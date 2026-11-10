@@ -189,6 +189,65 @@ def arxiv_records(text):
     return result
 
 
+def usenix_record(html, url):
+    from html.parser import HTMLParser
+    class Page(HTMLParser):
+        def __init__(self):
+            super().__init__(); self.meta={}; self.bib=[]; self.depth=0; self.text=[]
+        def handle_starttag(self, tag, attrs):
+            attrs=dict(attrs)
+            if tag=='meta' and attrs.get('name','').startswith('citation_'):
+                self.meta.setdefault(attrs['name'],[]).append(attrs.get('content',''))
+            if tag=='div':
+                if self.depth:self.depth+=1
+                elif 'bibtex-text-entry' in attrs.get('class',''):self.depth=1
+            if tag=='br' and self.depth:self.bib.append('\n')
+        def handle_endtag(self,tag):
+            if tag=='div' and self.depth:self.depth-=1
+        def handle_data(self,text):
+            self.text.append(text)
+            if self.depth:self.bib.append(text)
+    page=Page();page.feed(html);meta=page.meta
+    def first(key):return next(iter(meta.get('citation_'+key,[])),'')
+    title=first('title').replace('{','').replace('}','')
+    if not title or not first('conference_title'):raise ValueError('USENIX 页面缺少论文元数据')
+    year_match=re.search(r'20\d{2}',first('publication_date'))
+    if not year_match:raise ValueError('USENIX 论文年份缺失')
+    item={'id':'usenix:'+url.split('/conference/',1)[-1], 'title':title,
+          'authors':', '.join(meta.get('citation_author',[])),
+          'authors_bibtex':' and '.join(meta.get('citation_author',[])),
+          'venue':first('conference_title'),'year':int(year_match[0]),'kind':'conference','tier':'Unrated',
+          'doi':first('doi'),'url':url,'pdf_url':first('pdf_url'),'bibtex':''.join(page.bib).strip(),
+          'selected':False,'search_source':'USENIX official'}
+    if 'Distinguished Artifact Award Winner' in ' '.join(page.text):
+        item['award']='Distinguished Artifact Award'
+        item['award_source']=url
+    return classify(fallback_bibtex(item))
+
+
+def search_usenix(query):
+    from html.parser import HTMLParser
+    from urllib.parse import urljoin, urlsplit
+    class Links(HTMLParser):
+        def __init__(self):super().__init__();self.links=[]
+        def handle_starttag(self,tag,attrs):
+            attrs=dict(attrs)
+            if tag=='a':
+                url=urljoin('https://www.usenix.org',attrs.get('href',''))
+                parts=urlsplit(url)
+                if parts.hostname=='www.usenix.org' and re.fullmatch(r'/conference/[a-z0-9-]+/presentation/[a-zA-Z0-9_-]+',parts.path):
+                    if url not in self.links:self.links.append(url)
+    term=query.split(':',1)[0].strip()
+    if len(term)<4:term=query
+    html=request('https://www.usenix.org/search/site/'+quote(term,safe=''),'text/html')
+    links=Links();links.feed(html)
+    def load(url):
+        try:return usenix_record(request(url,'text/html'),url)
+        except Exception:return None
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+        return [item for item in pool.map(load,links.links[:6]) if item]
+
+
 def search_title(value):
     import difflib
     if not isinstance(value,str) or not 4 <= len(value.strip()) <= 500:
@@ -214,11 +273,12 @@ def search_title(value):
                 'tier':'Unrated','doi':doi,'url':loc.get('landing_page_url') or w['id'],'pdf_url':pdf,'bibtex':'','selected':False,'search_source':'OpenAlex'}))
         return records
     records=[]
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
-        tasks={pool.submit(fn):name for name,fn in [('Crossref',crossref),('arXiv',arxiv),('OpenAlex',openalex)]}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+        tasks={pool.submit(fn):name for name,fn in [('USENIX 官方',lambda: search_usenix(query)),('Crossref',crossref),('arXiv',arxiv),('OpenAlex',openalex)]}
         for future in concurrent.futures.as_completed(tasks):
             try:records.extend(future.result())
             except Exception:warnings.append(tasks[future]+' 暂不可用')
+    records.sort(key=lambda p:p.get('search_source')!='USENIX official')
     candidates=[]
     q=title_key(query)
     for item in records:
@@ -227,12 +287,12 @@ def search_title(value):
         item['title_similarity']=round(similarity*100)
         try:validate_profile({'publications':[item]})
         except (ValueError,TypeError):continue
-        previous=next((p for p in candidates if same_work(p,item)),None)
+        previous=next((p for p in candidates if same_work(p,item) and p['kind']==item['kind']),None)
         if previous:
             for field in ('pdf_url','authors','venue','doi'):
                 if not previous.get(field) and item.get(field):previous[field]=item[field]
         else:candidates.append(item)
-    candidates.sort(key=lambda p:(-p['title_similarity'],p['kind']=='other',-p['year']))
+    candidates.sort(key=lambda p:(-p['title_similarity'],p.get('search_source')!='USENIX official',p['kind']=='other',-p['year']))
     for item in candidates:
         fallback_bibtex(item)
     return {'results':candidates[:12], 'warning':'；'.join(warnings), 'query':query}

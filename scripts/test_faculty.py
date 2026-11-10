@@ -54,6 +54,30 @@ class FacultyEditorTests(unittest.TestCase):
             self.assertIn("contents/content/site.json", request.call_args.args[0][1])
             raw.assert_not_called()
 
+    def test_fresh_faculty_loads_production_identity_without_orcid_defaults(self):
+        production = json.loads(subprocess.check_output(["git", "show", "main:content/site.json"], cwd=faculty.ROOT))
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);content=root/'site.json';content.write_text(json.dumps(production))
+            baseline=root/'.local/baseline.json'
+            with patch.object(faculty.admin,'CONTENT',content), patch.object(faculty,'OWNER','garrisongys'), patch.object(faculty,'BRANCH','main'), patch.object(faculty,'STUDENT',False), patch.object(faculty,'ROOT',root), patch.object(faculty,'BASELINE',baseline), patch.object(faculty,'fetch_remote',return_value=production), patch.object(faculty,'validate'), patch.object(faculty,'urlopen') as fetch:
+                for lang in ('en','zh'):
+                    for person in production[lang]['people']:
+                        target=root/person['avatar'];target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(b'photo')
+                faculty.sync_on_start()
+                state=faculty.current_state()
+                self.assertEqual(state['owner'],'garrisongys');self.assertEqual(state['branch'],'main')
+                self.assertEqual(state['profiles']['en']['name'],'Yansong (Garrison) Gao')
+                self.assertEqual(state['orcid'],'');self.assertEqual(state['publications'],[])
+                self.assertEqual(state['sync']['state'],'synced')
+                edited=json.loads(content.read_text());edited['en']['people'][0]['name']='Local draft';content.write_text(json.dumps(edited))
+                faculty.sync_on_start()
+                self.assertEqual(json.loads(content.read_text())['en']['people'][0]['name'],'Local draft')
+                faculty.sync_on_start(force=True)
+                backups=list((root/'.local/backups').glob('*.json'))
+                self.assertEqual(len(backups),1)
+                self.assertEqual(json.loads(backups[0].read_text())['en']['people'][0]['name'],'Local draft')
+                self.assertEqual(json.loads(content.read_text())['en']['people'][0]['name'],'Yansong (Garrison) Gao')
+
     def test_recruitment_can_be_edited_before_faculty_photo_exists(self):
         source = copy.deepcopy(self.data)
         recruitment = {lang: copy.deepcopy(source[lang]["recruitment"]) for lang in ("en", "zh")}
@@ -77,7 +101,7 @@ class FacultyEditorTests(unittest.TestCase):
                 self.assertEqual(prepared["avatar"], faculty.DRAFT_AVATAR)
                 self.assertEqual(prepared["en"]["name"], faculty.DRAFT_NAMES["en"])
                 self.assertTrue((root / faculty.DRAFT_AVATAR).is_file())
-                self.assertIn("**Secure systems**", merged["en"]["people"][-1]["bio_markdown"])
+                self.assertIn("**Secure systems**", faculty.own_record(merged, "en")["bio_markdown"])
                 self.assertEqual(draft["avatar"], "")
 
     def test_student_editor_only_changes_its_own_profile_and_accepts_default_avatar(self):

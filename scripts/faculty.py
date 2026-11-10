@@ -5,6 +5,7 @@ from urllib.parse import urlsplit, unquote
 import base64
 import copy
 import hashlib
+from datetime import datetime
 import json
 import mimetypes
 import os
@@ -39,6 +40,7 @@ BASELINE = ROOT / ".local/faculty-baseline.json"
 BINDING = ROOT / ".local/member-binding-main.json"
 TOKEN = secrets.token_urlsafe(32)
 AUTH_STATE = {"state": "idle"}
+SYNC_STATE = {"state": "idle", "message": "尚未同步"}
 LOCK = threading.Lock()
 FIELDS = ("name", "role", "url", "bio_markdown", "description")
 DRAFT_AVATAR = "assets/people/draft-preview.jpg"
@@ -259,7 +261,7 @@ def current_state():
             "categories": categories, "student": STUDENT,
             "recruitment": {lang: data[lang]["recruitment"] for lang in ("en", "zh")},
             "orcid": p["en"].get("orcid", ""), "publications": [publications.classify(copy.deepcopy(paper)) for paper in p["en"].get("publications", [])],
-            "owner": OWNER, "branch": BRANCH, "revision": admin.revision(raw), "token": TOKEN}
+            "sync": dict(SYNC_STATE), "owner": OWNER, "branch": BRANCH, "revision": admin.revision(raw), "token": TOKEN}
 
 
 def profile_hash(data):
@@ -308,15 +310,16 @@ def fetch_remote():
         return json.load(response)
 
 
-def sync_on_start():
+def sync_on_start(force=False):
     """Refresh a clean portable copy while preserving edits from a previous session."""
     try:
         saved = json.loads(BASELINE.read_text())
     except (OSError, ValueError):
         saved = {}
     local_raw = admin.CONTENT.read_bytes()
-    if saved.get("branch") == BRANCH and saved.get("local_sha") != admin.revision(local_raw):
-        print("检测到未发布的本地修改，保留当前资料。", flush=True)
+    if not force and saved.get("branch") == BRANCH and saved.get("local_sha") != admin.revision(local_raw):
+        SYNC_STATE.update(state="local_draft", message="已保留本地未发布草稿。可点击重新读取正式资料；现有资料会先备份。")
+        print(SYNC_STATE["message"], flush=True)
         return
     try:
         remote = fetch_remote()
@@ -335,11 +338,17 @@ def sync_on_start():
                     target.parent.mkdir(parents=True, exist_ok=True)
                     target.write_bytes(raw)
         validate(remote)
+        if force:
+            backup = ROOT / (".local/backups/faculty-before-sync-" + datetime.now().strftime("%Y%m%d-%H%M%S-%f") + ".json")
+            backup.parent.mkdir(parents=True, exist_ok=True)
+            backup.write_bytes(local_raw)
         admin.CONTENT.write_text(json.dumps(remote, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         save_baseline(remote)
-        print(f"已同步 GitHub {BRANCH} 分支的最新内容。", flush=True)
+        SYNC_STATE.update(state="synced", message=f"已读取 GitHub {BRANCH} 最新资料 · {OWNER} · {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+        print(SYNC_STATE["message"], flush=True)
     except Exception as exc:
-        print(f"未能同步线上内容，使用本地副本：{exc}", flush=True)
+        SYNC_STATE.update(state="error", message=f"暂未同步成功，当前为本地副本：{exc}。请联网后点击重新读取资料。")
+        print(SYNC_STATE["message"], flush=True)
 
 
 def select_student_owner(user):
@@ -463,6 +472,15 @@ class Handler(admin.Handler):
                 return self.send(413, {"error": "请求格式或大小无效"})
             payload = json.loads(self.rfile.read(length))
             path = urlsplit(self.path).path
+            if path == "/api/sync":
+                if STUDENT or BRANCH != "main" or OWNER != "garrisongys":
+                    raise ValueError("此同步入口仅供 garrisongys 正式资料维护使用")
+                with LOCK:
+                    if payload.get("revision") != admin.revision(admin.CONTENT.read_bytes()):
+                        raise RuntimeError("本地内容已变化，请刷新后重试")
+                    sync_on_start(force=True)
+                    build()
+                    return self.send(200, current_state())
             if path == "/api/connect":
                 return self.send(200, login())
             if path in ("/api/orcid", "/api/publication", "/api/paper-search"):

@@ -153,7 +153,8 @@ def publication_list(items, lang):
                     actions += f'<a download="citation.bib" href="data:application/x-bibtex;charset=utf-8,{quote(p["bibtex"], safe="")}">BibTeX ↓</a><details><summary>View BibTeX</summary><pre><code>{e(p["bibtex"])}</code></pre></details>'
                 else:
                     actions += '<span class="muted"> · BibTeX ' + ("待补充" if lang == "zh" else "unavailable") + '</span>'
-                result += f'<li class="publication"><h3>{title}</h3><p>{e(p.get("authors", ""))}</p><p class="muted">{e(p.get("venue", ""))} · {p["year"]}</p><div class="publication-actions">{actions}</div></li>'
+                award = f'<p class="publication-award">{e(p.get("award", ""))}</p>' if p.get("award") else ""
+                result += f'<li class="publication"><h3>{title}</h3>{award}<p>{e(p.get("authors", ""))}</p><p class="muted">{e(p.get("venue", ""))} · {p["year"]}</p><div class="publication-actions">{actions}</div></li>'
             result += '</ul>'
     return result + '</div>'
 

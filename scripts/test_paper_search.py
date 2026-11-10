@@ -21,3 +21,18 @@ class SearchTests(unittest.TestCase):
     def test_title_bounds(self):
         for title in [None,'ab','x'*501]:
             with self.assertRaises(ValueError):p.search_title(title)
+
+    def test_official_usenix_metadata_and_preprint_are_distinct(self):
+        html='<meta name="citation_title" content="{CompLeak}: Example"><meta name="citation_author" content="Na Li"><meta name="citation_author" content="Yansong Gao"><meta name="citation_publication_date" content="2026"><meta name="citation_conference_title" content="35th USENIX Security Symposium (USENIX Security 26)"><meta name="citation_pdf_url" content="https://www.usenix.org/system/files/usenixsecurity26-li-na.pdf"><div class="bibtex-text-entry">@inproceedings {x,<br>title={CompLeak}, year={2026}}</div><p>Distinguished Artifact Award Winner</p>'
+        official=p.usenix_record(html,'https://www.usenix.org/conference/usenixsecurity26/presentation/li-na')
+        self.assertEqual(official['tier'],'A');self.assertEqual(official['year'],2026)
+        self.assertEqual(official['award'],'Distinguished Artifact Award');self.assertIn('@inproceedings',official['bibtex'])
+        def request(url,accept='application/json'):
+            if '/search/site/' in url:return '<a href="/conference/usenixsecurity26/presentation/li-na">CompLeak</a>'
+            if '/presentation/' in url:return html
+            if 'crossref' in url:return {'message':{'items':[]}}
+            if 'openalex' in url:return {'results':[]}
+            raise OSError('offline')
+        with patch.object(p,'request',side_effect=request): result=p.search_title('CompLeak: Example')
+        self.assertEqual(result['results'][0]['search_source'],'USENIX official')
+        self.assertEqual(result['results'][0]['pdf_url'],'https://www.usenix.org/system/files/usenixsecurity26-li-na.pdf')

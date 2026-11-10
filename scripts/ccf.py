@@ -7,6 +7,7 @@ ROOT = Path(sys.executable).resolve().parent if getattr(sys,'frozen',False) else
 CATALOG = json.loads((ROOT/'content/ccf-2026.json').read_text(encoding='utf-8'))
 
 def key(value):
+    value = re.sub(r'\(USENIX\s+Security\s*\d*\)', '', value, flags=re.I)
     value = re.sub(r'\b(?:19|20)\d{2}\b|\b\d+(?:st|nd|rd|th)\b','',value,flags=re.I)
     value = re.sub(r'^\s*(?:proceedings\s+of\s+(?:the\s+)?|the\s+)','',value,flags=re.I)
     return re.sub(r'[^a-z0-9]','',value.casefold())
