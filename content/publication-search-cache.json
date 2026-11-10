@@ -1,0 +1,29 @@
+{
+  "checked": "2026-11-10",
+  "description": "Verified official metadata for search fallback only; never auto-added to a member profile.",
+  "works": [
+    {
+      "id": "usenix:usenixsecurity26/presentation/li-na",
+      "title": "CompLeak: Deep Learning Model Compression Exacerbates Privacy Leakage",
+      "authors": "Na Li, Yansong Gao, Hongsheng Hu, Boyu Kuang, Anmin Fu",
+      "authors_bibtex": "Na Li and Yansong Gao and Hongsheng Hu and Boyu Kuang and Anmin Fu",
+      "venue": "35th USENIX Security Symposium (USENIX Security 26)",
+      "year": 2026,
+      "kind": "conference",
+      "tier": "A",
+      "doi": "",
+      "url": "https://www.usenix.org/conference/usenixsecurity26/presentation/li-na",
+      "pdf_url": "https://www.usenix.org/system/files/usenixsecurity26-li-na.pdf",
+      "bibtex": "@inproceedings {317957,\n\n\tauthor = {Na Li and Yansong Gao and Hongsheng Hu and Boyu Kuang and Anmin Fu},\n\n\ttitle = {{CompLeak}: Deep Learning Model Compression Exacerbates Privacy Leakage},\n\n\tbooktitle = {35th USENIX Security Symposium (USENIX Security 26)},\n\n\tyear = {2026},\n\n\tisbn = {978-1-939133-58-8},\n\n\taddress = {Baltimore, MD},\n\n\tpages = {6545--6564},\n\n\turl = {https://www.usenix.org/conference/usenixsecurity26/presentation/li-na},\n\n\tpublisher = {USENIX Association},\n\n\tmonth = aug\n\n}",
+      "selected": false,
+      "search_source": "USENIX official",
+      "award": "Distinguished Artifact Award",
+      "award_source": "https://www.usenix.org/conference/usenixsecurity26/presentation/li-na",
+      "ccf_edition": "CCF 第七版（2026，2026-04-09 勘误）",
+      "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/2026-03-31/870181.shtml",
+      "ccf_status": "venue_matched",
+      "ccf_venue": "USENIXSecuritySymposium",
+      "ccf_page": 20
+    }
+  ]
+}

@@ -6,7 +6,7 @@ import ssl
 from urllib.request import Request, urlopen
 from urllib.parse import quote
 import certifi
-from ccf import classify
+from ccf import classify, ROOT as DATA_ROOT
 
 CONTEXT = ssl.create_default_context(cafile=certifi.where())
 TIERS = ('A', 'B', 'C', 'Unrated')
@@ -27,7 +27,7 @@ def orcid_id(value):
 
 
 def request(url, accept='application/json'):
-    with urlopen(Request(url, headers={'Accept': accept, 'User-Agent': 'ZhigeFacultyEditor/1.2 (public academic metadata)'}), timeout=25, context=CONTEXT) as response:
+    with urlopen(Request(url, headers={'Accept': accept, 'User-Agent': 'ZhigeFacultyEditor/1.2 (public academic metadata)'}), timeout=12 if url.startswith("https://www.usenix.org/") else 25, context=CONTEXT) as response:
         raw = response.read(8_000_001)
     if len(raw) > 8_000_000:
         raise ValueError('数据源响应过大')
@@ -239,13 +239,33 @@ def search_usenix(query):
                     if url not in self.links:self.links.append(url)
     term=query.split(':',1)[0].strip()
     if len(term)<4:term=query
-    html=request('https://www.usenix.org/search/site/'+quote(term,safe=''),'text/html')
+    try:
+        html=request('https://www.usenix.org/search/site/'+quote(term,safe=''),'text/html')
+    except Exception:
+        html=''
     links=Links();links.feed(html)
     def load(url):
         try:return usenix_record(request(url,'text/html'),url)
         except Exception:return None
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
-        return [item for item in pool.map(load,links.links[:6]) if item]
+        live = [item for item in pool.map(load,links.links[:6]) if item]
+    # Search-only bibliographic cache, not prefilled profile content. Make provenance explicit.
+    import difflib
+    try:
+        cache=json.loads((DATA_ROOT/'content/publication-search-cache.json').read_text(encoding='utf-8'))
+    except (OSError,ValueError):
+        cache={'works':[]}
+    for source in cache['works']:
+        if difflib.SequenceMatcher(None,title_key(query),title_key(source['title'])).ratio() < .65:
+            continue
+        if any(same_work(source,item) for item in live):
+            continue
+        item=dict(source)
+        item['search_source']='USENIX official (verified cache '+cache['checked']+')'
+        item['source_checked']=cache['checked']
+        item['source_warning']='USENIX 实时检索暂未返回此论文，使用已核对的官方元数据缓存；可点击来源复核。'
+        live.append(classify(item))
+    return live
 
 
 def search_title(value):
@@ -278,7 +298,7 @@ def search_title(value):
         for future in concurrent.futures.as_completed(tasks):
             try:records.extend(future.result())
             except Exception:warnings.append(tasks[future]+' 暂不可用')
-    records.sort(key=lambda p:p.get('search_source')!='USENIX official')
+    records.sort(key=lambda p:not p.get('search_source','').startswith('USENIX official'))
     candidates=[]
     q=title_key(query)
     for item in records:
@@ -292,7 +312,9 @@ def search_title(value):
             for field in ('pdf_url','authors','venue','doi'):
                 if not previous.get(field) and item.get(field):previous[field]=item[field]
         else:candidates.append(item)
-    candidates.sort(key=lambda p:(-p['title_similarity'],p.get('search_source')!='USENIX official',p['kind']=='other',-p['year']))
+    candidates.sort(key=lambda p:(-p['title_similarity'],not p.get('search_source','').startswith('USENIX official'),p['kind']=='other',-p['year']))
     for item in candidates:
         fallback_bibtex(item)
+    if any(p.get('source_warning') for p in candidates):
+        warnings.append('USENIX 部分结果来自已核对的官方缓存，来源与核对日期已标明')
     return {'results':candidates[:12], 'warning':'；'.join(warnings), 'query':query}
