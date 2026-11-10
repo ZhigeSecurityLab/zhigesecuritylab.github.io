@@ -69,8 +69,28 @@ jobs:
           name: Zhige-Member-Editor-Windows
           path: dist/ZhigeFacultyEditor/
           retention-days: 30
+      - name: Build signed official Python runtime Faculty package
+        run: python scripts/package_windows_faculty.py
+      - name: Verify official runtime editor
+        shell: pwsh
+        run: |
+          $root = (Resolve-Path dist/FacultyOfficial).Path
+          if ((Get-AuthenticodeSignature "$root/runtime/python.exe").Status -ne 'Valid') { throw 'Official Python signature invalid' }
+          $p = Start-Process "$root/runtime/python.exe" -ArgumentList "$root/scripts/faculty.py",'--user','zhengfeiLian','--branch','faculty-ccf-test','--port','18008' -WorkingDirectory $root -PassThru
+          try {
+            $ready = $false
+            for ($i=0; $i -lt 40; $i++) {
+              Start-Sleep -Seconds 1
+              try { $s=Invoke-RestMethod 'http://127.0.0.1:18008/api/state'; if ($s.branch -eq 'faculty-ccf-test') {$ready=$true;break} } catch {}
+            }
+            if (-not $ready) { throw 'Official runtime editor failed startup' }
+            $html=(Invoke-WebRequest 'http://127.0.0.1:18008/' -UseBasicParsing).Content
+            if (-not $html.Contains('paper-title-search')) { throw 'Search UI missing' }
+          } finally { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue }
+          Remove-Item "$root/.local" -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item "$root/_site" -Recurse -Force -ErrorAction SilentlyContinue
       - uses: actions/upload-artifact@v4
         with:
           name: Zhige-Faculty-Editor-Windows
-          path: dist/ZhigeFacultyEditor/
+          path: dist/FacultyOfficial/
           retention-days: 30
