@@ -97,9 +97,10 @@ def enrich(item):
             item['pdf_url'] = next((x['URL'] for x in data.get('link', []) if x.get('content-type') == 'application/pdf' and x.get('URL', '').startswith('https://')), '')
     except Exception:
         pass
-    if not item.get('bibtex'):
+    if not item.get('bibtex') or item.get('bibtex_source'):
         try:
             item['bibtex'] = request('https://doi.org/' + encoded, 'application/x-bibtex')
+            item.pop('bibtex_source', None)
         except Exception:
             pass
     return classify(fallback_bibtex(item))
@@ -111,7 +112,7 @@ def fallback_bibtex(item):
     def escape(value):
         return str(value).replace('\\', r'\textbackslash{}').replace('{', r'\{').replace('}', r'\}').replace('&', r'\&').replace('%', r'\%').replace('_', r'\_')
     kind = {'conference': 'inproceedings', 'journal': 'article'}.get(item.get('kind'), 'misc')
-    fields = [('title', item.get('title')), ('author', item.get('authors', '').replace(', ', ' and ')),
+    fields = [('title', item.get('title')), ('author', item.get('authors_bibtex') or item.get('authors', '').replace(', ', ' and ')),
               ('year', item.get('year')), ('booktitle' if kind == 'inproceedings' else 'journal', item.get('venue')),
               ('doi', item.get('doi')), ('url', item.get('url'))]
     item['bibtex'] = '@' + kind + '{zhige' + str(item.get('year', '')) + ',\n' + ',\n'.join('  ' + key + ' = {' + escape(value) + '}' for key, value in fields if value) + '\n}'
@@ -159,6 +160,7 @@ def crossref_record(work):
     year = next((work[key]['date-parts'][0][0] for key in ('published', 'issued', 'published-print', 'published-online') if work.get(key, {}).get('date-parts')), 1900)
     return classify({'id': 'doi:' + doi, 'title': next(iter(work.get('title', [])), ''),
         'authors': ', '.join(' '.join(filter(None, [a.get('given'), a.get('family')])) for a in work.get('author', [])),
+        'authors_bibtex': ' and '.join(' '.join(filter(None, [a.get('given'), a.get('family')])) for a in work.get('author', [])),
         'venue': next(iter(work.get('container-title', [])), ''), 'year': year,
         'kind': {'proceedings-article':'conference', 'journal-article':'journal'}.get(work.get('type'), 'other'),
         'tier':'Unrated', 'doi':doi, 'url':'https://doi.org/' + doi,
@@ -179,6 +181,7 @@ def arxiv_records(text):
         url='https://arxiv.org/abs/'+identifier
         item={'id':'arxiv:'+re.sub(r'v\d+$','',identifier),'title':title,
               'authors':', '.join(a.findtext('a:name','',ns) for a in entry.findall('a:author',ns)),
+              'authors_bibtex':' and '.join(a.findtext('a:name','',ns) for a in entry.findall('a:author',ns)),
               'venue':'arXiv (preprint)', 'year':int(entry.findtext('a:published','1900',ns)[:4]),
               'kind':'other','tier':'Unrated','doi':'','url':url,'pdf_url':'https://arxiv.org/pdf/'+identifier,
               'bibtex':'','selected':False,'search_source':'arXiv'}
@@ -205,6 +208,7 @@ def search_title(value):
             pdf=next((l.get('pdf_url') for l in w.get('locations',[]) if l.get('pdf_url','') and l['pdf_url'].startswith('https://')), '')
             records.append(classify({'id':'doi:'+doi if doi else 'openalex:'+w['id'].rsplit('/',1)[-1],
                 'title':w.get('display_name') or '', 'authors':', '.join(a['author']['display_name'] for a in w.get('authorships',[])),
+                'authors_bibtex':' and '.join(a['author']['display_name'] for a in w.get('authorships',[])),
                 'venue':source.get('display_name') or '', 'year':w.get('publication_year') or 1900,
                 'kind': 'other' if w.get('type') in ('preprint','posted-content') else {'journal':'journal','conference':'conference'}.get(source.get('type'),'other'),
                 'tier':'Unrated','doi':doi,'url':loc.get('landing_page_url') or w['id'],'pdf_url':pdf,'bibtex':'','selected':False,'search_source':'OpenAlex'}))
