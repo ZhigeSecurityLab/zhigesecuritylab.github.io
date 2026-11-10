@@ -28,6 +28,42 @@
         "url": "",
         "bio_markdown": "He is a Professor at Southeast University. Before that, he was a Lecturer (equivalent to an Assistant Professor in the US) at the University of Western Australia. Prior to that, he was a tenured Research Scientist and subsequently a Senior Research Scientist at Data61, CSIRO. He is a Senior Member of IEEE.\n\n## Editor\n\n- Senior Area Editor (Sep 2026—), *IEEE Transactions on Information Forensics and Security*\n- Associate Editor (Jan 2024—), *IEEE Transactions on Neural Networks and Learning Systems*\n- Associate Editor (Oct 2024—Oct 2026), *IEEE Transactions on Information Forensics and Security*\n\n## PC Member\n\n- 2027: USENIX Security, NDSS, AsiaCCS, EuroS&P, SaTML, ACISP, ASP-DAC\n- 2026: CCS, USENIX Security, ACSAC, EuroS&P, WWW, ICDCS, ACISP, IEEE GLOBECOM, IEEE CIC\n- 2025: AsiaCCS, ACSAC\n- 2024: AsiaCCS, ICDCS, ESORICS\n- 2023: ATS\n\n",
         "avatar": "assets/people/8bd2a0ddd9f44d30bfcbedc36ad863a9.png"
+      },
+      {
+        "category": "faculty",
+        "github_username": "zhengfeiLian",
+        "name": "Faculty search and CCF test",
+        "role": "",
+        "url": "",
+        "bio_markdown": "Test-only: title-based discovery, PDF, BibTeX and automatic CCF 2026 matching.",
+        "description": "",
+        "orcid": "",
+        "publications": [
+          {
+            "id": "doi:10.48550/arxiv.2507.16872",
+            "title": "CompLeak: Deep Learning Model Compression Exacerbates Privacy Leakage",
+            "authors": "Li, Na, Yansong Gao, Hongsheng Hu, Boyu Kuang, Anmin Fu",
+            "authors_bibtex": "Li, Na and Yansong Gao and Hongsheng Hu and Boyu Kuang and Anmin Fu",
+            "venue": "USENIX Security Symposium",
+            "year": 2026,
+            "kind": "conference",
+            "tier": "A",
+            "doi": "10.48550/arxiv.2507.16872",
+            "url": "http://arxiv.org/abs/2507.16872",
+            "pdf_url": "https://arxiv.org/pdf/2507.16872",
+            "bibtex": "@misc{zhige2025,\n  title = {CompLeak: Deep Learning Model Compression Exacerbates Privacy Leakage},\n  author = {Li, Na and Yansong Gao and Hongsheng Hu and Boyu Kuang and Anmin Fu},\n  year = {2025},\n  journal = {arXiv (Cornell University)},\n  doi = {10.48550/arxiv.2507.16872},\n  url = {http://arxiv.org/abs/2507.16872}\n}",
+            "selected": true,
+            "search_source": "OpenAlex",
+            "ccf_edition": "CCF 第七版（2026，2026-04-09 勘误）",
+            "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/2026-03-31/870181.shtml",
+            "ccf_status": "venue_matched",
+            "title_similarity": 100,
+            "bibtex_source": "Generated from public metadata; please verify author names and fields.",
+            "ccf_venue": "USENIXSecuritySymposium",
+            "ccf_page": 20
+          }
+        ],
+        "avatar": "assets/people/default-male.svg"
       }
     ],
     "recruitment": {
@@ -56,6 +92,42 @@
         "url": "",
         "bio_markdown": "现任东南大学教授。此前曾任西澳大学讲师（长期职位），以及澳大利亚联邦科学与工业研究组织（CSIRO）Data61研究科学家（长期职位）和高级研究科学家（长期职位）。IEEE高级会员。\n\n# 编委任职\n\n- 高级领域编辑 (Sep 2026—), *IEEE Transactions on Information Forensics and Security*\n- 副编辑 (Jan 2024—), *IEEE Transactions on Neural Networks and Learning Systems*\n- 副编辑 (Oct 2024—Oct 2026), *IEEE Transactions on Information Forensics and Security*\n\n# 程序委员会委员\n\n- 2027年：USENIX Security、NDSS、AsiaCCS、EuroS&P、SaTML、ACISP、ASP-DAC\n- 2026年：CCS、USENIX Security、ACSAC、EuroS&P、WWW、ICDCS、ACISP、IEEE GLOBECOM、IEEE CIC\n- 2025年：AsiaCCS、ACSAC\n- 2024年：AsiaCCS、ICDCS、ESORICS\n- 2023年：ATS",
         "avatar": "assets/people/8bd2a0ddd9f44d30bfcbedc36ad863a9.png"
+      },
+      {
+        "category": "faculty",
+        "github_username": "zhengfeiLian",
+        "name": "Faculty search and CCF test",
+        "role": "",
+        "url": "",
+        "bio_markdown": "Test-only: title-based discovery, PDF, BibTeX and automatic CCF 2026 matching.",
+        "description": "",
+        "orcid": "",
+        "publications": [
+          {
+            "id": "doi:10.48550/arxiv.2507.16872",
+            "title": "CompLeak: Deep Learning Model Compression Exacerbates Privacy Leakage",
+            "authors": "Li, Na, Yansong Gao, Hongsheng Hu, Boyu Kuang, Anmin Fu",
+            "authors_bibtex": "Li, Na and Yansong Gao and Hongsheng Hu and Boyu Kuang and Anmin Fu",
+            "venue": "USENIX Security Symposium",
+            "year": 2026,
+            "kind": "conference",
+            "tier": "A",
+            "doi": "10.48550/arxiv.2507.16872",
+            "url": "http://arxiv.org/abs/2507.16872",
+            "pdf_url": "https://arxiv.org/pdf/2507.16872",
+            "bibtex": "@misc{zhige2025,\n  title = {CompLeak: Deep Learning Model Compression Exacerbates Privacy Leakage},\n  author = {Li, Na and Yansong Gao and Hongsheng Hu and Boyu Kuang and Anmin Fu},\n  year = {2025},\n  journal = {arXiv (Cornell University)},\n  doi = {10.48550/arxiv.2507.16872},\n  url = {http://arxiv.org/abs/2507.16872}\n}",
+            "selected": true,
+            "search_source": "OpenAlex",
+            "ccf_edition": "CCF 第七版（2026，2026-04-09 勘误）",
+            "ccf_source": "https://www.ccf.org.cn/Academic_Evaluation/By_category/2026-03-31/870181.shtml",
+            "ccf_status": "venue_matched",
+            "title_similarity": 100,
+            "bibtex_source": "Generated from public metadata; please verify author names and fields.",
+            "ccf_venue": "USENIXSecuritySymposium",
+            "ccf_page": 20
+          }
+        ],
+        "avatar": "assets/people/default-male.svg"
       }
     ],
     "recruitment": {
