@@ -74,3 +74,20 @@ $('orcid-sync').addEventListener('click',async()=>{
     modified('profile');renderPapers();$('orcid-status').textContent=`公开记录姓名：${result.name||'未公开'}。读取 ${result.works.length} 条，新增 ${added} 条，当前共 ${works.length} 条。请核对身份后勾选。${result.warning||''}`;
   }catch(error){$('orcid-status').textContent=error.message;}finally{button.disabled=false;}
 });
+
+let searchResults=[];
+function duplicatePaper(a,b){if(a.doi&&b.doi)return a.doi.toLowerCase()===b.doi.toLowerCase();const k=x=>x.toLowerCase().replace(/[^a-z0-9]/g,'');return k(a.title)&&k(a.title)===k(b.title);}
+$('paper-title-search').addEventListener('click',async()=>{
+ const button=$('paper-title-search');button.disabled=true;$('paper-search-status').textContent='正在查询 Crossref、arXiv 与 OpenAlex…';$('paper-search-results').replaceChildren();$('paper-search-add').hidden=true;
+ try{const result=await api('/api/paper-search',{title:$('paper-title-query').value});searchResults=result.results.map(p=>({...p,add:false}));
+ for(const p of searchResults){const label=document.createElement('label');label.className='paper-card';const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.addEventListener('change',()=>p.add=checkbox.checked);const text=document.createElement('span');text.textContent=` ${p.title} · ${p.year} · ${p.authors} · ${p.venue||'场所待补充'} · ${p.search_source} · 标题相似度 ${p.title_similarity}% · ${p.pdf_url?'有 PDF 链接':'PDF 待补充'} · ${p.tier==='Unrated'?'CCF 待核验':'CCF '+p.tier}`;label.append(checkbox,text);$('paper-search-results').append(label);}
+ $('paper-search-status').textContent=`找到 ${searchResults.length} 个候选，请核对作者与版本。${result.warning||''}`;$('paper-search-add').hidden=!searchResults.length;
+ }catch(error){$('paper-search-status').textContent=error.message;}finally{button.disabled=false;}
+});
+$('paper-search-add').addEventListener('click',async()=>{
+ const button=$('paper-search-add');button.disabled=true;let added=0,duplicates=0;
+ try{for(const candidate of searchResults.filter(p=>p.add)){if(works.some(p=>duplicatePaper(p,candidate))){duplicates++;continue;}const p=structuredClone(candidate);delete p.add;p.selected=true;try{Object.assign(p,await api('/api/publication',{publication:p}));}catch(error){message('已保留检索元数据，可稍后重试补全。');}works.push(p);added++;}
+ if(added){modified('profile');$('paper-search').value='';renderPapers();}$('paper-search-status').textContent=`已添加 ${added} 条，跳过重复 ${duplicates} 条。新增论文已勾选展示，保存预览后再推送。`;
+ }finally{button.disabled=false;}
+});
+$('paper-blank').addEventListener('click',()=>{const p={id:'manual:'+Date.now()+'-'+Math.random().toString(36).slice(2),title:'待填写论文标题',authors:'',venue:'',year:new Date().getFullYear(),kind:'other',tier:'Unrated',doi:'',url:'',pdf_url:'',bibtex:'',selected:false};works.push(p);$('paper-search').value=p.title;modified('profile');renderPapers();message('已添加空白条目，请展开填写并勾选展示。');});

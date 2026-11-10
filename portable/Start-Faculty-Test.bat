@@ -1,5 +1,5 @@
 @echo off
 chcp 65001 >nul
 cd /d "%~dp0"
-ZhigeFacultyEditor.exe --user zhengfeiLian --branch faculty-publications-test --port 8003 --open
+ZhigeFacultyEditor.exe --user zhengfeiLian --branch faculty-ccf-test --port 8003 --open
 if errorlevel 1 pause

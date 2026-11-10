@@ -465,9 +465,11 @@ class Handler(admin.Handler):
             path = urlsplit(self.path).path
             if path == "/api/connect":
                 return self.send(200, login())
-            if path in ("/api/orcid", "/api/publication"):
+            if path in ("/api/orcid", "/api/publication", "/api/paper-search"):
                 if STUDENT:
                     raise ValueError("此接口仅供 Faculty 使用")
+                if path == "/api/paper-search":
+                    return self.send(200, publications.search_title(payload.get("title")))
                 if path == "/api/orcid":
                     return self.send(200, publications.sync(payload.get("orcid", "")))
                 item = payload.get("publication")
@@ -512,13 +514,13 @@ if __name__ == "__main__":
     parser.add_argument("--port", type=int, default=8002)
     parser.add_argument("--open", action="store_true")
     parser.add_argument("--user", default="garrisongys", choices=("garrisongys", "zhengfeiLian"))
-    parser.add_argument("--branch", default="main", choices=("main", "faculty-editor-test", "member-editor-test", "faculty-publications-test"))
+    parser.add_argument("--branch", default="main", choices=("main", "faculty-editor-test", "member-editor-test", "faculty-publications-test", "faculty-ccf-test"))
     parser.add_argument("--student", action="store_true", help="Self-service member editor; account comes from GitHub login")
     args = parser.parse_args()
     STUDENT = args.student
     OWNER = "" if STUDENT else args.user
     BRANCH = args.branch
-    if not STUDENT and (OWNER, BRANCH) not in {("garrisongys", "main"), ("zhengfeiLian", "faculty-editor-test"), ("zhengfeiLian", "faculty-publications-test")}:
+    if not STUDENT and (OWNER, BRANCH) not in {("garrisongys", "main"), ("zhengfeiLian", "faculty-editor-test"), ("zhengfeiLian", "faculty-publications-test"), ("zhengfeiLian", "faculty-ccf-test")}:
         parser.error("账号与目标分支不匹配")
     UI = ROOT / ("student_editor" if STUDENT else "faculty_editor")
     CONFIG = ROOT / (".local/member-github-auth" if STUDENT else ".local/faculty-github-auth-" + OWNER.lower())

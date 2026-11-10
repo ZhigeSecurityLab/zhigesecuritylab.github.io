@@ -142,3 +142,93 @@ def validate_profile(person):
         for key in ('url', 'pdf_url'):
             if item.get(key) and not re.match(r'^https?://[^\s<>"\']+$', item[key]):
                 raise ValueError('论文链接必须为 HTTP(S) 地址')
+
+
+def title_key(value):
+    return re.sub(r'[^a-z0-9]', '', str(value).casefold())
+
+
+def same_work(left, right):
+    if left.get('doi') and right.get('doi'):
+        return left['doi'].casefold() == right['doi'].casefold()
+    return bool(title_key(left.get('title'))) and title_key(left.get('title')) == title_key(right.get('title'))
+
+
+def crossref_record(work):
+    doi = work.get('DOI', '').lower()
+    year = next((work[key]['date-parts'][0][0] for key in ('published', 'issued', 'published-print', 'published-online') if work.get(key, {}).get('date-parts')), 1900)
+    return classify({'id': 'doi:' + doi, 'title': next(iter(work.get('title', [])), ''),
+        'authors': ', '.join(' '.join(filter(None, [a.get('given'), a.get('family')])) for a in work.get('author', [])),
+        'venue': next(iter(work.get('container-title', [])), ''), 'year': year,
+        'kind': {'proceedings-article':'conference', 'journal-article':'journal'}.get(work.get('type'), 'other'),
+        'tier':'Unrated', 'doi':doi, 'url':'https://doi.org/' + doi,
+        'pdf_url':next((x['URL'] for x in work.get('link', []) if x.get('content-type') == 'application/pdf' and x.get('URL','').startswith('https://')), ''),
+        'bibtex':'', 'selected':False, 'search_source':'Crossref'})
+
+
+def arxiv_records(text):
+    import xml.etree.ElementTree as ET
+    ns={'a':'http://www.w3.org/2005/Atom'}
+    root=ET.fromstring(text)
+    result=[]
+    for entry in root.findall('a:entry',ns):
+        identifier=entry.findtext('a:id','',ns).rsplit('/',1)[-1]
+        if not re.fullmatch(r'(?:\d{4}\.\d{4,5}|[a-z-]+(?:\.[A-Z]{2})?/\d{7})(?:v\d+)?',identifier):
+            continue
+        title=' '.join(entry.findtext('a:title','',ns).split())
+        url='https://arxiv.org/abs/'+identifier
+        item={'id':'arxiv:'+re.sub(r'v\d+$','',identifier),'title':title,
+              'authors':', '.join(a.findtext('a:name','',ns) for a in entry.findall('a:author',ns)),
+              'venue':'arXiv (preprint)', 'year':int(entry.findtext('a:published','1900',ns)[:4]),
+              'kind':'other','tier':'Unrated','doi':'','url':url,'pdf_url':'https://arxiv.org/pdf/'+identifier,
+              'bibtex':'','selected':False,'search_source':'arXiv'}
+        result.append(classify(fallback_bibtex(item)))
+    return result
+
+
+def search_title(value):
+    import difflib
+    if not isinstance(value,str) or not 4 <= len(value.strip()) <= 500:
+        raise ValueError('请输入 4–500 字符的论文标题')
+    query=value.strip()
+    warnings=[]
+    def crossref():
+        return [crossref_record(w) for w in request('https://api.crossref.org/works?rows=8&query.title='+quote(query,safe=''))['message']['items'] if w.get('DOI') and w.get('title')]
+    def arxiv():
+        terms=' AND '.join('ti:'+word for word in re.findall(r'[A-Za-z0-9]+',query)[:30])
+        return arxiv_records(request('https://export.arxiv.org/api/query?max_results=8&search_query='+quote(terms,safe=''),'application/atom+xml'))
+    def openalex():
+        raw=request('https://api.openalex.org/works?per-page=8&search='+quote(query,safe=''))
+        records=[]
+        for w in raw.get('results',[]):
+            loc=w.get('primary_location') or {};source=loc.get('source') or {};doi=(w.get('doi') or '').removeprefix('https://doi.org/').lower()
+            pdf=next((l.get('pdf_url') for l in w.get('locations',[]) if l.get('pdf_url','') and l['pdf_url'].startswith('https://')), '')
+            records.append(classify({'id':'doi:'+doi if doi else 'openalex:'+w['id'].rsplit('/',1)[-1],
+                'title':w.get('display_name') or '', 'authors':', '.join(a['author']['display_name'] for a in w.get('authorships',[])),
+                'venue':source.get('display_name') or '', 'year':w.get('publication_year') or 1900,
+                'kind': 'other' if w.get('type') in ('preprint','posted-content') else {'journal':'journal','conference':'conference'}.get(source.get('type'),'other'),
+                'tier':'Unrated','doi':doi,'url':loc.get('landing_page_url') or w['id'],'pdf_url':pdf,'bibtex':'','selected':False,'search_source':'OpenAlex'}))
+        return records
+    records=[]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+        tasks={pool.submit(fn):name for name,fn in [('Crossref',crossref),('arXiv',arxiv),('OpenAlex',openalex)]}
+        for future in concurrent.futures.as_completed(tasks):
+            try:records.extend(future.result())
+            except Exception:warnings.append(tasks[future]+' 暂不可用')
+    candidates=[]
+    q=title_key(query)
+    for item in records:
+        similarity=difflib.SequenceMatcher(None,q,title_key(item['title'])).ratio()
+        if similarity < .45:continue
+        item['title_similarity']=round(similarity*100)
+        try:validate_profile({'publications':[item]})
+        except (ValueError,TypeError):continue
+        previous=next((p for p in candidates if same_work(p,item)),None)
+        if previous:
+            for field in ('pdf_url','authors','venue','doi'):
+                if not previous.get(field) and item.get(field):previous[field]=item[field]
+        else:candidates.append(item)
+    candidates.sort(key=lambda p:(-p['title_similarity'],p['kind']=='other',-p['year']))
+    for item in candidates:
+        fallback_bibtex(item)
+    return {'results':candidates[:12], 'warning':'；'.join(warnings), 'query':query}
