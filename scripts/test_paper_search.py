@@ -36,3 +36,21 @@ class SearchTests(unittest.TestCase):
         with patch.object(p,'request',side_effect=request): result=p.search_title('CompLeak: Example')
         self.assertEqual(result['results'][0]['search_source'],'USENIX official')
         self.assertEqual(result['results'][0]['pdf_url'],'https://www.usenix.org/system/files/usenixsecurity26-li-na.pdf')
+
+    def test_split_title_and_subtitle_are_combined(self):
+        paper=p.crossref_record({'DOI':'10.1145/3359789.3359790','title':['STRIP'],'subtitle':['a defence against trojan attacks on deep neural networks'],'type':'proceedings-article','published':{'date-parts':[[2019]]}})
+        self.assertEqual(paper['title'],'STRIP: a defence against trojan attacks on deep neural networks')
+
+    def test_verified_index_recovers_all_audited_titles_without_prefilling_profiles(self):
+        import json
+        cache=json.loads((p.DATA_ROOT/'content/publication-search-cache.json').read_text())
+        self.assertEqual(len(cache['works']),12)
+        with patch.object(p,'request',side_effect=OSError('network unavailable')):
+            for expected in cache['works']:
+                with self.subTest(title=expected['title']):
+                    result=p.search_title(expected['title'])
+                    matching=[w for w in result['results'] if p.title_key(w['title'])==p.title_key(expected['title']) and w['year']==expected['year']]
+                    self.assertTrue(matching)
+                    self.assertFalse(matching[0]['selected'])
+                    self.assertTrue(matching[0]['bibtex'])
+                    self.assertIn('verified cache',matching[0]['search_source'])

@@ -76,7 +76,8 @@ $('orcid-sync').addEventListener('click',async()=>{
 });
 
 let searchResults=[];
-function duplicatePaper(a,b){if(a.doi&&b.doi)return a.doi.toLowerCase()===b.doi.toLowerCase();const k=x=>x.toLowerCase().replace(/[^a-z0-9]/g,'');return k(a.title)&&k(a.title)===k(b.title);}
+$('paper-title-query').value='';$('paper-search-results').replaceChildren();$('paper-search-status').textContent='';$('paper-search-add').hidden=true;
+function duplicatePaper(a,b){if(a.kind!==b.kind)return false;if(a.doi&&b.doi)return a.doi.toLowerCase()===b.doi.toLowerCase();const k=x=>x.toLowerCase().replace(/[^a-z0-9]/g,'');return k(a.title)&&k(a.title)===k(b.title);}
 $('paper-title-search').addEventListener('click',async()=>{
  const button=$('paper-title-search');button.disabled=true;$('paper-search-status').textContent='正在查询 USENIX 官方、Crossref、arXiv 与 OpenAlex…';$('paper-search-results').replaceChildren();$('paper-search-add').hidden=true;
  try{const result=await api('/api/paper-search',{title:$('paper-title-query').value});searchResults=result.results.map(p=>({...p,add:false}));

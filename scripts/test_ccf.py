@@ -9,3 +9,7 @@ class CCFTests(unittest.TestCase):
             self.assertEqual(classify(dict(venue=venue,kind='conference',tier='A'))['tier'],'Unrated')
     def test_supplied_grade_overwritten(self):
         self.assertEqual(classify(dict(venue='ACM Asia Conference on Computer and Communications Security',kind='conference',tier='A'))['tier'],'C')
+    def test_unambiguous_trailing_acronyms(self):
+        for venue in ['IEEE International Symposium on High-Performance Computer Architecture (HPCA)','IEEE Symposium on Security and Privacy (S&P)','ACM SIGSAC Conference on Computer and Communications Security (CCS)']:
+            self.assertEqual(classify(dict(venue=venue,kind='conference'))['tier'],'A')
+        self.assertEqual(classify(dict(venue='IEEE International Symposium on High-Performance Computer Architecture Workshops (HPCA)',kind='conference'))['tier'],'Unrated')

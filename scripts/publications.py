@@ -158,7 +158,7 @@ def same_work(left, right):
 def crossref_record(work):
     doi = work.get('DOI', '').lower()
     year = next((work[key]['date-parts'][0][0] for key in ('published', 'issued', 'published-print', 'published-online') if work.get(key, {}).get('date-parts')), 1900)
-    return classify({'id': 'doi:' + doi, 'title': next(iter(work.get('title', [])), ''),
+    return classify({'id': 'doi:' + doi, 'title': next(iter(work.get('title', [])), '') + (': ' + work['subtitle'][0] if work.get('subtitle') and work['subtitle'][0] else ''),
         'authors': ', '.join(' '.join(filter(None, [a.get('given'), a.get('family')])) for a in work.get('author', [])),
         'authors_bibtex': ' and '.join(' '.join(filter(None, [a.get('given'), a.get('family')])) for a in work.get('author', [])),
         'venue': next(iter(work.get('container-title', [])), ''), 'year': year,
@@ -219,9 +219,11 @@ def usenix_record(html, url):
           'venue':first('conference_title'),'year':int(year_match[0]),'kind':'conference','tier':'Unrated',
           'doi':first('doi'),'url':url,'pdf_url':first('pdf_url'),'bibtex':''.join(page.bib).strip(),
           'selected':False,'search_source':'USENIX official'}
-    if 'Distinguished Artifact Award Winner' in ' '.join(page.text):
-        item['award']='Distinguished Artifact Award'
-        item['award_source']=url
+    for label in ('Distinguished Artifact Award', 'Distinguished Paper Award', 'Honorable Mention Paper Award'):
+        if label in ' '.join(page.text):
+            item['award']=label
+            item['award_source']=url
+            break
     return classify(fallback_bibtex(item))
 
 
@@ -256,6 +258,7 @@ def search_usenix(query):
     except (OSError,ValueError):
         cache={'works':[]}
     for source in cache['works']:
+        if not source.get('search_source','').startswith('USENIX official'):continue
         if difflib.SequenceMatcher(None,title_key(query),title_key(source['title'])).ratio() < .65:
             continue
         if any(same_work(source,item) for item in live):
@@ -298,6 +301,19 @@ def search_title(value):
         for future in concurrent.futures.as_completed(tasks):
             try:records.extend(future.result())
             except Exception:warnings.append(tasks[future]+' 暂不可用')
+    try:
+        cache=json.loads((DATA_ROOT/'content/publication-search-cache.json').read_text(encoding='utf-8'))
+    except (OSError,ValueError):cache={'works':[]}
+    for source in cache['works']:
+        if difflib.SequenceMatcher(None,title_key(query),title_key(source['title'])).ratio()<.85:continue
+        previous=next((p for p in records if same_work(p,source) and p['kind']==source['kind']),None)
+        if previous:
+            for field in ('pdf_url','bibtex','award','award_source'):
+                if not previous.get(field) and source.get(field):previous[field]=source[field]
+            continue
+        item=dict(source);item['search_source']=source.get('search_source','Verified source')+' (verified cache '+cache['checked']+')'
+        item['source_checked']=cache['checked'];item['source_warning']='在线来源暂未返回此记录，使用已核对的元数据缓存；请通过来源链接复核。'
+        records.append(classify(item))
     records.sort(key=lambda p:not p.get('search_source','').startswith('USENIX official'))
     candidates=[]
     q=title_key(query)
@@ -316,5 +332,5 @@ def search_title(value):
     for item in candidates:
         fallback_bibtex(item)
     if any(p.get('source_warning') for p in candidates):
-        warnings.append('USENIX 部分结果来自已核对的官方缓存，来源与核对日期已标明')
+        warnings.append('部分结果来自已核对的元数据缓存，来源与核对日期已标明')
     return {'results':candidates[:12], 'warning':'；'.join(warnings), 'query':query}

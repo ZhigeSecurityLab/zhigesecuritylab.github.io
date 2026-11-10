@@ -14,7 +14,8 @@ def key(value):
 
 ALIASES={'usenixconferenceonsecuritysymposium':'usenixsecuritysymposium','usenixsecurity':'usenixsecuritysymposium',
          'ieeesymposiumonsecurityandprivacysp':'ieeesymposiumonsecurityandprivacy',
-         'acmasiaconferenceoncomputerandcommunicationssecurityasiaccs':'acmasiaconferenceoncomputerandcommunicationssecurity'}
+         'acmasiaconferenceoncomputerandcommunicationssecurityasiaccs':'acmasiaconferenceoncomputerandcommunicationssecurity',
+         'acmsigsacconferenceoncomputerandcommunicationssecurity':'acmconferenceoncomputerandcommunicationssecurity'}
 
 def classify(item):
     venue=item.get('venue','')
@@ -23,11 +24,19 @@ def classify(item):
     item['ccf_source']=CATALOG['source']
     item['ccf_status']='venue_unmatched'
     # Companion/provisional records do not inherit the main conference rank.
-    if item.get('kind')=='conference' and re.search(r'\b(workshop|companion|demo|short\s+papers?|findings|artifact)\b',venue,re.I):
+    if item.get('kind')=='conference' and re.search(r'\b(workshops?|companion|demo|short\s+papers?|findings|artifact)\b',venue,re.I):
         item['ccf_status']='paper_type_not_eligible_or_unverified'
         return item
     normalized=key(venue);normalized=ALIASES.get(normalized,normalized)
-    matches=[row for row in CATALOG['records'] if row['kind']==item.get('kind') and normalized and normalized in (key(row['name']),key(row['abbreviation']))]
+    tail=re.search(r'\(([^()]+)\)\s*$',venue)
+    stripped=key(venue[:tail.start()]) if tail else ''
+    stripped=ALIASES.get(stripped,stripped)
+    def match(row):
+        if row['kind']!=item.get('kind'):return False
+        if normalized and normalized in (key(row['name']),key(row['abbreviation'])):return True
+        # Ignore a trailing parenthesis only when it is that venue's catalog abbreviation.
+        return bool(tail and key(tail[1])==key(row['abbreviation']) and stripped==key(row['name']))
+    matches=[row for row in CATALOG['records'] if match(row)]
     tiers={row['tier'] for row in matches}
     if len(tiers)==1:
         item['tier']=next(iter(tiers));item['ccf_status']='venue_matched'
