@@ -74,7 +74,8 @@ jobs:
       - name: Verify official runtime editor
         shell: pwsh
         run: |
-          $root = (Resolve-Path dist/FacultyOfficial).Path
+          Copy-Item dist/FacultyOfficial faculty-official-smoke -Recurse
+          $root = (Resolve-Path faculty-official-smoke).Path
           if ((Get-AuthenticodeSignature "$root/runtime/python.exe").Status -ne 'Valid') { throw 'Official Python signature invalid' }
           $p = Start-Process "$root/runtime/python.exe" -ArgumentList "$root/scripts/faculty.py",'--user','zhengfeiLian','--branch','faculty-ccf-test','--port','18008' -WorkingDirectory $root -PassThru
           try {
